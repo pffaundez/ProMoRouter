@@ -1,0 +1,26 @@
+# Core
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Graph + ML
+torch>=2.1.0
+torch-geometric>=2.5.0
+networkx>=3.2
+
+# LLM routing baselines
+llmrouter-lib>=0.2.0
+
+# Data & evaluation
+numpy>=1.26.0
+scipy>=1.11.0
+pandas>=2.1.0
+scikit-learn>=1.3.0
+
+# Prompting / tokenization (optional but useful)
+transformers>=4.39.0
+sentencepiece>=0.2.0
+tiktoken>=0.6.0
+
+# Experiment management
+tqdm>=4.66.0
+pyyaml>=6.0.1
