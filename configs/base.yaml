@@ -1,0 +1,2 @@
+data_path:
+  llm_data: "/home/pablofg/Documents/repo/graph-router-2/configs/llm_candidates_2.json"
