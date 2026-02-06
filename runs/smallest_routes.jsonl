@@ -1,0 +1,4 @@
+{"success": true, "query": "Solve: If 3x+5=20, what is x? Explain briefly.", "model_name": "mixtral-8x7b", "routing_result": {"query": "Solve: If 3x+5=20, what is x? Explain briefly.", "model_name": "mixtral-8x7b"}}
+{"success": true, "query": "Write a SQL query that returns the top 5 countries by user count.", "model_name": "mixtral-8x7b", "routing_result": {"query": "Write a SQL query that returns the top 5 countries by user count.", "model_name": "mixtral-8x7b"}}
+{"success": true, "query": "Summarize in Spanish: why does inflation happen?", "model_name": "mixtral-8x7b", "routing_result": {"query": "Summarize in Spanish: why does inflation happen?", "model_name": "mixtral-8x7b"}}
+{"success": true, "query": "Multi-hop: Who directed the movie that won Best Picture in 1994?", "model_name": "mixtral-8x7b", "routing_result": {"query": "Multi-hop: Who directed the movie that won Best Picture in 1994?", "model_name": "mixtral-8x7b"}}
