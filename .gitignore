@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Caches
+.pytest_cache/
+.mypy_cache/
+ruff_cache/
+
+# Data / outputs (adjust to your structure)
+data/
+runs/
+outputs/
+wandb/
+*.log
+
+# OS
+.DS_Store
