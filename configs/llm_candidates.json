@@ -1,12 +1,96 @@
 {
   "mistral-7b": {
     "service": "Local",
-    "model": "mistral:latest",
+    "model": "mistral",
     "hf_id": "mistralai/Mistral-7B-Instruct-v0.3",
     "size": "7B",
     "input_price": 0.0,
     "output_price": 0.0,
     "api_endpoint": "http://localhost:11434/v1"
+  },
+  "qwen2.5-7b": {
+    "service": "Local",
+    "model": "qwen2.5",
+    "hf_id": "Qwen/Qwen2.5-7B-Instruct",
+    "size": "7B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+  "llama3.1-8b": {
+    "service": "Local",
+    "model": "llama3.1",
+    "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "size": "8B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+
+  "qwen2.5-14b": {
+    "service": "Local",
+    "model": "qwen2.5:14b",
+    "hf_id": "Qwen/Qwen2.5-14B-Instruct",
+    "size": "14B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+  "yi-34b": {
+    "service": "Local",
+    "model": "yi:34b",
+    "hf_id": "01-ai/Yi-34B-Chat",
+    "size": "34B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+  "mixtral-8x7b": {
+    "service": "Local",
+    "model": "mixtral",
+    "hf_id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    "size": "MoE-8x7B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+
+  "codellama-34b": {
+    "service": "Local",
+    "model": "codellama:34b-instruct",
+    "hf_id": "codellama/CodeLlama-34b-Instruct-hf",
+    "size": "34B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+
+  "llama3.1-70b": {
+    "service": "Local",
+    "model": "llama3.1:70b",
+    "hf_id": "meta-llama/Llama-3.1-70B-Instruct",
+    "size": "70B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+  "qwen2.5-72b": {
+    "service": "Local",
+    "model": "qwen2.5:72b",
+    "hf_id": "Qwen/Qwen2.5-72B-Instruct",
+    "size": "72B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
+  },
+
+  "mixtral-8x22b": {
+    "service": "Local",
+    "model": "mixtral:8x22b",
+    "hf_id": "mistralai/Mixtral-8x22B-Instruct-v0.1",
+    "size": "MoE-8x22B",
+    "input_price": 0.0,
+    "output_price": 0.0,
+    "api_endpoint": "http://localhost:11434/v1"
   }
 }
-
