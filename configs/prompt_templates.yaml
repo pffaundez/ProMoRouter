@@ -1,0 +1,48 @@
+# GraphRouter++ prompt templates (GRPP-IL v1)
+# Compatible with simple .format() rendering.
+# Required variables: {subquery}
+# Optional variables: {context_block}  (should be "" if no context)
+
+templates:
+  direct: |
+    You are a helpful assistant.
+    Answer the user's request as directly and correctly as possible.
+
+    {context_block}{subquery}
+
+  cot: |
+    You are a helpful assistant.
+    Think step by step, then provide the final answer.
+
+    {context_block}{subquery}
+
+    Final:
+
+  decompose: |
+    You are a helpful assistant.
+    Break the problem into a short plan (2–4 bullet points), then solve it.
+
+    {context_block}{subquery}
+
+    Plan:
+    -
+    Execution:
+    Final:
+
+  selfcheck: |
+    You are a careful assistant.
+    First provide an answer.
+    Then briefly check for mistakes or missing assumptions.
+    If needed, correct the answer.
+
+    Output format:
+    Answer: ...
+    Check: ...
+    Final: ...
+
+    {context_block}{subquery}
+
+    Answer:
+    Check:
+    Final:
+
