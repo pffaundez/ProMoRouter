@@ -51,7 +51,16 @@ reward:
 pools:
   models:
     # Use model keys/identifiers consistent with llm_candidates.json 'model'
-    - "mistralai/Mistral-7B-Instruct-v0.3"
+    - "mistral-7b"
+    - "qwen2.5-7b"
+    - "llama3.1-8b"
+    - "qwen2.5-14b"
+    - "yi-34b"
+    - "mixtral-8x7b"
+    - "codellama-34b"
+    - "llama3.1-70b"
+    - "qwen2.5-72b"
+    - "mixtral-8x22b"
     # add more models here for full v1 later
 
   prompts:
