@@ -7,7 +7,7 @@ split: "train"
 seed: 0
 
 # Scale controls
-n_per_task: 2000                 # set to your target; keep small for first real run
+n_per_task: 5                # set to your target; keep small for first real run
 max_units_per_query: 40          # intended: |P| * |M| in monolithic (e.g., 4*10=40)
 # NOTE: if you don't want full cartesian yet, set max_units_per_query lower and sample actions.
 
@@ -15,7 +15,7 @@ max_units_per_query: 40          # intended: |P| * |M| in monolithic (e.g., 4*10
 endpoint: "http://localhost:18000/v1"
 timeout_s: 120
 temperature: 0.0
-max_tokens: 512
+max_tokens: 128
 
 # Logging + robustness
 log_prompt_text: true            # store rendered prompt_text for reproducibility (recommended by spec)
@@ -52,34 +52,33 @@ pools:
   models:
     # Use model keys/identifiers consistent with llm_candidates.json 'model'
     - "mistral-7b"
-    - "qwen2.5-7b"
-    - "llama3.1-8b"
-    - "qwen2.5-14b"
-    - "yi-34b"
-    - "mixtral-8x7b"
-    - "codellama-34b"
-    - "llama3.1-70b"
-    - "qwen2.5-72b"
-    - "mixtral-8x22b"
+    #- "qwen2.5-7b"
+    #- "llama3.1-8b"
+    #- "qwen2.5-14b"
+    #- "yi-34b"
+    #- "mixtral-8x7b"
+    #- "codellama-34b"
+    #- "llama3.1-70b"
+    #- "qwen2.5-72b"
+    #- "mixtral-8x22b"
     # add more models here for full v1 later
 
   prompts:
     # Keep simple IDs; builder should render prompt_text from templates
-    - id: "direct"
-      strategy: "direct"
-      params: {}
+    - "direct"
+      
 
-    - id: "cot"
-      strategy: "cot"
-      params: {}
+    #- id: "cot"
+    #  strategy: "cot"
+    #  params: {}
 
-    - id: "decompose"
-      strategy: "decompose"
-      params: {}
+    #- id: "decompose"
+    #  strategy: "decompose"
+    #  params: {}
 
-    - id: "selfcheck"
-      strategy: "selfcheck"
-      params: {}
+    #- id: "selfcheck"
+    #  strategy: "selfcheck"
+    #  params: {}
 
 # Action selection per qid
 # For monolithic GRPP-IL v1, spec defines total rows per qid = |P|*|M|.
@@ -126,15 +125,15 @@ tasks:
     eval_mode: "auto"
     answer_extraction: "squad_span"          # parsed_answer extractor name
 
-  multinews:
-    hf_path: "multi_news"
-    hf_name: null
-    query_field: "document"
-    gold_field: "summary"
-    primary_metric: "rougeL"
-    metric_name: "ROUGE-L"
-    eval_mode: "auto"
-    summary_extraction: "raw"                # usually parsed_answer = response (maybe trimmed)
+  # multinews:
+    #hf_path: "multi_news"
+    #hf_name: null
+    #query_field: "document"
+    #gold_field: "summary"
+    #primary_metric: "rougeL"
+    #metric_name: "ROUGE-L"
+    #eval_mode: "auto"
+    #summary_extraction: "raw"                # usually parsed_answer = response (maybe trimmed)
 
   alpaca:
     hf_path: "tatsu-lab/alpaca"
