@@ -43,3 +43,16 @@ tasks:
     query_field: "document"
     gold_field: "summary"
     primary_metric: "rougeL"
+
+  alpaca:
+    hf_path: "tatsu-lab/alpaca"
+    query_field: "instruction"
+    input_field: "input"
+    gold_field: "output"
+    primary_metric: "judge"
+
+  humaneval:
+    hf_path: "openai_humaneval"
+    query_field: "prompt"
+    gold_field: "canonical_solution"
+    primary_metric: "pass"
