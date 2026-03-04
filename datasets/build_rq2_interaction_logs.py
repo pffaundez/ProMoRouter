@@ -5,27 +5,27 @@ import yaml
 import requests
 from datasets import load_dataset
 
-# -------- Prompt strategies --------
+# -------- Prompt strategies (IDs must match YAML pools.prompts) --------
 PROMPTS = {
     "direct": {
         "system": "You are a helpful assistant. Answer concisely and accurately.",
-        "user": "{q}"
+        "user": "{q}",
     },
     "cot": {
         "system": "You are a helpful assistant. Think step by step internally, then provide the final answer only.",
-        "user": "{q}\n\nFinal answer (one line):"
+        "user": "{q}\n\nFinal answer (one line):",
     },
     "decompose": {
         "system": "You are a helpful assistant. Decompose the problem internally, then provide the final answer only.",
-        "user": "{q}\n\nFinal answer (one line):"
+        "user": "{q}\n\nFinal answer (one line):",
     },
     "selfcheck": {
         "system": "You are a helpful assistant. Answer, self-check briefly, and provide the final answer only.",
-        "user": "{q}\n\nFinal answer (one line):"
+        "user": "{q}\n\nFinal answer (one line):",
     },
 }
 
-# ----------------- Normalization -----------------
+# ----------------- Normalization / metrics -----------------
 def normalize_text(s: str) -> str:
     s = (s or "").strip().lower()
     s = re.sub(r"\b(a|an|the)\b", " ", s)
@@ -43,35 +43,50 @@ def f1_token(pred: str, gold: str) -> float:
         return 1.0
     if not p or not g:
         return 0.0
-    common = {}
+
+    common: Dict[str, int] = {}
     for w in p:
         common[w] = common.get(w, 0) + 1
+
     num_same = 0
     for w in g:
         if common.get(w, 0) > 0:
             num_same += 1
             common[w] -= 1
+
     if num_same == 0:
         return 0.0
+
     precision = num_same / len(p)
     recall = num_same / len(g)
     return 2 * precision * recall / (precision + recall)
 
 def acc_numeric(pred: str, gold: str) -> float:
+    """Simple numeric extraction for GSM8K-like answers."""
     def extract_num(x: str) -> Optional[str]:
-        m = re.findall(r"-?\d+(?:\.\d+)?", (x or "").replace(",", ""))
+        x = (x or "").strip().replace(",", "")
+        m = re.findall(r"-?\d+(?:\.\d+)?", x)
         return m[-1] if m else None
-    return 1.0 if extract_num(pred) == extract_num(gold) else 0.0
 
-# ----------------- vLLM client -----------------
-def chat(endpoint, model, system, user, temperature, max_tokens, timeout_s):
+    pn = extract_num(pred)
+    gn = extract_num(gold)
+    return 1.0 if (pn is not None and gn is not None and pn == gn) else 0.0
+
+# ----------------- OpenAI-compatible client (vLLM / OpenAI-like) -----------------
+def chat(
+    endpoint: str,
+    model: str,
+    system: str,
+    user: str,
+    temperature: float,
+    max_tokens: int,
+    timeout_s: int,
+) -> Tuple[str, float, int, int]:
     url = endpoint.rstrip("/") + "/chat/completions"
     payload = {
         "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user}
-        ],
+        "messages": [{"role": "system", "content": system},
+                     {"role": "user", "content": user}],
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
@@ -80,6 +95,7 @@ def chat(endpoint, model, system, user, temperature, max_tokens, timeout_s):
     latency = time.time() - t0
     r.raise_for_status()
     data = r.json()
+
     text = data["choices"][0]["message"]["content"]
     usage = data.get("usage", {}) or {}
     tin = int(usage.get("prompt_tokens", 0))
@@ -87,28 +103,31 @@ def chat(endpoint, model, system, user, temperature, max_tokens, timeout_s):
     return text, latency, tin, tout
 
 # ----------------- Reward -----------------
-def reward(primary, tokens_total, lam):
+def compute_reward(primary: Optional[float], tokens_total: int, lam: float) -> Optional[float]:
     if primary is None:
         return None
     return float(primary) - lam * float(tokens_total)
 
-# ----------------- Query building -----------------
-def make_query(task_cfg, ex):
-    query = ex.get(task_cfg["query_field"], "")
+# ----------------- Task → query rendering -----------------
+def make_query(task_cfg: Dict[str, Any], ex: Dict[str, Any]) -> Tuple[str, Any]:
+    """returns (query_text, gold_raw)"""
+    q = ex.get(task_cfg["query_field"], "")
 
+    # optional context (e.g., SQuAD)
     if task_cfg.get("context_field"):
         ctx = ex.get(task_cfg["context_field"], "")
-        query = f"Context:\n{ctx}\n\nQuestion:\n{query}"
+        q = f"Context:\n{ctx}\n\nQuestion:\n{q}"
 
+    # optional input field (e.g., Alpaca instruction + input)
     if task_cfg.get("input_field"):
         inp = ex.get(task_cfg["input_field"], "")
         if inp:
-            query = f"Instruction:\n{query}\n\nInput:\n{inp}"
+            q = f"Instruction:\n{q}\n\nInput:\n{inp}"
 
     gold = ex.get(task_cfg.get("gold_field", ""), None)
-    return query, gold
+    return q, gold
 
-def extract_gold(task_name, gold_raw):
+def extract_gold(task_name: str, gold_raw: Any) -> str:
     if gold_raw is None:
         return ""
     if task_name == "squad":
@@ -117,120 +136,256 @@ def extract_gold(task_name, gold_raw):
     return str(gold_raw)
 
 # ----------------- Scoring -----------------
-def score(task_name, primary_metric, pred, gold):
+def score(task_name: str, primary_metric: Optional[str], pred: str, gold: str) -> Dict[str, Any]:
+    """
+    Returns a consistent performance object.
+    For tasks without auto metrics, primary will be None (but run still logs response/cost).
+    """
     perf = {
         "primary": None,
         "metric": primary_metric,
         "em": None,
         "f1": None,
-        "acc": None
+        "acc": None,
     }
 
     if task_name in ("hotpotqa", "squad"):
         perf["em"] = em(pred, gold)
         perf["f1"] = f1_token(pred, gold)
-        perf["primary"] = perf["f1"]
+        perf["primary"] = perf["em"] if primary_metric == "em" else perf["f1"]
 
     elif task_name == "gsm8k":
         perf["acc"] = acc_numeric(pred, gold)
         perf["primary"] = perf["acc"]
 
+    else:
+        perf["primary"] = None
+
     return perf
 
 # ----------------- Split fallback -----------------
-def load_with_fallback(hf_path, hf_name, preferred_split):
-    for split_try in [preferred_split, "validation", "test", "train"]:
+def load_with_fallback(hf_path: str, hf_name: Optional[str], preferred_split: str):
+    """
+    Robust dataset loader with split fallback.
+    """
+    splits_to_try = []
+
+    for s in [preferred_split, "train", "validation", "test"]:
+        if s not in splits_to_try:
+            splits_to_try.append(s)
+
+    last_error = None
+
+    for split_try in splits_to_try:
         try:
-            return load_dataset(hf_path, hf_name, split=split_try)
-        except Exception:
-            continue
-    raise RuntimeError(f"Could not load dataset {hf_path}")
+            ds = load_dataset(
+                path=hf_path,
+                name=hf_name,
+                split=split_try
+            )
+            return ds, split_try
+
+        except Exception as e:
+            last_error = e
+
+    raise RuntimeError(
+        f"Could not load dataset={hf_path} name={hf_name}. "
+        f"Tried splits={splits_to_try}. Last error: {last_error}"
+    )
+
+# ----------------- Prompt list normalization -----------------
+def normalize_prompt_ids(prompts_cfg: Any) -> List[str]:
+    """
+    YAML prompts may be:
+      - ["direct", "cot", ...]
+      - [{id: "direct", ...}, ...]
+    Normalize to list[str].
+    """
+    out: List[str] = []
+    if not isinstance(prompts_cfg, list):
+        raise ValueError(f"Unsupported prompts config type: {type(prompts_cfg)}")
+    for p in prompts_cfg:
+        if isinstance(p, str):
+            out.append(p)
+        elif isinstance(p, dict):
+            pid = p.get("id")
+            if not pid:
+                raise ValueError(f"Prompt dict missing 'id': {p}")
+            out.append(pid)
+        else:
+            raise ValueError(f"Unsupported prompt entry: {p} ({type(p)})")
+    return out
+
+# ----------------- Config deep-merge (base + shard override) -----------------
+def deep_update(d: Dict[str, Any], u: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Recursively update dict d with dict u (u overrides d).
+    """
+    for k, v in (u or {}).items():
+        if isinstance(v, dict) and k in d and isinstance(d[k], dict):
+            deep_update(d[k], v)
+        else:
+            d[k] = v
+    return d
+
+# ----------------- Action selection helper (optional cap) -----------------
+def build_actions(models: List[str], prompt_ids: List[str], cfg: Dict[str, Any]) -> List[Tuple[str, str]]:
+    """
+    Returns list of (prompt_id, model_id).
+    Supports optional cap via:
+      max_units_per_query + actions.mode == "cartesian_then_cap"
+    """
+    combos: List[Tuple[str, str]] = [(p, m) for p in prompt_ids for m in models]
+
+    max_units = cfg.get("max_units_per_query", None)
+    actions_cfg = cfg.get("actions", {}) or {}
+    mode = actions_cfg.get("mode", "cartesian_then_cap")
+
+    if max_units is None:
+        return combos
+
+    try:
+        max_units = int(max_units)
+    except Exception:
+        return combos
+
+    if mode == "cartesian_then_cap" and max_units > 0 and len(combos) > max_units:
+        # deterministic cap: shuffle with seed, then take first max_units
+        seed = int(cfg.get("seed", 0))
+        rng = random.Random(seed + 1337)
+        combos_copy = combos[:]
+        rng.shuffle(combos_copy)
+        return combos_copy[:max_units]
+
+    return combos
 
 # ----------------- Main -----------------
 def main():
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", required=True)
+    ap.add_argument("--config", required=True, help="Path to shard/override YAML config")
+    ap.add_argument("--base_config", default="configs/rq2_dataset_builder_full.yaml",
+                    help="Base YAML (full builder) to deep-merge with shard config")
     args = ap.parse_args()
 
-    cfg = yaml.safe_load(open(args.config))
+    with open(args.base_config, "r", encoding="utf-8") as f:
+        base_cfg = yaml.safe_load(f) or {}
+    with open(args.config, "r", encoding="utf-8") as f:
+        override_cfg = yaml.safe_load(f) or {}
+
+    # Deep merge: shard overrides base
+    cfg: Dict[str, Any] = deep_update(base_cfg, override_cfg)
 
     out_path = cfg["out_jsonl"]
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
+
+    seed = int(cfg.get("seed", 0))
+    random.seed(seed)
 
     endpoint = cfg["endpoint"]
     timeout_s = int(cfg.get("timeout_s", 120))
     temperature = float(cfg.get("temperature", 0.0))
     max_tokens = int(cfg.get("max_tokens", 256))
+    lam = float(cfg.get("reward", {}).get("lambda_cost", 1e-5))
 
-    lam = cfg.get("reward", {}).get("lambda_cost", 1e-5)
+    models: List[str] = cfg["pools"]["models"]
+    prompt_ids: List[str] = normalize_prompt_ids(cfg["pools"]["prompts"])
+    tasks_cfg: Dict[str, Any] = cfg["tasks"]
+    # safety filter
+    tasks_cfg.pop("multinews", None)
 
-    models = cfg["pools"]["models"]
-    prompts = cfg["pools"]["prompts"]
-    tasks_cfg = cfg["tasks"]
+    # Validate prompt ids exist
+    missing = [p for p in prompt_ids if p not in PROMPTS]
+    if missing:
+        raise KeyError(f"Prompt ids not found in PROMPTS: {missing}. Available: {list(PROMPTS.keys())}")
 
-    rows = []
+    n_per_task = int(cfg.get("n_per_task", 10))
+    global_split_pref = cfg.get("split", "train")
+
+    # Build prompt×model actions once (applies per query)
+    actions = build_actions(models=models, prompt_ids=prompt_ids, cfg=cfg)
+
+    rows: List[Dict[str, Any]] = []
+    per_task_counts: Dict[str, int] = {}
+    per_task_failed: Dict[str, int] = {}
 
     for task_name, tcfg in tasks_cfg.items():
-        n = int(cfg.get("n_per_task", 10))
-        split_pref = tcfg.get("split", cfg.get("split", "train"))
+        split_pref = tcfg.get("split", global_split_pref)
+        hf_path = tcfg["hf_path"]
+        hf_name = tcfg.get("hf_name", None)
 
-        ds = load_with_fallback(
-            tcfg["hf_path"],
-            tcfg.get("hf_name"),
-            split_pref
-        )
-
-        ds = ds.shuffle(seed=cfg.get("seed", 0)).select(range(min(n, len(ds))))
+        ds, used_split = load_with_fallback(hf_path, hf_name, split_pref)
+        ds = ds.shuffle(seed=seed).select(range(min(n_per_task, len(ds))))
 
         for i, ex in enumerate(ds):
-            qid = f"{task_name}-{i:06d}"
+            qid = f"{task_name}-{used_split}-{i:06d}"
             query_text, gold_raw = make_query(tcfg, ex)
             gold = extract_gold(task_name, gold_raw)
 
-            for p in prompts:
-                for m in models:
+            for (p, m) in actions:
+                sys = PROMPTS[p]["system"]
+                usr = PROMPTS[p]["user"].format(q=query_text)
 
-                    sys = PROMPTS[p]["system"]
-                    usr = PROMPTS[p]["user"].format(q=query_text)
+                rec: Dict[str, Any] = {
+                    "task": task_name,
+                    "qid": qid,
+                    "prompt": p,
+                    "model": m,
+                    "failed": False,
+                    "response": "",
+                    "performance": None,
+                    "cost": None,
+                    "reward": None,
+                    "error": None,
+                }
 
-                    rec = {
-                        "task": task_name,
-                        "qid": qid,
-                        "prompt": p,
-                        "model": m,
-                        "failed": False,
+                try:
+                    text, lat, tin, tout = chat(endpoint, m, sys, usr, temperature, max_tokens, timeout_s)
+                    tokens_total = tin + tout
+                    perf = score(task_name, tcfg.get("primary_metric", None), text, gold)
+
+                    rec["response"] = text
+                    rec["performance"] = perf
+                    rec["cost"] = {
+                        "tokens_in": tin,
+                        "tokens_out": tout,
+                        "tokens_total": tokens_total,
+                        "latency_s": lat,
                     }
+                    rec["reward"] = compute_reward(perf["primary"], tokens_total, lam)
 
-                    try:
-                        text, lat, tin, tout = chat(
-                            endpoint, m, sys, usr,
-                            temperature, max_tokens, timeout_s
-                        )
+                except Exception as e:
+                    rec["failed"] = True
+                    rec["error"] = str(e)
+                    rec["performance"] = {
+                        "primary": None,
+                        "metric": tcfg.get("primary_metric", None),
+                        "em": None,
+                        "f1": None,
+                        "acc": None,
+                    }
+                    rec["cost"] = {"tokens_in": 0, "tokens_out": 0, "tokens_total": 0, "latency_s": 0.0}
+                    rec["reward"] = None
 
-                        tokens_total = tin + tout
-                        perf = score(task_name, tcfg["primary_metric"], text, gold)
+                rows.append(rec)
+                per_task_counts[task_name] = per_task_counts.get(task_name, 0) + 1
+                if rec["failed"]:
+                    per_task_failed[task_name] = per_task_failed.get(task_name, 0) + 1
 
-                        rec.update({
-                            "response": text,
-                            "performance": perf,
-                            "cost": tokens_total,
-                            "reward": reward(perf["primary"], tokens_total, lam)
-                        })
-
-                    except Exception as e:
-                        rec["failed"] = True
-                        rec["error"] = str(e)
-
-                    rows.append(rec)
-
-    with open(out_path, "w") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         for r in rows:
-            f.write(json.dumps(r) + "\n")
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    total_failed = sum(1 for r in rows if r.get("failed"))
 
     print("==== DONE ====")
+    print(f"Base: {args.base_config}")
+    print(f"Shard: {args.config}")
+    print(f"Out: {out_path}")
     print(f"Rows: {len(rows)}")
-    print(f"Failed: {sum(r['failed'] for r in rows)}")
+    print(f"Failed: {total_failed}")
+    print("Per-task rows:", per_task_counts)
+    print("Per-task failed:", per_task_failed)
 
 if __name__ == "__main__":
     main()
