@@ -1,0 +1,180 @@
+# Canonical builder config for: GRPP-IL v1 (GraphRouter++ Interaction Log v1)
+# Spec: GraphRouter++ Dataset Specification Pack
+
+dataset_name: "grpp_il_v1"
+out_jsonl: "data/interaction_logs/grpp_il_v1/train.jsonl"   # sharding recommended later
+split: "train"
+seed: 0
+
+# Scale controls
+n_per_task: 5                # set to your target; keep small for first real run
+max_units_per_query: 40          # intended: |P| * |M| in monolithic (e.g., 4*10=40)
+# NOTE: if you don't want full cartesian yet, set max_units_per_query lower and sample actions.
+
+# Execution (OpenAI-compatible server)
+endpoint: "http://localhost:18000/v1"
+timeout_s: 120
+temperature: 0.0
+max_tokens: 128
+
+# Logging + robustness
+log_prompt_text: true            # store rendered prompt_text for reproducibility (recommended by spec)
+log_raw_response: true
+truncate_fields:
+  # optional safety to avoid gigantic rows (esp. multinews)
+  query_chars: 12000
+  context_chars: 12000
+  response_chars: 12000
+  prompt_text_chars: 16000
+
+# Decomposition (monolithic v1)
+decomposition:
+  enabled: false                 # monolithic first; spec says subquery=query
+  max_subqueries: 1              # K=1
+  splitter: "none"               # placeholder; later "heuristic_splitter_v0"
+
+# Cost definition (spec-compliant)
+cost:
+  mode: "priced_tokens"          # cost = in_tokens*in_price + out_tokens*out_price
+  prices_from: "configs/llm_candidates.json"
+  normalize_per_million: true    # prices in $/1M tokens
+  # also store a lightweight proxy for analysis
+  cost_proxy: "tokens_total"     # tokens_in + tokens_out
+
+# Reward (optional; can be computed later, but keep config for consistency)
+reward:
+  enabled: true
+  lambda_cost: 0.00001           # used only if you compute reward inline
+  form: "performance_minus_lambda_cost"
+
+# Pools (actions = prompt × model)
+pools:
+  models:
+    # Use model keys/identifiers consistent with llm_candidates.json 'model'
+    - "mistral-7b"
+    - "qwen2.5-7b"
+    - "llama3.1-8b"
+    - "qwen2.5-14b"
+    - "yi-34b"
+    - "mixtral-8x7b"
+    - "codellama-34b"
+    - "llama3.1-70b"
+    - "qwen2.5-72b"
+    - "mixtral-8x22b"
+    # add more models here for full v1 later
+
+  prompts:
+    # Keep simple IDs; builder should render prompt_text from templates
+    - "direct"
+    - "cot"
+    - "decompose"
+    - "selfcheck"
+
+
+# Action selection per qid
+# For monolithic GRPP-IL v1, spec defines total rows per qid = |P|*|M|.
+# You can either enumerate full cartesian, or sample if max_units_per_query < |P|*|M|.
+actions:
+  mode: "cartesian_then_cap"     # enumerate prompt×model then cap to max_units_per_query (optional)
+  sampling:
+    enabled: false               # set true if you want partial coverage
+    method: "uniform"            # uniform over action list
+    ensure_coverage:
+      prompts: true
+      models: true
+
+# Tasks (automatic-metric tasks recommended for v1)
+# NOTE: If a task needs a judge/harness, keep it in tasks but mark eval_mode so performance can be null.
+tasks:
+  hotpotqa:
+    hf_path: "hotpot_qa"
+    hf_name: "distractor"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "f1"
+    metric_name: "F1"
+    eval_mode: "auto"
+
+  gsm8k:
+    hf_path: "gsm8k"
+    hf_name: "main"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "accuracy"
+    metric_name: "accuracy"
+    eval_mode: "auto"
+    answer_extraction: "gsm8k_final_number"  # parsed_answer extractor name in your code
+
+  squad:
+    hf_path: "squad"
+    hf_name: null
+    query_field: "question"
+    context_field: "context"
+    gold_field: "answers"
+    primary_metric: "f1"
+    metric_name: "F1"
+    eval_mode: "auto"
+    answer_extraction: "squad_span"          # parsed_answer extractor name
+
+  multinews:
+    hf_path: "multi_news"
+    hf_name: null
+    query_field: "document"
+    gold_field: "summary"
+    primary_metric: "rougeL"
+    metric_name: "ROUGE-L"
+    eval_mode: "auto"
+    summary_extraction: "raw"                # usually parsed_answer = response (maybe trimmed)
+
+  alpaca:
+    hf_path: "tatsu-lab/alpaca"
+    hf_name: null
+    query_field: "instruction"
+    input_field: "input"
+    gold_field: "output"
+    primary_metric: null
+    metric_name: "judge_score"
+    eval_mode: "judge"                       # performance can be null unless judge is enabled
+    judge:
+      enabled: false
+      judge_model: null
+
+  humaneval:
+    hf_path: "openai_humaneval"
+    hf_name: null
+    query_field: "prompt"
+    gold_field: "test"
+    entry_point_field: "entry_point"
+    primary_metric: null
+    metric_name: "pass@1"
+    eval_mode: "harness"                     # performance can be null unless harness is enabled
+    harness:
+      enabled: false
+      timeout_s: 10
+
+# Output schema knobs (what to write per row)
+# This mirrors the spec fields; builder should fill these.
+output_fields:
+  - task
+  - qid
+  - query
+  - subquery
+  - is_decomposed
+  - subquery_id
+  - num_subqueries
+  - prompt
+  - prompt_text
+  - model
+  - model_backend
+  - response
+  - parsed_answer
+  - performance
+  - metric_name
+  - cost
+  - input_tokens
+  - output_tokens
+  - latency_s
+  - timestamp
+  - seed
+  - status
+  - error_msg
