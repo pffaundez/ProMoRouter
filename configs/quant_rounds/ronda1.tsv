@@ -1,0 +1,5 @@
+# gpu_id	port	served_name	hf_model_repo	quantization	max_model_len	gpu_mem_util
+0	18000	mistral-7b-gptq4	RedHatAI/Mistral-7B-Instruct-v0.3-GPTQ-4bit	gptq	512	0.90
+0	18001	qwen2.5-7b-gptq4	Qwen/Qwen2.5-7B-Instruct-GPTQ-Int4	gptq	512	0.90
+0	18002	llama3.1-8b-gptq4	hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4	gptq	512	0.90
+0	18003	qwen2.5-14b-gptq4	Qwen/Qwen2.5-14B-Instruct-GPTQ-Int4	gptq	512	0.85

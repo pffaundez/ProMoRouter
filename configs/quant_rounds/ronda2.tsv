@@ -1,0 +1,4 @@
+# gpu_id	port	served_name	hf_model_repo	quantization	max_model_len	gpu_mem_util
+0	18100	yi-34b-gptq4	REEMPLAZAR_CON_REPO_CUANTIZADO_YI34B	gptq	512	0.80
+0	18101	codellama-34b-gptq4	REEMPLAZAR_CON_REPO_CUANTIZADO_CODELLAMA34B	gptq	512	0.80
+0	18102	mixtral-8x22b-gptq4	REEMPLAZAR_CON_REPO_CUANTIZADO_MIXTRAL8X22B	gptq	512	0.65
