@@ -1,0 +1,61 @@
+dataset_name: "grpp_il_v1"
+
+out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__qwen2.5-72b.jsonl"
+endpoint: "http://localhost:18201/v1"
+
+api_mode: "chat"
+
+split: "train"
+seed: 0
+n_per_task: 5
+
+timeout_s: 120
+temperature: 0.0
+max_tokens: 128
+
+lambda_cost: 0.00001
+cost_proxy: "tokens_total"
+
+pools:
+  models:
+  - "qwen2.5-72b-gptq4"
+  prompts:
+  - "direct"
+  - "cot"
+  - "decompose"
+  - "selfcheck"
+
+tasks:
+  hotpotqa:
+    hf_path: "hotpot_qa"
+    hf_name: "distractor"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "f1"
+
+  squad:
+    hf_path: "squad"
+    query_field: "question"
+    context_field: "context"
+    gold_field: "answers"
+    primary_metric: "f1"
+
+  gsm8k:
+    hf_path: "gsm8k"
+    hf_name: "main"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "acc"
+
+  alpaca:
+    hf_path: "tatsu-lab/alpaca"
+    query_field: "instruction"
+    input_field: "input"
+    gold_field: "output"
+    primary_metric: "judge"
+
+  humaneval:
+    hf_path: "openai_humaneval"
+    query_field: "prompt"
+    gold_field: "canonical_solution"
+    primary_metric: "pass"
