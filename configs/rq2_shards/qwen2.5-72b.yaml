@@ -2,6 +2,8 @@ dataset_name: "grpp_il_v1"
 
 out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__qwen2.5-72b.jsonl"
 endpoint: "http://localhost:18201/v1"
+api_mode: "chat"
+served_model_name: "qwen2.5-72b-gptq4"
 
 api_mode: "chat"
 
@@ -18,7 +20,7 @@ cost_proxy: "tokens_total"
 
 pools:
   models:
-  - "qwen2.5-72b-gptq4"
+  - "qwen2.5-72b"
   prompts:
   - "direct"
   - "cot"

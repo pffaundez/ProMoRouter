@@ -1,7 +1,10 @@
 dataset_name: "grpp_il_v1"
 
 out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__mistral-7b.jsonl"
-endpoint: http://localhost:18010/v1
+endpoint: "http://localhost:18000/v1"
+
+api_mode: "chat"
+served_model_name: "mistral-7b-gptq4"
 
 split: "train"
 seed: 0
@@ -17,13 +20,14 @@ reward:
 cost_proxy: "tokens_total"
 
 pools:
-  models: 
-  - "mistral-7b"
+  models:
+  # we left the cannonical name
+    - "mistral-7b"
   prompts:
-  - "direct"
-  - "cot"
-  - "decompose"
-  - "selfcheck"
+    - "direct"
+    - "cot"
+    - "decompose"
+    - "selfcheck"
 
 tasks:
   hotpotqa:

@@ -1,7 +1,11 @@
 dataset_name: "grpp_il_v1"
 
 out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__codellama-34b.jsonl"
-endpoint: "http://localhost:18016/v1"
+endpoint: "http://localhost:18101/v1"
+api_mode: "completion"
+served_model_name: "codellama-34b-gptq4"
+
+api_mode: "completion"
 
 split: "train"
 seed: 0
@@ -15,7 +19,7 @@ lambda_cost: 0.00001
 cost_proxy: "tokens_total"
 
 pools:
-  models: 
+  models:
   - "codellama-34b"
   prompts:
   - "direct"
@@ -44,14 +48,6 @@ tasks:
     query_field: "question"
     gold_field: "answer"
     primary_metric: "acc"
-
-  #multinews:
-    #hf_path: "allenai/multi_news"
-    #hf_name: null
-    #query_field: "document"
-    #gold_field: "summary"
-    #primary_metric: "rougeL"
-    #metric_name: "ROUGE-L"
 
   alpaca:
     hf_path: "tatsu-lab/alpaca"

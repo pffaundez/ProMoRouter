@@ -1,7 +1,9 @@
 dataset_name: "grpp_il_v1"
 
 out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__qwen2.5-14b.jsonl"
-endpoint: "http://localhost:18013/v1"
+endpoint: "http://localhost:18003/v1"
+api_mode: "chat"
+served_model_name: "qwen2.5-14b-gptq4"
 
 split: "train"
 seed: 0
@@ -15,7 +17,7 @@ lambda_cost: 0.00001
 cost_proxy: "tokens_total"
 
 pools:
-  models: 
+  models:
   - "qwen2.5-14b"
   prompts:
   - "direct"

@@ -1,7 +1,11 @@
 dataset_name: "grpp_il_v1"
 
 out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__mixtral-8x7b.jsonl"
-endpoint: "http://localhost:18015/v1"
+endpoint: "http://localhost:18102/v1"
+api_mode: "chat"
+served_model_name: "mixtral-8x7b-gptq4"
+
+api_mode: "chat"
 
 split: "train"
 seed: 0
@@ -15,7 +19,7 @@ lambda_cost: 0.00001
 cost_proxy: "tokens_total"
 
 pools:
-  models: 
+  models:
   - "mixtral-8x7b"
   prompts:
   - "direct"
