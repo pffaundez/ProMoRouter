@@ -1,9 +1,14 @@
-import os, json, time, random, re
+import os
+import json
+import time
+import random
+import re
 from typing import Dict, Any, List, Optional, Tuple
 
 import yaml
 import requests
 from datasets import load_dataset
+
 
 # -------- Prompt strategies (IDs must match YAML pools.prompts) --------
 PROMPTS = {
@@ -25,6 +30,7 @@ PROMPTS = {
     },
 }
 
+
 # ----------------- Normalization / metrics -----------------
 def normalize_text(s: str) -> str:
     s = (s or "").strip().lower()
@@ -33,8 +39,10 @@ def normalize_text(s: str) -> str:
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
+
 def em(pred: str, gold: str) -> float:
     return 1.0 if normalize_text(pred) == normalize_text(gold) else 0.0
+
 
 def f1_token(pred: str, gold: str) -> float:
     p = normalize_text(pred).split()
@@ -61,8 +69,10 @@ def f1_token(pred: str, gold: str) -> float:
     recall = num_same / len(g)
     return 2 * precision * recall / (precision + recall)
 
+
 def acc_numeric(pred: str, gold: str) -> float:
     """Simple numeric extraction for GSM8K-like answers."""
+
     def extract_num(x: str) -> Optional[str]:
         x = (x or "").strip().replace(",", "")
         m = re.findall(r"-?\d+(?:\.\d+)?", x)
@@ -72,10 +82,11 @@ def acc_numeric(pred: str, gold: str) -> float:
     gn = extract_num(gold)
     return 1.0 if (pn is not None and gn is not None and pn == gn) else 0.0
 
+
 # ----------------- OpenAI-compatible client (vLLM / OpenAI-like) -----------------
-def chat(
+def chat_completion(
     endpoint: str,
-    model: str,
+    served_model_name: str,
     system: str,
     user: str,
     temperature: float,
@@ -83,13 +94,16 @@ def chat(
     timeout_s: int,
 ) -> Tuple[str, float, int, int]:
     url = endpoint.rstrip("/") + "/chat/completions"
+
     payload = {
-        "model": model,
-        "messages": [{"role": "system", "content": system},
-                     {"role": "user", "content": user}],
+        "model": served_model_name,
+        "messages": [
+            {"role": "user", "content": f"{system}\n\n{user}"},
+        ],
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
+
     t0 = time.time()
     r = requests.post(url, json=payload, timeout=timeout_s)
     latency = time.time() - t0
@@ -102,23 +116,89 @@ def chat(
     tout = int(usage.get("completion_tokens", 0))
     return text, latency, tin, tout
 
+
+def text_completion(
+    endpoint: str,
+    served_model_name: str,
+    prompt_text: str,
+    temperature: float,
+    max_tokens: int,
+    timeout_s: int,
+) -> Tuple[str, float, int, int]:
+    url = endpoint.rstrip("/") + "/completions"
+    payload = {
+        "model": served_model_name,
+        "prompt": prompt_text,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+    }
+
+    t0 = time.time()
+    r = requests.post(url, json=payload, timeout=timeout_s)
+    latency = time.time() - t0
+    r.raise_for_status()
+    data = r.json()
+
+    text = data["choices"][0]["text"]
+    usage = data.get("usage", {}) or {}
+    tin = int(usage.get("prompt_tokens", 0))
+    tout = int(usage.get("completion_tokens", 0))
+    return text, latency, tin, tout
+
+
+def generate_response(
+    endpoint: str,
+    api_mode: str,
+    served_model_name: str,
+    system: str,
+    user: str,
+    temperature: float,
+    max_tokens: int,
+    timeout_s: int,
+) -> Tuple[str, float, int, int]:
+    api_mode = (api_mode or "chat").strip().lower()
+
+    if api_mode == "chat":
+        return chat_completion(
+            endpoint=endpoint,
+            served_model_name=served_model_name,
+            system=system,
+            user=user,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout_s=timeout_s,
+        )
+
+    if api_mode == "completion":
+        prompt_text = f"{system}\n\n{user}"
+        return text_completion(
+            endpoint=endpoint,
+            served_model_name=served_model_name,
+            prompt_text=prompt_text,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout_s=timeout_s,
+        )
+
+    raise ValueError(f"Unsupported api_mode: {api_mode}")
+
+
 # ----------------- Reward -----------------
 def compute_reward(primary: Optional[float], tokens_total: int, lam: float) -> Optional[float]:
     if primary is None:
         return None
     return float(primary) - lam * float(tokens_total)
 
+
 # ----------------- Task → query rendering -----------------
 def make_query(task_cfg: Dict[str, Any], ex: Dict[str, Any]) -> Tuple[str, Any]:
     """returns (query_text, gold_raw)"""
     q = ex.get(task_cfg["query_field"], "")
 
-    # optional context (e.g., SQuAD)
     if task_cfg.get("context_field"):
         ctx = ex.get(task_cfg["context_field"], "")
         q = f"Context:\n{ctx}\n\nQuestion:\n{q}"
 
-    # optional input field (e.g., Alpaca instruction + input)
     if task_cfg.get("input_field"):
         inp = ex.get(task_cfg["input_field"], "")
         if inp:
@@ -126,6 +206,7 @@ def make_query(task_cfg: Dict[str, Any], ex: Dict[str, Any]) -> Tuple[str, Any]:
 
     gold = ex.get(task_cfg.get("gold_field", ""), None)
     return q, gold
+
 
 def extract_gold(task_name: str, gold_raw: Any) -> str:
     if gold_raw is None:
@@ -135,12 +216,9 @@ def extract_gold(task_name: str, gold_raw: Any) -> str:
         return texts[0] if texts else ""
     return str(gold_raw)
 
+
 # ----------------- Scoring -----------------
 def score(task_name: str, primary_metric: Optional[str], pred: str, gold: str) -> Dict[str, Any]:
-    """
-    Returns a consistent performance object.
-    For tasks without auto metrics, primary will be None (but run still logs response/cost).
-    """
     perf = {
         "primary": None,
         "metric": primary_metric,
@@ -163,11 +241,9 @@ def score(task_name: str, primary_metric: Optional[str], pred: str, gold: str) -
 
     return perf
 
+
 # ----------------- Split fallback -----------------
 def load_with_fallback(hf_path: str, hf_name: Optional[str], preferred_split: str):
-    """
-    Robust dataset loader with split fallback.
-    """
     splits_to_try = []
 
     for s in [preferred_split, "train", "validation", "test"]:
@@ -181,10 +257,9 @@ def load_with_fallback(hf_path: str, hf_name: Optional[str], preferred_split: st
             ds = load_dataset(
                 path=hf_path,
                 name=hf_name,
-                split=split_try
+                split=split_try,
             )
             return ds, split_try
-
         except Exception as e:
             last_error = e
 
@@ -193,14 +268,9 @@ def load_with_fallback(hf_path: str, hf_name: Optional[str], preferred_split: st
         f"Tried splits={splits_to_try}. Last error: {last_error}"
     )
 
+
 # ----------------- Prompt list normalization -----------------
 def normalize_prompt_ids(prompts_cfg: Any) -> List[str]:
-    """
-    YAML prompts may be:
-      - ["direct", "cot", ...]
-      - [{id: "direct", ...}, ...]
-    Normalize to list[str].
-    """
     out: List[str] = []
     if not isinstance(prompts_cfg, list):
         raise ValueError(f"Unsupported prompts config type: {type(prompts_cfg)}")
@@ -216,11 +286,9 @@ def normalize_prompt_ids(prompts_cfg: Any) -> List[str]:
             raise ValueError(f"Unsupported prompt entry: {p} ({type(p)})")
     return out
 
+
 # ----------------- Config deep-merge (base + shard override) -----------------
 def deep_update(d: Dict[str, Any], u: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Recursively update dict d with dict u (u overrides d).
-    """
     for k, v in (u or {}).items():
         if isinstance(v, dict) and k in d and isinstance(d[k], dict):
             deep_update(d[k], v)
@@ -228,13 +296,9 @@ def deep_update(d: Dict[str, Any], u: Dict[str, Any]) -> Dict[str, Any]:
             d[k] = v
     return d
 
+
 # ----------------- Action selection helper (optional cap) -----------------
 def build_actions(models: List[str], prompt_ids: List[str], cfg: Dict[str, Any]) -> List[Tuple[str, str]]:
-    """
-    Returns list of (prompt_id, model_id).
-    Supports optional cap via:
-      max_units_per_query + actions.mode == "cartesian_then_cap"
-    """
     combos: List[Tuple[str, str]] = [(p, m) for p in prompt_ids for m in models]
 
     max_units = cfg.get("max_units_per_query", None)
@@ -250,7 +314,6 @@ def build_actions(models: List[str], prompt_ids: List[str], cfg: Dict[str, Any])
         return combos
 
     if mode == "cartesian_then_cap" and max_units > 0 and len(combos) > max_units:
-        # deterministic cap: shuffle with seed, then take first max_units
         seed = int(cfg.get("seed", 0))
         rng = random.Random(seed + 1337)
         combos_copy = combos[:]
@@ -259,13 +322,18 @@ def build_actions(models: List[str], prompt_ids: List[str], cfg: Dict[str, Any])
 
     return combos
 
+
 # ----------------- Main -----------------
 def main():
     import argparse
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True, help="Path to shard/override YAML config")
-    ap.add_argument("--base_config", default="configs/rq2_dataset_builder_full.yaml",
-                    help="Base YAML (full builder) to deep-merge with shard config")
+    ap.add_argument(
+        "--base_config",
+        default="configs/rq2_dataset_builder_full.yaml",
+        help="Base YAML (full builder) to deep-merge with shard config",
+    )
     args = ap.parse_args()
 
     with open(args.base_config, "r", encoding="utf-8") as f:
@@ -273,7 +341,6 @@ def main():
     with open(args.config, "r", encoding="utf-8") as f:
         override_cfg = yaml.safe_load(f) or {}
 
-    # Deep merge: shard overrides base
     cfg: Dict[str, Any] = deep_update(base_cfg, override_cfg)
 
     out_path = cfg["out_jsonl"]
@@ -283,6 +350,9 @@ def main():
     random.seed(seed)
 
     endpoint = cfg["endpoint"]
+    api_mode = cfg.get("api_mode", "chat")
+    served_model_name = cfg.get("served_model_name", None)
+
     timeout_s = int(cfg.get("timeout_s", 120))
     temperature = float(cfg.get("temperature", 0.0))
     max_tokens = int(cfg.get("max_tokens", 256))
@@ -290,11 +360,18 @@ def main():
 
     models: List[str] = cfg["pools"]["models"]
     prompt_ids: List[str] = normalize_prompt_ids(cfg["pools"]["prompts"])
-    tasks_cfg: Dict[str, Any] = cfg["tasks"]
-    # safety filter
+    tasks_cfg: Dict[str, Any] = dict(cfg["tasks"])
+
+    if served_model_name is None:
+        if len(models) == 1:
+            served_model_name = models[0]
+        else:
+            raise ValueError(
+                "served_model_name is required when multiple logical models are listed in pools.models"
+            )
+
     tasks_cfg.pop("multinews", None)
 
-    # Validate prompt ids exist
     missing = [p for p in prompt_ids if p not in PROMPTS]
     if missing:
         raise KeyError(f"Prompt ids not found in PROMPTS: {missing}. Available: {list(PROMPTS.keys())}")
@@ -302,7 +379,6 @@ def main():
     n_per_task = int(cfg.get("n_per_task", 10))
     global_split_pref = cfg.get("split", "train")
 
-    # Build prompt×model actions once (applies per query)
     actions = build_actions(models=models, prompt_ids=prompt_ids, cfg=cfg)
 
     rows: List[Dict[str, Any]] = []
@@ -330,7 +406,9 @@ def main():
                     "task": task_name,
                     "qid": qid,
                     "prompt": p,
-                    "model": m,
+                    "model": m,  # canonical model id for dataset/cost logic
+                    "served_model_name": served_model_name,  # actual vLLM-exposed name
+                    "api_mode": api_mode,
                     "failed": False,
                     "response": "",
                     "performance": None,
@@ -340,7 +418,16 @@ def main():
                 }
 
                 try:
-                    text, lat, tin, tout = chat(endpoint, m, sys, usr, temperature, max_tokens, timeout_s)
+                    text, lat, tin, tout = generate_response(
+                        endpoint=endpoint,
+                        api_mode=api_mode,
+                        served_model_name=served_model_name,
+                        system=sys,
+                        user=usr,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        timeout_s=timeout_s,
+                    )
                     tokens_total = tin + tout
                     perf = score(task_name, tcfg.get("primary_metric", None), text, gold)
 
@@ -364,7 +451,12 @@ def main():
                         "f1": None,
                         "acc": None,
                     }
-                    rec["cost"] = {"tokens_in": 0, "tokens_out": 0, "tokens_total": 0, "latency_s": 0.0}
+                    rec["cost"] = {
+                        "tokens_in": 0,
+                        "tokens_out": 0,
+                        "tokens_total": 0,
+                        "latency_s": 0.0,
+                    }
                     rec["reward"] = None
 
                 rows.append(rec)
@@ -386,6 +478,7 @@ def main():
     print(f"Failed: {total_failed}")
     print("Per-task rows:", per_task_counts)
     print("Per-task failed:", per_task_failed)
+
 
 if __name__ == "__main__":
     main()
