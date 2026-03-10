@@ -9,7 +9,7 @@ api_mode: "completion"
 
 split: "train"
 seed: 0
-n_per_task: 5
+n_per_task: 200
 
 timeout_s: 120
 temperature: 0.0
