@@ -1,31 +1,33 @@
 dataset_name: "grpp_il_v1"
 
-out_jsonl: "data/interaction_logs/grpp_il_v1/shards/train__mixtral-8x7b.jsonl"
-endpoint: "http://localhost:18102/v1"
-api_mode: "chat"
-served_model_name: "mixtral-8x7b-gptq4"
+out_jsonl: "data/interaction_logs/grpp_il_v1/shards/debug__mistral.jsonl"
+endpoint: "http://localhost:18000/v1"
 
 api_mode: "chat"
+served_model_name: "mistral-7b-gptq4"
 
 split: "train"
 seed: 0
-n_per_task: 5
+n_per_task: 2
 
 timeout_s: 120
 temperature: 0.0
 max_tokens: 128
 
-lambda_cost: 0.00001
+reward:
+  lambda_cost: 0.00001
+
 cost_proxy: "tokens_total"
 
 pools:
   models:
-  - "mixtral-8x7b"
+  # we left the cannonical name
+    - "mistral-7b"
   prompts:
-  - "direct"
-  - "cot"
-  - "decompose"
-  - "selfcheck"
+    - "direct"
+    - "cot"
+    - "decompose"
+    - "selfcheck"
 
 tasks:
   hotpotqa:

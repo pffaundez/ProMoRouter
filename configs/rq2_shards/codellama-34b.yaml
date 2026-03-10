@@ -13,7 +13,7 @@ n_per_task: 5
 
 timeout_s: 120
 temperature: 0.0
-max_tokens: 256
+max_tokens: 128
 
 lambda_cost: 0.00001
 cost_proxy: "tokens_total"
