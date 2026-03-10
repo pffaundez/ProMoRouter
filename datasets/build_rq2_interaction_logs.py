@@ -105,9 +105,15 @@ def chat_completion(
     }
 
     t0 = time.time()
+
     r = requests.post(url, json=payload, timeout=timeout_s)
     latency = time.time() - t0
-    r.raise_for_status()
+
+    if not r.ok:
+        raise RuntimeError(
+            f"HTTP {r.status_code} for {url}. Response body: {r.text}"
+        )
+
     data = r.json()
 
     text = data["choices"][0]["message"]["content"]
@@ -134,9 +140,15 @@ def text_completion(
     }
 
     t0 = time.time()
+
     r = requests.post(url, json=payload, timeout=timeout_s)
     latency = time.time() - t0
-    r.raise_for_status()
+
+    if not r.ok:
+        raise RuntimeError(
+            f"HTTP {r.status_code} for {url}. Response body: {r.text}"
+        )
+
     data = r.json()
 
     text = data["choices"][0]["text"]
@@ -409,6 +421,9 @@ def main():
                     "model": m,  # canonical model id for dataset/cost logic
                     "served_model_name": served_model_name,  # actual vLLM-exposed name
                     "api_mode": api_mode,
+                    "system_text": sys,
+                    "user_text": usr,
+                    "request_preview": f"{sys}\n\n{usr}",
                     "failed": False,
                     "response": "",
                     "performance": None,
