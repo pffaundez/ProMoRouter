@@ -1,0 +1,73 @@
+dataset_name: "grpp_il_v1"
+
+out_jsonl: "data/interaction_logs/grpp_il_v1/shards/smoke__mistral-7b.jsonl"
+endpoint: "http://localhost:18000/v1"
+
+api_mode: "chat"
+served_model_name: "mistral-7b-gptq4"
+
+split: "train"
+seed: 0
+n_per_task: 2
+
+timeout_s: 120
+temperature: 0.0
+max_tokens: 128
+
+reward:
+  lambda_cost: 0.00001
+
+cost_proxy: "tokens_total"
+
+pools:
+  models:
+  # we left the cannonical name
+    - "mistral-7b"
+  prompts:
+    - "direct"
+    - "cot"
+    - "decompose"
+    - "selfcheck"
+
+tasks:
+  hotpotqa:
+    hf_path: "hotpot_qa"
+    hf_name: "distractor"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "f1"
+
+  squad:
+    hf_path: "squad"
+    query_field: "question"
+    context_field: "context"
+    gold_field: "answers"
+    primary_metric: "f1"
+
+  gsm8k:
+    hf_path: "gsm8k"
+    hf_name: "main"
+    query_field: "question"
+    gold_field: "answer"
+    primary_metric: "acc"
+
+  #multinews:
+    #hf_path: "allenai/multi_news"
+    #hf_name: null
+    #query_field: "document"
+    #gold_field: "summary"
+    #primary_metric: "rougeL"
+    #metric_name: "ROUGE-L"
+
+  alpaca:
+    hf_path: "tatsu-lab/alpaca"
+    query_field: "instruction"
+    input_field: "input"
+    gold_field: "output"
+    primary_metric: "judge"
+
+  humaneval:
+    hf_path: "openai_humaneval"
+    query_field: "prompt"
+    gold_field: "canonical_solution"
+    primary_metric: "pass"
