@@ -3,6 +3,7 @@ import json
 import time
 import random
 import re
+import math
 from typing import Dict, Any, List, Optional, Tuple
 
 import yaml
@@ -193,6 +194,51 @@ def generate_response(
         )
 
     raise ValueError(f"Unsupported api_mode: {api_mode}")
+
+def compute_effective_max_tokens(
+    system: str,
+    user: str,
+    requested_max_tokens: int,
+    task_name: str,
+    prompt_id: str,
+    cfg: Dict[str, Any],
+) -> int:
+    """
+    Conservative per-request output budget to reduce context-overflow failures.
+
+    Assumptions:
+    - current runs use model context limit = 512
+    - token estimate is approximate, so we stay conservative
+    """
+    model_context_limit = int(cfg.get("model_context_limit", 512))
+
+    # Conservative text-to-token estimate
+    prompt_text = f"{system}\n\n{user}"
+    estimated_input_tokens = math.ceil(len(prompt_text) / 3.5)
+
+    # Small safety margin
+    reserve_tokens = 16
+
+    # Task/prompt-specific hard caps (minimal correction)
+    hard_cap = requested_max_tokens
+
+    if task_name == "squad":
+        # SQuAD answers are short spans; no need for large generation budget
+        hard_cap = min(hard_cap, 96)
+
+    if task_name == "humaneval" and prompt_id in {"cot", "decompose", "selfcheck"}:
+        # These prompts add overhead and are the main source of overflows
+        hard_cap = min(hard_cap, 96)
+
+    # Dynamic cap based on estimated remaining room
+    dynamic_cap = model_context_limit - estimated_input_tokens - reserve_tokens
+
+    # Keep at least a small valid generation budget
+    dynamic_cap = max(32, dynamic_cap)
+
+    effective_max_tokens = min(requested_max_tokens, hard_cap, dynamic_cap)
+
+    return max(32, effective_max_tokens)
 
 
 # ----------------- Reward -----------------
@@ -430,9 +476,20 @@ def main():
                     "cost": None,
                     "reward": None,
                     "error": None,
+                    "effective_max_tokens": None,
                 }
 
                 try:
+                    effective_max_tokens = compute_effective_max_tokens(
+                        system=sys,
+                        user=usr,
+                        requested_max_tokens=max_tokens,
+                        task_name=task_name,
+                        prompt_id=p,
+                        cfg=cfg,
+                    )
+                    rec["effective_max_tokens"] = effective_max_tokens
+                    
                     text, lat, tin, tout = generate_response(
                         endpoint=endpoint,
                         api_mode=api_mode,
@@ -440,9 +497,10 @@ def main():
                         system=sys,
                         user=usr,
                         temperature=temperature,
-                        max_tokens=max_tokens,
+                        max_tokens=effective_max_tokens,
                         timeout_s=timeout_s,
                     )
+
                     tokens_total = tin + tout
                     perf = score(task_name, tcfg.get("primary_metric", None), text, gold)
 
