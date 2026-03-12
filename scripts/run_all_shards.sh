@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+source "$ROOT/.venv/bin/activate"
+
 LOGDIR="$ROOT/logs"
 mkdir -p "$LOGDIR"
 
@@ -11,8 +14,8 @@ COOLDOWN_S=10
 
 SHARD_DIR="configs/rq2_shards"
 
-# Fijamos GPU 1 por consistencia con enexa2
-GPU_ID="${GPU_ID:-1}"
+# Fijamos GPU 3 para morel
+GPU_ID="${GPU_ID:-3}"
 
 MODELS=(
   "mistral-7b|RedHatAI/Mistral-7B-Instruct-v0.3-GPTQ-4bit|mistral-7b-gptq4|18000|512|0.80|gptq_marlin"

@@ -18,12 +18,30 @@ QUANTIZATION="$5"
 MAX_MODEL_LEN="${6:-512}"
 GPU_MEM_UTIL="${7:-0.90}"
 
-LOG_DIR="logs/quant"
+# ------------------------------------------------------------
+# Resolve repository root dynamically
+# ------------------------------------------------------------
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PYTHON_BIN="${PYTHON_BIN:-$ROOT/.venv/bin/python}"
+
+if [ ! -x "$PYTHON_BIN" ]; then
+  echo "[ERROR] Python environment not found at:"
+  echo "        $PYTHON_BIN"
+  echo "Activate or create the venv first:"
+  echo "        python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+  exit 1
+fi
+
+LOG_DIR="$ROOT/logs/quant"
 mkdir -p "${LOG_DIR}"
 LOG_FILE="${LOG_DIR}/${SERVED_NAME}.log"
 
 export CUDA_VISIBLE_DEVICES="${GPU_ID}"
+export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True"
 
+echo "[INFO] ROOT=${ROOT}"
+echo "[INFO] PYTHON=${PYTHON_BIN}"
 echo "[INFO] GPU=${GPU_ID}"
 echo "[INFO] PORT=${PORT}"
 echo "[INFO] SERVED_NAME=${SERVED_NAME}"
@@ -33,7 +51,7 @@ echo "[INFO] MAX_MODEL_LEN=${MAX_MODEL_LEN}"
 echo "[INFO] GPU_MEM_UTIL=${GPU_MEM_UTIL}"
 echo "[INFO] LOG_FILE=${LOG_FILE}"
 
-/local/upb/users/p/pablofg/profiles/unix/cs/repos/graph-router-2/.venv/bin/python -m vllm.entrypoints.openai.api_server \
+"$PYTHON_BIN" -m vllm.entrypoints.openai.api_server \
   --model "${HF_MODEL_REPO}" \
   --served-model-name "${SERVED_NAME}" \
   --port "${PORT}" \

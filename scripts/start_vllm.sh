@@ -14,12 +14,20 @@ CUDA_DEV="${7:?cuda_device}"
 QUANTIZATION="${8:?quantization}"
 LOGFILE="${9:?logfile}"
 
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PYTHON_BIN="${PYTHON_BIN:-$ROOT/.venv/bin/python}"
+
+if [ ! -x "$PYTHON_BIN" ]; then
+  echo "[ERROR] Python environment not found at: $PYTHON_BIN" >&2
+  exit 1
+fi
+
 mkdir -p "$(dirname "$LOGFILE")"
 
 export CUDA_VISIBLE_DEVICES="$CUDA_DEV"
 export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True"
 
-python -m vllm.entrypoints.openai.api_server \
+"$PYTHON_BIN" -m vllm.entrypoints.openai.api_server \
   --model "$HF_ID" \
   --served-model-name "$SERVED_NAME" \
   --port "$PORT" \
