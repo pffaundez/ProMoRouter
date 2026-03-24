@@ -62,7 +62,7 @@ tasks:
     query_field: "instruction"
     input_field: "input"
     gold_field: "output"
-    primary_metric: "judge"
+    primary_metric: "f1"
 
   humaneval:
     hf_path: "openai_humaneval"
