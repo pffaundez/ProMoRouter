@@ -25,10 +25,12 @@ EPOCHS = 30
 LR = 1e-3
 HIDDEN_DIM = 256
 
+# Post-Alpaca qnorm state: humaneval is still excluded upstream because it lacks valid primary metric.
 TASK_TO_ID = {
     "gsm8k": 0,
     "hotpotqa": 1,
     "squad": 2,
+    "alpaca": 3,
 }
 
 MODEL_TO_ID = {
@@ -52,7 +54,7 @@ def set_seed(seed):
 
 def load_data():
     rows = []
-    with ROUTER_DATA_PATH.open() as f:
+    with ROUTER_DATA_PATH.open("r", encoding="utf-8") as f:
         for line in f:
             rows.append(json.loads(line))
     return rows
@@ -77,7 +79,9 @@ def build_examples(rows, query_embs, lambda_key):
                 "qid": qid,
                 "query_emb": query_embs[qid],
                 "task_id": TASK_TO_ID[task],
+                "task": task,
                 "model_id": MODEL_TO_ID[cand["model"]],
+                "model": cand["model"],
                 "reward": float(reward),
                 "performance": float(cand["avg_performance"]),
                 "cost": float(cand["avg_cost_norm"]),
@@ -87,18 +91,18 @@ def build_examples(rows, query_embs, lambda_key):
 
 
 def split_by_qid(examples):
-    qids = list(set(e["qid"] for e in examples))
+    qids = sorted(set(e["qid"] for e in examples))
     random.shuffle(qids)
 
     n = len(qids)
-    train_q = set(qids[:int(0.7*n)])
-    val_q = set(qids[int(0.7*n):int(0.85*n)])
-    test_q = set(qids[int(0.85*n):])
+    train_q = set(qids[:int(0.7 * n)])
+    val_q = set(qids[int(0.7 * n):int(0.85 * n)])
+    test_q = set(qids[int(0.85 * n):])
 
     def filt(qset):
         return [e for e in examples if e["qid"] in qset]
 
-    return filt(train_q), filt(val_q), filt(test_q)
+    return filt(train_q), filt(val_q), filt(test_q), train_q, val_q, test_q
 
 
 class DatasetWrapper(Dataset):
@@ -112,12 +116,14 @@ class DatasetWrapper(Dataset):
         e = self.ex[i]
         return {
             "query_emb": e["query_emb"].float(),
-            "task_id": torch.tensor(e["task_id"]),
-            "model_id": torch.tensor(e["model_id"]),
-            "reward": torch.tensor(e["reward"]),
-            "performance": torch.tensor(e["performance"]),
-            "cost": torch.tensor(e["cost"]),
-            "qid": e["qid"]
+            "task_id": torch.tensor(e["task_id"], dtype=torch.long),
+            "model_id": torch.tensor(e["model_id"], dtype=torch.long),
+            "reward": torch.tensor(e["reward"], dtype=torch.float32),
+            "performance": torch.tensor(e["performance"], dtype=torch.float32),
+            "cost": torch.tensor(e["cost"], dtype=torch.float32),
+            "qid": e["qid"],
+            "task": e["task"],
+            "model": e["model"],
         }
 
 
@@ -141,14 +147,17 @@ class Model(nn.Module):
 
 
 def collate(batch):
-    return {
-        k: torch.stack([x[k] for x in batch]) if k not in ["qid"] else [x[k] for x in batch]
-        for k in batch[0]
-    }
+    out = {}
+    for k in batch[0]:
+        if k in {"qid", "task", "model"}:
+            out[k] = [x[k] for x in batch]
+        else:
+            out[k] = torch.stack([x[k] for x in batch])
+    return out
 
 
 def eval_model(model, dataset):
-    loader = DataLoader(dataset, batch_size=128, collate_fn=collate)
+    loader = DataLoader(dataset, batch_size=BATCH_SIZE, collate_fn=collate)
     model.eval()
 
     by_qid = defaultdict(list)
@@ -158,7 +167,7 @@ def eval_model(model, dataset):
             pred = model(
                 b["query_emb"].to(DEVICE),
                 b["task_id"].to(DEVICE),
-                b["model_id"].to(DEVICE)
+                b["model_id"].to(DEVICE),
             ).cpu()
 
             for i in range(len(b["qid"])):
@@ -167,23 +176,33 @@ def eval_model(model, dataset):
                     "reward": float(b["reward"][i]),
                     "performance": float(b["performance"][i]),
                     "cost": float(b["cost"][i]),
+                    "task": b["task"][i],
+                    "model": b["model"][i],
                 })
 
-    sel = [max(v, key=lambda x: x["pred"]) for v in by_qid.values()]
+    selected = [max(v, key=lambda x: x["pred"]) for v in by_qid.values()]
+
+    model_counts = defaultdict(int)
+    task_counts = defaultdict(int)
+    for x in selected:
+        model_counts[x["model"]] += 1
+        task_counts[x["task"]] += 1
 
     return {
-        "queries": len(sel),
-        "R": sum(x["reward"] for x in sel)/len(sel),
-        "P": sum(x["performance"] for x in sel)/len(sel),
-        "C": sum(x["cost"] for x in sel)/len(sel),
+        "queries": len(selected),
+        "R": sum(x["reward"] for x in selected) / len(selected),
+        "P": sum(x["performance"] for x in selected) / len(selected),
+        "C": sum(x["cost"] for x in selected) / len(selected),
+        "model_counts": dict(model_counts),
+        "task_counts": dict(task_counts),
     }
 
 
 def train_one(lambda_key, rows, emb):
     ex = build_examples(rows, emb, lambda_key)
-    tr, va, te = split_by_qid(ex)
+    tr, va, te, train_q, val_q, test_q = split_by_qid(ex)
 
-    tr_dl = DataLoader(DatasetWrapper(tr), batch_size=128, shuffle=True, collate_fn=collate)
+    tr_dl = DataLoader(DatasetWrapper(tr), batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate)
 
     model = Model(ex[0]["query_emb"].shape[0]).to(DEVICE)
     opt = torch.optim.Adam(model.parameters(), lr=LR)
@@ -192,13 +211,16 @@ def train_one(lambda_key, rows, emb):
     best = None
     best_val = -1e9
 
+    print(f"Examples: {len(ex)} | Train: {len(tr)} | Val: {len(va)} | Test: {len(te)}")
+    print(f"Train qids: {len(train_q)} | Val qids: {len(val_q)} | Test qids: {len(test_q)}")
+
     for ep in range(EPOCHS):
         model.train()
         for b in tr_dl:
             pred = model(
                 b["query_emb"].to(DEVICE),
                 b["task_id"].to(DEVICE),
-                b["model_id"].to(DEVICE)
+                b["model_id"].to(DEVICE),
             )
             loss = loss_fn(pred, b["reward"].to(DEVICE))
 
@@ -207,22 +229,30 @@ def train_one(lambda_key, rows, emb):
             opt.step()
 
         val = eval_model(model, DatasetWrapper(va))
-
-        print(f"Epoch {ep+1:02d} | val_R={val['R']:.4f}")
+        print(f"Epoch {ep + 1:02d} | val_R={val['R']:.4f}")
 
         if val["R"] > best_val:
             best_val = val["R"]
-            best = model.state_dict()
+            best = {k: v.cpu() for k, v in model.state_dict().items()}
 
     model.load_state_dict(best)
     test = eval_model(model, DatasetWrapper(te))
 
     print("\nTEST:", test)
-    return test
+    return {
+        "queries": test["queries"],
+        "P": test["P"],
+        "C": test["C"],
+        "R": test["R"],
+        "model_counts": test["model_counts"],
+        "task_counts": test["task_counts"],
+    }, best
 
 
 def main():
     set_seed(SEED)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
     rows = load_data()
     emb = torch.load(QUERY_EMB_PATH)
 
@@ -230,8 +260,19 @@ def main():
 
     for key, lam in LAMBDA_CONFIGS:
         print("\n====", key, "====")
-        res = train_one(key, rows, emb)
+        res, state = train_one(key, rows, emb)
+
+        model_path = OUTPUT_DIR / f"router_model_only_{key}.pt"
+        torch.save(state, model_path)
+
+        res["lambda_key"] = key
+        res["lambda"] = lam
+        res["model_path"] = str(model_path)
         results.append(res)
+
+    results_path = OUTPUT_DIR / "router_model_only_qnorm_results.json"
+    with results_path.open("w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
 
     print("\n==== OVERLEAF ====")
     vals = []
@@ -239,6 +280,7 @@ def main():
         vals += [f"{r['P']:.3f}", f"{r['C']:.3f}", f"{r['R']:.3f}"]
 
     print("GraphRouter (model-only, qnorm) & " + " & ".join(vals) + r" \\")
+    print(f"Saved results: {results_path}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import json
 import random
+import argparse
 from pathlib import Path
 from collections import defaultdict
 
@@ -9,23 +10,21 @@ from torch.utils.data import Dataset, DataLoader
 
 BIPARTITE_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_bipartite_qnorm.jsonl")
 QUERY_EMB_PATH = Path("data/router/query_embeddings.pt")
-OUTPUT_DIR = Path("outputs/router_bipartite_qnorm")
+OUTPUT_DIR = Path("outputs/router_bipartite_qnorm_seed_sweep")
 
-LAMBDA_CONFIGS = [
-    ("reward_qnorm_lam_01", 0.1),
-    ("reward_qnorm_lam_05", 0.5),
-    ("reward_qnorm_lam_09", 0.9),
-]
+LAMBDA_CONFIGS = {
+    "reward_qnorm_lam_01": 0.1,
+    "reward_qnorm_lam_05": 0.5,
+    "reward_qnorm_lam_09": 0.9,
+}
 
 DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-SEED = 42
 BATCH_SIZE = 128
 EPOCHS = 30
 LR = 1e-3
 HIDDEN_DIM = 256
 
-# Post-Alpaca qnorm state: humaneval is still excluded upstream.
 TASK_TO_ID = {
     "gsm8k": 0,
     "hotpotqa": 1,
@@ -250,7 +249,22 @@ def evaluate_action_selection(model, dataset):
     }
 
 
-def train_one_lambda(lambda_key, router_queries, query_embs):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", type=int, required=True)
+    parser.add_argument("--lambda_key", type=str, required=True, choices=list(LAMBDA_CONFIGS.keys()))
+    args = parser.parse_args()
+
+    seed = args.seed
+    lambda_key = args.lambda_key
+    lam = LAMBDA_CONFIGS[lambda_key]
+
+    set_seed(seed)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    router_queries = load_router_queries()
+    query_embs = torch.load(QUERY_EMB_PATH)
+
     examples = build_flat_examples(router_queries, query_embs, lambda_key)
     train_ex, val_ex, test_ex, train_qids, val_qids, test_qids = split_by_qid(examples)
 
@@ -274,8 +288,9 @@ def train_one_lambda(lambda_key, router_queries, query_embs):
 
     best_val_reward = -1e9
     best_state = None
+    best_epoch = None
 
-    print(f"\n==== TRAINING {lambda_key} ====")
+    print(f"==== TRAINING {lambda_key} | seed={seed} ====")
     print(f"Examples: {len(examples)} | Train: {len(train_ex)} | Val: {len(val_ex)} | Test: {len(test_ex)}")
     print(f"Train qids: {len(train_qids)} | Val qids: {len(val_qids)} | Test qids: {len(test_qids)}")
 
@@ -284,14 +299,13 @@ def train_one_lambda(lambda_key, router_queries, query_embs):
         total_loss = 0.0
 
         for batch in train_loader:
-            query_emb = batch["query_emb"].to(DEVICE)
-            task_id = batch["task_id"].to(DEVICE)
-            prompt_id = batch["prompt_id"].to(DEVICE)
-            model_id = batch["model_id"].to(DEVICE)
-            reward = batch["reward"].to(DEVICE)
-
-            pred = model(query_emb, task_id, prompt_id, model_id)
-            loss = criterion(pred, reward)
+            pred = model(
+                batch["query_emb"].to(DEVICE),
+                batch["task_id"].to(DEVICE),
+                batch["prompt_id"].to(DEVICE),
+                batch["model_id"].to(DEVICE),
+            )
+            loss = criterion(pred, batch["reward"].to(DEVICE))
 
             optimizer.zero_grad()
             loss.backward()
@@ -313,18 +327,16 @@ def train_one_lambda(lambda_key, router_queries, query_embs):
         if val_metrics["avg_reward"] > best_val_reward:
             best_val_reward = val_metrics["avg_reward"]
             best_state = {k: v.cpu() for k, v in model.state_dict().items()}
-
-    if best_state is None:
-        raise RuntimeError("Training failed: no best model state found.")
+            best_epoch = epoch
 
     model.load_state_dict(best_state)
     test_metrics = evaluate_action_selection(model, test_ds)
 
-    out_path = OUTPUT_DIR / f"router_bipartite_{lambda_key}.pt"
-    torch.save(best_state, out_path)
-
-    result = {
+    out = {
+        "seed": seed,
         "lambda_key": lambda_key,
+        "lambda": lam,
+        "best_epoch": best_epoch,
         "queries": test_metrics["queries"],
         "P": test_metrics["avg_performance"],
         "C": test_metrics["avg_cost"],
@@ -332,54 +344,15 @@ def train_one_lambda(lambda_key, router_queries, query_embs):
         "prompt_counts": test_metrics["prompt_counts"],
         "model_counts": test_metrics["model_counts"],
         "task_counts": test_metrics["task_counts"],
-        "model_path": str(out_path),
     }
 
+    out_path = OUTPUT_DIR / f"{lambda_key}__seed_{seed}.json"
+    with out_path.open("w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2)
+
     print("\n==== TEST RESULTS ====")
-    print(f"queries={result['queries']}")
-    print(f"avg_reward={result['R']:.6f}")
-    print(f"avg_performance={result['P']:.6f}")
-    print(f"avg_cost={result['C']:.6f}")
-    print(f"prompt_counts={result['prompt_counts']}")
-    print(f"model_counts={result['model_counts']}")
-    print(f"task_counts={result['task_counts']}")
-    print(f"saved_model={out_path}")
-
-    return result
-
-
-def main():
-    set_seed(SEED)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    print("==== TRAIN ROUTER BIPARTITE QNORM (ALL LAMBDAS) ====")
-    print("Device:", DEVICE)
-
-    router_queries = load_router_queries()
-    query_embs = torch.load(QUERY_EMB_PATH)
-
-    all_results = []
-
-    for lambda_key, lam in LAMBDA_CONFIGS:
-        set_seed(SEED)
-        result = train_one_lambda(lambda_key, router_queries, query_embs)
-        result["lambda"] = lam
-        all_results.append(result)
-
-    results_path = OUTPUT_DIR / "router_bipartite_qnorm_results.json"
-    with results_path.open("w", encoding="utf-8") as f:
-        json.dump(all_results, f, indent=2)
-
-    print("\n==== OVERLEAF ROW ====")
-    vals = []
-    for result in all_results:
-        vals.extend([
-            f"{result['P']:.3f}",
-            f"{result['C']:.3f}",
-            f"{result['R']:.3f}",
-        ])
-    print("GraphRouter++ (qnorm) & " + " & ".join(vals) + r" \\")
-    print(f"\nSaved results: {results_path}")
+    print(json.dumps(out, indent=2))
+    print(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":
