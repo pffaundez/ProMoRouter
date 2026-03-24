@@ -1,10 +1,11 @@
 import json
 import random
 from pathlib import Path
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 MODEL_ONLY_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only_qnorm.jsonl")
 BIPARTITE_PATH = Path("data/interaction_logs/grpp_il_v1/router_bipartite_qnorm.jsonl")
+OUTPUT_PATH = Path("outputs/baselines_qnorm/baselines_qnorm_test_results.json")
 
 LAMBDA_CONFIGS = [
     ("reward_qnorm_lam_01", 0.1),
@@ -47,7 +48,6 @@ def split_qids(rows, train_ratio=0.7, val_ratio=0.15):
 
 
 def model_size_map():
-    # Used only to define largest/smallest model baselines.
     return {
         "mistral-7b": 7,
         "qwen2.5-7b": 7,
@@ -248,11 +248,14 @@ def main():
     train_qids, val_qids, test_qids = split_qids(model_only_rows)
     smallest_model, largest_model = find_smallest_and_largest_models(model_only_rows)
 
-    print("==== QNORM BASELINES ON TEST SPLIT ====")
+    test_task_counts = Counter(row["task"] for row in model_only_rows if row["qid"] in test_qids)
+
+    print("==== QNORM BASELINES ON TEST SPLIT (POST-ALPACA) ====")
     print(f"Total queries: {len(model_only_rows)}")
     print(f"Train queries: {len(train_qids)}")
     print(f"Val queries: {len(val_qids)}")
     print(f"Test queries: {len(test_qids)}")
+    print(f"Test task counts: {dict(test_task_counts)}")
     print(f"Smallest model: {smallest_model}")
     print(f"Largest model: {largest_model}")
 
@@ -277,6 +280,10 @@ def main():
             "best_fixed_pair": (best_pair_model, best_pair_prompt),
             "results": results,
         }
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with OUTPUT_PATH.open("w", encoding="utf-8") as f:
+        json.dump(all_results, f, indent=2)
 
     for reward_key, payload in all_results.items():
         print(f"\n===== lambda = {payload['lambda']} ({reward_key}) =====")
@@ -311,6 +318,8 @@ def main():
                 format_metric(metrics["R"]),
             ])
         print(f"{method} & " + " & ".join(vals) + r" \\")
+
+    print(f"\nSaved results: {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":

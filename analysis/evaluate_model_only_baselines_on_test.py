@@ -3,6 +3,7 @@ import random
 from pathlib import Path
 from collections import defaultdict
 
+print("==== MODEL-ONLY BASELINES ON TEST SPLIT (RAW / LEGACY, POST-ALPACA IF AVAILABLE) ====")
 ROUTER_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only.jsonl")
 
 LAMBDA_CONFIGS = [
