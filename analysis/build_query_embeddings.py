@@ -3,12 +3,11 @@ from pathlib import Path
 import torch
 from sentence_transformers import SentenceTransformer
 
-INPUT_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only.jsonl")
+INPUT_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only_qnorm.jsonl")
 OUTPUT_PATH = Path("data/router/query_embeddings.pt")
 
 MODEL_NAME = "intfloat/e5-large-v2"
 DEVICE = "cuda:0"
-PREFERRED_DEVICE = "cuda:0"
 
 
 def load_queries():
@@ -17,12 +16,9 @@ def load_queries():
     with INPUT_PATH.open("r", encoding="utf-8") as f:
         for line in f:
             row = json.loads(line)
-
             qid = row["qid"]
 
-            # Retrieve the query text from the first candidate that contains it.
             query_text = None
-
             for cand in row["candidates"]:
                 query_text = cand.get("query_text")
                 if query_text:
@@ -43,6 +39,8 @@ def main():
     queries = load_queries()
 
     print("==== BUILDING QUERY EMBEDDINGS ====")
+    print("Input:", INPUT_PATH)
+    print("Output:", OUTPUT_PATH)
     print("Model:", MODEL_NAME)
     print("Device:", DEVICE)
     print("Queries:", len(queries))
@@ -55,7 +53,6 @@ def main():
     model = SentenceTransformer(MODEL_NAME, device=DEVICE)
 
     texts = [q for _, q in queries]
-
     embeddings = model.encode(
         texts,
         convert_to_tensor=True,
@@ -63,10 +60,7 @@ def main():
         normalize_embeddings=True,
     )
 
-    qid_to_emb = {}
-
-    for i, (qid, _) in enumerate(queries):
-        qid_to_emb[qid] = embeddings[i].cpu()
+    qid_to_emb = {qid: embeddings[i].cpu() for i, (qid, _) in enumerate(queries)}
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     torch.save(qid_to_emb, OUTPUT_PATH)

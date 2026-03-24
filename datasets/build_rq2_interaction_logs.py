@@ -3,7 +3,6 @@ import json
 import time
 import random
 import re
-import math
 from typing import Dict, Any, List, Optional, Tuple
 
 import yaml
@@ -84,6 +83,14 @@ def acc_numeric(pred: str, gold: str) -> float:
     return 1.0 if (pn is not None and gn is not None and pn == gn) else 0.0
 
 
+def alpaca_f1(pred: str, gold: str) -> float:
+    """
+    Alpaca is scored with token-level F1 to stay aligned with the
+    GraphRouter setup, which evaluates Alpaca using F1.
+    """
+    return f1_token(pred, gold)
+
+
 # ----------------- OpenAI-compatible client (vLLM / OpenAI-like) -----------------
 def chat_completion(
     endpoint: str,
@@ -106,15 +113,9 @@ def chat_completion(
     }
 
     t0 = time.time()
-
     r = requests.post(url, json=payload, timeout=timeout_s)
     latency = time.time() - t0
-
-    if not r.ok:
-        raise RuntimeError(
-            f"HTTP {r.status_code} for {url}. Response body: {r.text}"
-        )
-
+    r.raise_for_status()
     data = r.json()
 
     text = data["choices"][0]["message"]["content"]
@@ -141,15 +142,9 @@ def text_completion(
     }
 
     t0 = time.time()
-
     r = requests.post(url, json=payload, timeout=timeout_s)
     latency = time.time() - t0
-
-    if not r.ok:
-        raise RuntimeError(
-            f"HTTP {r.status_code} for {url}. Response body: {r.text}"
-        )
-
+    r.raise_for_status()
     data = r.json()
 
     text = data["choices"][0]["text"]
@@ -195,51 +190,6 @@ def generate_response(
 
     raise ValueError(f"Unsupported api_mode: {api_mode}")
 
-def compute_effective_max_tokens(
-    system: str,
-    user: str,
-    requested_max_tokens: int,
-    task_name: str,
-    prompt_id: str,
-    cfg: Dict[str, Any],
-) -> int:
-    """
-    Conservative per-request output budget to reduce context-overflow failures.
-
-    Assumptions:
-    - current runs use model context limit = 512
-    - token estimate is approximate, so we stay conservative
-    """
-    model_context_limit = int(cfg.get("model_context_limit", 512))
-
-    # Conservative text-to-token estimate
-    prompt_text = f"{system}\n\n{user}"
-    estimated_input_tokens = math.ceil(len(prompt_text) / 3.5)
-
-    # Small safety margin
-    reserve_tokens = 16
-
-    # Task/prompt-specific hard caps (minimal correction)
-    hard_cap = requested_max_tokens
-
-    if task_name == "squad":
-        # SQuAD answers are short spans; no need for large generation budget
-        hard_cap = min(hard_cap, 96)
-
-    if task_name == "humaneval" and prompt_id in {"cot", "decompose", "selfcheck"}:
-        # These prompts add overhead and are the main source of overflows
-        hard_cap = min(hard_cap, 96)
-
-    # Dynamic cap based on estimated remaining room
-    dynamic_cap = model_context_limit - estimated_input_tokens - reserve_tokens
-
-    # Keep at least a small valid generation budget
-    dynamic_cap = max(32, dynamic_cap)
-
-    effective_max_tokens = min(requested_max_tokens, hard_cap, dynamic_cap)
-
-    return max(32, effective_max_tokens)
-
 
 # ----------------- Reward -----------------
 def compute_reward(primary: Optional[float], tokens_total: int, lam: float) -> Optional[float]:
@@ -250,7 +200,7 @@ def compute_reward(primary: Optional[float], tokens_total: int, lam: float) -> O
 
 # ----------------- Task → query rendering -----------------
 def make_query(task_cfg: Dict[str, Any], ex: Dict[str, Any]) -> Tuple[str, Any]:
-    """returns (query_text, gold_raw)"""
+    """Returns (query_text, gold_raw)."""
     q = ex.get(task_cfg["query_field"], "")
 
     if task_cfg.get("context_field"):
@@ -269,9 +219,11 @@ def make_query(task_cfg: Dict[str, Any], ex: Dict[str, Any]) -> Tuple[str, Any]:
 def extract_gold(task_name: str, gold_raw: Any) -> str:
     if gold_raw is None:
         return ""
+
     if task_name == "squad":
         texts = gold_raw.get("text", []) if isinstance(gold_raw, dict) else []
         return texts[0] if texts else ""
+
     return str(gold_raw)
 
 
@@ -289,6 +241,10 @@ def score(task_name: str, primary_metric: Optional[str], pred: str, gold: str) -
         perf["em"] = em(pred, gold)
         perf["f1"] = f1_token(pred, gold)
         perf["primary"] = perf["em"] if primary_metric == "em" else perf["f1"]
+
+    elif task_name == "alpaca":
+        perf["f1"] = alpaca_f1(pred, gold)
+        perf["primary"] = perf["f1"]
 
     elif task_name == "gsm8k":
         perf["acc"] = acc_numeric(pred, gold)
@@ -346,9 +302,14 @@ def normalize_prompt_ids(prompts_cfg: Any) -> List[str]:
 
 
 # ----------------- Config deep-merge (base + shard override) -----------------
+REPLACE_KEYS = {"tasks", "pools"}
+
+
 def deep_update(d: Dict[str, Any], u: Dict[str, Any]) -> Dict[str, Any]:
     for k, v in (u or {}).items():
-        if isinstance(v, dict) and k in d and isinstance(d[k], dict):
+        if k in REPLACE_KEYS:
+            d[k] = v
+        elif isinstance(v, dict) and k in d and isinstance(d[k], dict):
             deep_update(d[k], v)
         else:
             d[k] = v
@@ -464,8 +425,8 @@ def main():
                     "task": task_name,
                     "qid": qid,
                     "prompt": p,
-                    "model": m,  # canonical model id for dataset/cost logic
-                    "served_model_name": served_model_name,  # actual vLLM-exposed name
+                    "model": m,
+                    "served_model_name": served_model_name,
                     "api_mode": api_mode,
                     "system_text": sys,
                     "user_text": usr,
@@ -476,20 +437,9 @@ def main():
                     "cost": None,
                     "reward": None,
                     "error": None,
-                    "effective_max_tokens": None,
                 }
 
                 try:
-                    effective_max_tokens = compute_effective_max_tokens(
-                        system=sys,
-                        user=usr,
-                        requested_max_tokens=max_tokens,
-                        task_name=task_name,
-                        prompt_id=p,
-                        cfg=cfg,
-                    )
-                    rec["effective_max_tokens"] = effective_max_tokens
-                    
                     text, lat, tin, tout = generate_response(
                         endpoint=endpoint,
                         api_mode=api_mode,
@@ -497,10 +447,9 @@ def main():
                         system=sys,
                         user=usr,
                         temperature=temperature,
-                        max_tokens=effective_max_tokens,
+                        max_tokens=max_tokens,
                         timeout_s=timeout_s,
                     )
-
                     tokens_total = tin + tout
                     perf = score(task_name, tcfg.get("primary_metric", None), text, gold)
 
