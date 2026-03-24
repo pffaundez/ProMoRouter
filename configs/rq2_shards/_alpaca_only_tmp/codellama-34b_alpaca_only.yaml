@@ -1,0 +1,28 @@
+dataset_name: grpp_il_v1
+out_jsonl: /upb/users/p/pablofg/profiles/unix/cs/repos/graph-router-2/data/interaction_logs/grpp_il_v1/shards/_alpaca_only_tmp/alpaca_only__codellama-34b.jsonl
+endpoint: http://localhost:18101/v1
+api_mode: completion
+served_model_name: codellama-34b-gptq4
+split: train
+seed: 0
+n_per_task: 200
+timeout_s: 120
+temperature: 0.0
+max_tokens: 128
+lambda_cost: 1.0e-05
+cost_proxy: tokens_total
+pools:
+  models:
+  - codellama-34b
+  prompts:
+  - direct
+  - cot
+  - decompose
+  - selfcheck
+tasks:
+  alpaca:
+    hf_path: tatsu-lab/alpaca
+    query_field: instruction
+    input_field: input
+    gold_field: output
+    primary_metric: f1
