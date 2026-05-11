@@ -6,6 +6,8 @@ from collections import defaultdict
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
+from torch_geometric.data import Data, Batch
+from torch_geometric.nn import GCNConv
 
 ROUTER_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only.jsonl")
 QUERY_EMB_PATH = Path("data/router/query_embeddings.pt")
@@ -140,25 +142,48 @@ class RouterDataset(Dataset):
         }
 
 
-class RouterMLP(nn.Module):
+class RouterGNN(nn.Module):
     def __init__(self, query_dim, num_tasks, num_models, hidden_dim):
         super().__init__()
         self.task_emb = nn.Embedding(num_tasks, 32)
         self.model_emb = nn.Embedding(num_models, 32)
 
-        self.mlp = nn.Sequential(
-            nn.Linear(query_dim + 32 + 32, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, 1),
-        )
+        # Project candidate to same dim as query
+        self.candidate_proj = nn.Linear(64, query_dim)
+
+        # GNN layers
+        self.conv1 = GCNConv(query_dim, hidden_dim)
+        self.conv2 = GCNConv(hidden_dim, hidden_dim)
+        self.lin = nn.Linear(hidden_dim * 2, 1)  # Aggregate both nodes
 
     def forward(self, query_emb, task_id, model_id):
         t_emb = self.task_emb(task_id)
         m_emb = self.model_emb(model_id)
-        x = torch.cat([query_emb, t_emb, m_emb], dim=-1)
-        return self.mlp(x).squeeze(-1)
+        candidate_emb = torch.cat([t_emb, m_emb], dim=-1)  # 64
+        candidate_emb = self.candidate_proj(candidate_emb)  # to query_dim
+
+        batch_size = query_emb.size(0)
+        data_list = []
+        for i in range(batch_size):
+            # Node features: [query_emb, candidate_emb]
+            x = torch.stack([query_emb[i], candidate_emb[i]], dim=0)
+            # Edge index: fully connected (bidirectional)
+            edge_index = torch.tensor([[0, 1], [1, 0]], dtype=torch.long).t()
+            data = Data(x=x, edge_index=edge_index)
+            data_list.append(data)
+
+        batch = Batch.from_data_list(data_list).to(query_emb.device)
+
+        # GNN forward
+        x = self.conv1(batch.x, batch.edge_index)
+        x = torch.relu(x)
+        x = self.conv2(x, batch.edge_index)
+        x = torch.relu(x)
+
+        # Aggregate: concat the two node representations
+        x = x.view(batch_size, 2, -1)  # [batch, 2, hidden]
+        x = x.view(batch_size, -1)  # [batch, 2*hidden]
+        return self.lin(x).squeeze(-1)
 
 
 def collate_fn(batch):
@@ -227,7 +252,7 @@ def train_one_lambda(lambda_key, router_queries, query_embs):
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
 
     query_dim = examples[0]["query_emb"].shape[0]
-    model = RouterMLP(
+    model = RouterGNN(
         query_dim=query_dim,
         num_tasks=len(TASK_TO_ID),
         num_models=len(MODEL_TO_ID),
@@ -335,7 +360,7 @@ def main():
             f"{result['C']:.3f}",
             f"{result['R']:.3f}",
         ])
-    print("GraphRouter (model-only) & " + " & ".join(vals) + r" \\")
+    print("GraphRouter (model-only, GNN) & " + " & ".join(vals) + r" \\")
 
     print(f"\nSaved results: {results_path}")
 
