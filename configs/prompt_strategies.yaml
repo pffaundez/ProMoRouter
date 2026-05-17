@@ -1,0 +1,44 @@
+# NEW FILE: configs/prompt_strategies.yaml
+# Natural-language descriptions used to initialize GraphRouter++ prompt nodes.
+# Keep these separate from configs/prompt_templates.yaml, which is used for LLM execution.
+
+prompts:
+  direct:
+    name: Direct Answer
+    description: >
+      A low-cost prompting strategy that asks the model to answer the user query
+      directly and correctly without explicit intermediate reasoning, planning, or
+      verification. It is suitable for simple factual questions, extractive QA, and
+      straightforward instruction-following cases where concise responses are enough.
+    expected_cost: low
+    expected_behavior: concise direct final answer
+
+  cot:
+    name: Chain-of-Thought
+    description: >
+      A reasoning-oriented prompting strategy that encourages the model to think
+      step by step before giving a final answer. It is useful for arithmetic,
+      multi-hop reasoning, and questions that benefit from explicit intermediate
+      inference, but it usually increases output length and inference cost.
+    expected_cost: medium
+    expected_behavior: step-by-step reasoning followed by final answer
+
+  decompose:
+    name: Decomposition / Plan-and-Solve
+    description: >
+      A high-cost prompting strategy that asks the model to break the problem into
+      a short plan or smaller reasoning steps and then solve them before producing
+      the final answer. It is useful for complex multi-step or compositional queries,
+      but can substantially increase token usage.
+    expected_cost: high
+    expected_behavior: short plan, execution, final answer
+
+  selfcheck:
+    name: Self-Check
+    description: >
+      A verification-oriented prompting strategy in which the model first answers,
+      then briefly checks for mistakes, missing assumptions, or inconsistencies, and
+      finally outputs a corrected final answer. It can improve reliability but adds
+      additional token cost.
+    expected_cost: medium_high
+    expected_behavior: answer, check, corrected final answer

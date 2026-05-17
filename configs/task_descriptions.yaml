@@ -1,0 +1,40 @@
+# NEW FILE: configs/task_descriptions.yaml
+# Natural-language descriptions used to initialize GraphRouter++ task nodes.
+# These are router node features, not execution prompts.
+
+tasks:
+  gsm8k:
+    name: GSM8K
+    description: >
+      Grade-school math word problems requiring multi-step arithmetic reasoning,
+      numerical computation, and extraction of a final numeric answer. The primary
+      metric is exact-match accuracy after answer normalization.
+    primary_metric: accuracy
+    expected_reasoning: arithmetic multi-step reasoning
+
+  hotpotqa:
+    name: HotpotQA
+    description: >
+      Multi-hop question answering over natural-language evidence, requiring the
+      model to combine multiple supporting facts before producing a concise answer.
+      The primary metric is token-level F1 against reference answers.
+    primary_metric: f1
+    expected_reasoning: multi-hop factual reasoning
+
+  squad:
+    name: SQuAD
+    description: >
+      Extractive question answering over a provided context passage. The model must
+      identify an answer span or concise answer supported by the passage. The primary
+      metric is token-level F1 or exact match against annotated answers.
+    primary_metric: f1
+    expected_reasoning: context-grounded extractive QA
+
+  alpaca:
+    name: Alpaca-style instruction following
+    description: >
+      General instruction-following examples in which the model must satisfy a user
+      instruction, optionally conditioned on an additional input field. The task
+      emphasizes helpfulness, relevance, and matching the expected response content.
+    primary_metric: f1
+    expected_reasoning: general instruction following

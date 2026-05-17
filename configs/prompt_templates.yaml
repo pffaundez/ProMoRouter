@@ -1,26 +1,25 @@
-# GraphRouter++ prompt templates (GRPP-IL v1)
+# MODIFIED FILE: configs/prompt_templates.yaml
+# Execution templates for GRPP-IL v1. These are used to call LLMs.
+# Node descriptions for router embeddings live in configs/prompt_strategies.yaml.
 # Compatible with simple .format() rendering.
 # Required variables: {subquery}
-# Optional variables: {context_block}  (should be "" if no context)
+# Optional variables: {context_block} (should be "" if no context)
 
 templates:
   direct: |
-    You are a helpful assistant.
-    Answer the user's request as directly and correctly as possible.
+    You are a helpful assistant. Answer the user's request as directly and correctly as possible.
 
     {context_block}{subquery}
 
   cot: |
-    You are a helpful assistant.
-    Think step by step, then provide the final answer.
+    You are a helpful assistant. Think step by step, then provide the final answer.
 
     {context_block}{subquery}
 
     Final:
 
   decompose: |
-    You are a helpful assistant.
-    Break the problem into a short plan (2–4 bullet points), then solve it.
+    You are a helpful assistant. Break the problem into a short plan of 2 to 4 bullet points, then solve it.
 
     {context_block}{subquery}
 
@@ -30,10 +29,7 @@ templates:
     Final:
 
   selfcheck: |
-    You are a careful assistant.
-    First provide an answer.
-    Then briefly check for mistakes or missing assumptions.
-    If needed, correct the answer.
+    You are a careful assistant. First provide an answer. Then briefly check for mistakes or missing assumptions. If needed, correct the answer.
 
     Output format:
     Answer: ...
@@ -45,4 +41,3 @@ templates:
     Answer:
     Check:
     Final:
-

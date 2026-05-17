@@ -1,0 +1,65 @@
+{
+  "mistral-7b": {
+    "name": "Mistral-7B-Instruct",
+    "family": "Mistral",
+    "size": "7B",
+    "hf_id": "mistralai/Mistral-7B-Instruct-v0.3",
+    "description": "A compact 7B instruction-tuned general-purpose language model. It is relatively low cost and suitable for concise instruction following, factual question answering, and lightweight reasoning, but may be less reliable on difficult multi-step reasoning than larger models."
+  },
+  "qwen2.5-7b": {
+    "name": "Qwen2.5-7B-Instruct",
+    "family": "Qwen2.5",
+    "size": "7B",
+    "hf_id": "Qwen/Qwen2.5-7B-Instruct",
+    "description": "A compact 7B instruction-tuned general-purpose model from the Qwen2.5 family. It is cost-efficient and often strong for mathematics, multilingual text, instruction following, and structured reasoning relative to its size."
+  },
+  "llama3.1-8b": {
+    "name": "Llama-3.1-8B-Instruct",
+    "family": "Llama 3.1",
+    "size": "8B",
+    "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "description": "An 8B instruction-tuned general-purpose model from the Llama 3.1 family. It provides a low-to-moderate cost option for general QA, summarization-style responses, and instruction following, with limited capacity compared with larger models."
+  },
+  "qwen2.5-14b": {
+    "name": "Qwen2.5-14B-Instruct",
+    "family": "Qwen2.5",
+    "size": "14B",
+    "hf_id": "Qwen/Qwen2.5-14B-Instruct",
+    "description": "A mid-sized 14B instruction-tuned model from the Qwen2.5 family. It balances cost and quality and is suitable for mathematical reasoning, question answering, and general instruction following when 7B models may be insufficient."
+  },
+  "yi-34b": {
+    "name": "Yi-34B-Chat",
+    "family": "Yi",
+    "size": "34B",
+    "hf_id": "01-ai/Yi-34B-Chat",
+    "description": "A 34B chat-oriented general-purpose model. It is more capable but more expensive than compact 7B and 14B models, and is intended for harder instruction-following, reasoning, and question-answering cases where stronger language understanding is useful."
+  },
+  "codellama-34b": {
+    "name": "CodeLlama-34B-Instruct",
+    "family": "CodeLlama",
+    "size": "34B",
+    "hf_id": "codellama/CodeLlama-34b-Instruct-hf",
+    "description": "A 34B instruction-tuned model specialized for code generation and code reasoning. It can handle programming-oriented prompts well, but may be less optimal than general-purpose chat models for ordinary factual QA, math word problems, or instruction-following tasks unrelated to code."
+  },
+  "mixtral-8x7b": {
+    "name": "Mixtral-8x7B-Instruct",
+    "family": "Mixtral",
+    "size": "MoE-8x7B",
+    "hf_id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    "description": "A sparse mixture-of-experts instruction-tuned model with 8 experts of 7B parameters. It is a strong general-purpose option with higher capacity than dense small models and can perform well on reasoning, QA, and instruction-following while maintaining efficient sparse activation."
+  },
+  "llama3.1-70b": {
+    "name": "Llama-3.1-70B-Instruct",
+    "family": "Llama 3.1",
+    "size": "70B",
+    "hf_id": "meta-llama/Llama-3.1-70B-Instruct",
+    "description": "A large 70B instruction-tuned general-purpose model. It is expected to be stronger on complex reasoning, multi-hop QA, and instruction following than smaller Llama models, but has substantially higher inference cost."
+  },
+  "qwen2.5-72b": {
+    "name": "Qwen2.5-72B-Instruct",
+    "family": "Qwen2.5",
+    "size": "72B",
+    "hf_id": "Qwen/Qwen2.5-72B-Instruct",
+    "description": "A large 72B instruction-tuned general-purpose model from the Qwen2.5 family. It is a high-quality but high-cost option for difficult reasoning, mathematics, QA, and instruction-following tasks where smaller models may fail."
+  }
+}

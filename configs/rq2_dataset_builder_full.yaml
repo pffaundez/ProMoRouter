@@ -1,17 +1,17 @@
-# Canonical builder config for: GRPP-IL v1 (GraphRouter++ Interaction Log v1)
-# Spec: GraphRouter++ Dataset Specification Pack
+# MODIFIED FILE: configs/rq2_dataset_builder_full.yaml
+# Canonical builder config for GRPP-IL v1 / GraphRouter++ paper experiments.
+# This version matches the paper setup: 4 prompting strategies × 9 LLMs = 36 actions/query.
 
 dataset_name: "grpp_il_v1"
-out_jsonl: "data/interaction_logs/grpp_il_v1/train.jsonl"   # sharding recommended later
+out_jsonl: "data/interaction_logs/grpp_il_v1/train.jsonl"
 split: "train"
 seed: 0
 
 # Scale controls
-n_per_task: 5                # set to your target; keep small for first real run
-max_units_per_query: 40          # intended: |P| * |M| in monolithic (e.g., 4*10=40)
-# NOTE: if you don't want full cartesian yet, set max_units_per_query lower and sample actions.
+n_per_task: 5
+max_units_per_query: 36
 
-# Execution (OpenAI-compatible server)
+# Execution
 endpoint: "http://localhost:18000/v1"
 timeout_s: 120
 temperature: 0.0
@@ -19,73 +19,61 @@ max_tokens: 128
 model_context_limit: 512
 
 # Logging + robustness
-log_prompt_text: true            # store rendered prompt_text for reproducibility (recommended by spec)
+log_prompt_text: true
 log_raw_response: true
 truncate_fields:
-  # optional safety to avoid gigantic rows (esp. multinews)
   query_chars: 12000
   context_chars: 12000
   response_chars: 12000
   prompt_text_chars: 16000
 
-# Decomposition (monolithic v1)
+# Decomposition: monolithic v1. The prompt strategy may request plan-and-solve,
+# but the dataset builder does not split one query into multiple subqueries.
 decomposition:
-  enabled: false                 # monolithic first; spec says subquery=query
-  max_subqueries: 1              # K=1
-  splitter: "none"               # placeholder; later "heuristic_splitter_v0"
+  enabled: false
+  max_subqueries: 1
+  splitter: "none"
 
-# Cost definition (spec-compliant)
+# Cost definition
 cost:
-  mode: "priced_tokens"          # cost = in_tokens*in_price + out_tokens*out_price
+  mode: "priced_tokens"
   prices_from: "configs/llm_candidates.json"
-  normalize_per_million: true    # prices in $/1M tokens
-  # also store a lightweight proxy for analysis
-  cost_proxy: "tokens_total"     # tokens_in + tokens_out
+  normalize_per_million: true
+  cost_proxy: "tokens_total"
 
-# Reward (optional; can be computed later, but keep config for consistency)
 reward:
   enabled: true
-  lambda_cost: 0.00001           # used only if you compute reward inline
+  lambda_cost: 0.00001
   form: "performance_minus_lambda_cost"
 
-# Pools (actions = prompt × model)
+# Pools: paper-consistent 9-model pool. mixtral-8x22b remains in llm_candidates.json
+# as an available model, but it is not part of the reported GraphRouter++ setup.
 pools:
   models:
-    # Use model keys/identifiers consistent with llm_candidates.json 'model'
     - "mistral-7b"
     - "qwen2.5-7b"
     - "llama3.1-8b"
     - "qwen2.5-14b"
     - "yi-34b"
-    - "mixtral-8x7b"
     - "codellama-34b"
+    - "mixtral-8x7b"
     - "llama3.1-70b"
     - "qwen2.5-72b"
-    - "mixtral-8x22b"
-    # add more models here for full v1 later
-
   prompts:
-    # Keep simple IDs; builder should render prompt_text from templates
     - "direct"
     - "cot"
     - "decompose"
     - "selfcheck"
 
-
-# Action selection per qid
-# For monolithic GRPP-IL v1, spec defines total rows per qid = |P|*|M|.
-# You can either enumerate full cartesian, or sample if max_units_per_query < |P|*|M|.
 actions:
-  mode: "cartesian_then_cap"     # enumerate prompt×model then cap to max_units_per_query (optional)
+  mode: "cartesian_then_cap"
   sampling:
-    enabled: false               # set true if you want partial coverage
-    method: "uniform"            # uniform over action list
+    enabled: false
+    method: "uniform"
     ensure_coverage:
       prompts: true
       models: true
 
-# Tasks (automatic-metric tasks recommended for v1)
-# NOTE: If a task needs a judge/harness, keep it in tasks but mark eval_mode so performance can be null.
 tasks:
   hotpotqa:
     hf_path: "hotpot_qa"
@@ -104,7 +92,7 @@ tasks:
     primary_metric: "accuracy"
     metric_name: "accuracy"
     eval_mode: "auto"
-    answer_extraction: "gsm8k_final_number"  # parsed_answer extractor name in your code
+    answer_extraction: "gsm8k_final_number"
 
   squad:
     hf_path: "squad"
@@ -115,17 +103,7 @@ tasks:
     primary_metric: "f1"
     metric_name: "F1"
     eval_mode: "auto"
-    answer_extraction: "squad_span"          # parsed_answer extractor name
-
-  multinews:
-    hf_path: "multi_news"
-    hf_name: null
-    query_field: "document"
-    gold_field: "summary"
-    primary_metric: "rougeL"
-    metric_name: "ROUGE-L"
-    eval_mode: "auto"
-    summary_extraction: "raw"                # usually parsed_answer = response (maybe trimmed)
+    answer_extraction: "squad_span"
 
   alpaca:
     hf_path: "tatsu-lab/alpaca"
@@ -133,28 +111,10 @@ tasks:
     query_field: "instruction"
     input_field: "input"
     gold_field: "output"
-    primary_metric: null
-    metric_name: "judge_score"
-    eval_mode: "judge"                       # performance can be null unless judge is enabled
-    judge:
-      enabled: false
-      judge_model: null
+    primary_metric: "f1"
+    metric_name: "F1"
+    eval_mode: "auto"
 
-  humaneval:
-    hf_path: "openai_humaneval"
-    hf_name: null
-    query_field: "prompt"
-    gold_field: "test"
-    entry_point_field: "entry_point"
-    primary_metric: null
-    metric_name: "pass@1"
-    eval_mode: "harness"                     # performance can be null unless harness is enabled
-    harness:
-      enabled: false
-      timeout_s: 10
-
-# Output schema knobs (what to write per row)
-# This mirrors the spec fields; builder should fill these.
 output_fields:
   - task
   - qid
