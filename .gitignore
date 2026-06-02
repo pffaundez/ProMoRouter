@@ -29,3 +29,13 @@ wandb/
 .DS_Store
 cleanup_backup_*.tar.gz
 *.tar.gz
+*.tar.gz
+cleanup_backup_*.tar.gz
+__pycache__/
+*.pyc
+.wandb/
+wandb/
+checkpoints/
+outputs/
+runs/
+configs/rq2_shards/_alpaca_only_tmp/

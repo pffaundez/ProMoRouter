@@ -1,5 +1,5 @@
 dataset_name: grpp_il_v1
-out_jsonl: /upb/users/p/pablofg/profiles/unix/cs/repos/graph-router-2/data/interaction_logs/grpp_il_v1/shards/_alpaca_only_tmp/alpaca_only__qwen2.5-72b.jsonl
+out_jsonl: data/interaction_logs/grpp_il_v1/shards/_alpaca_only_tmp/alpaca_only__qwen2.5-72b.jsonl
 endpoint: http://localhost:18201/v1
 api_mode: chat
 served_model_name: qwen2.5-72b-gptq4
