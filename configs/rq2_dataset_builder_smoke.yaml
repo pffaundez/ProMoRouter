@@ -1,4 +1,4 @@
-# Canonical builder config for: GRPP-IL v1 (joint prompt--model router Interaction Log v1)
+# Canonical builder config for: PMR-IL v1 (joint prompt--model router Interaction Log v1)
 # Spec: joint prompt--model router Dataset Specification Pack
 
 dataset_name: "grpp_il_v1"
@@ -81,7 +81,7 @@ pools:
     #  params: {}
 
 # Action selection per qid
-# For monolithic GRPP-IL v1, spec defines total rows per qid = |P|*|M|.
+# For monolithic PMR-IL v1, spec defines total rows per qid = |P|*|M|.
 # You can either enumerate full cartesian, or sample if max_units_per_query < |P|*|M|.
 actions:
   mode: "cartesian_then_cap"     # enumerate prompt×model then cap to max_units_per_query (optional)

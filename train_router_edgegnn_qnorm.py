@@ -1,7 +1,7 @@
 """
 joint prompt--model router Edge-GNN router with query-normalized rewards.
 
-This is the more GraphRouter-like variant:
+This is the edge-based joint routing variant:
 
   * The graph used for message passing contains only TRAIN-observed routing
     structure, derived from the top-k prompt/model actions per train query.
@@ -185,7 +185,7 @@ def select_observed_train_edges(train_examples: List[ActionExample], top_k: int,
     The selected examples define observed graph structure. Labels are not passed
     as edge attributes; labels are used only here offline to choose which train
     actions are considered historically successful edges, analogous to observed
-    train edges in GraphRouter.
+    train edges in the model-only routing baseline.
     """
     selected: List[ActionExample] = []
     for _, cands in group_by_qid(train_examples).items():
@@ -308,7 +308,7 @@ class HeteroSageLayer(nn.Module):
         return new_h
 
 
-class GraphRouterPPEdgeGNN(nn.Module):
+class PromptModelRouterEdgeGNN(nn.Module):
     def __init__(
         self,
         query_dim: int,
@@ -385,7 +385,7 @@ def qid_batches(qids: List[str], batch_size: int, shuffle: bool) -> Iterable[Lis
 
 
 def compute_batch_loss(
-    model: GraphRouterPPEdgeGNN,
+    model: PromptModelRouterEdgeGNN,
     graph: HeteroGraphBatch,
     grouped: Dict[str, List[ActionExample]],
     batch_qids: List[str],
@@ -427,7 +427,7 @@ def compute_batch_loss(
 
 @torch.no_grad()
 def evaluate_action_selection(
-    model: GraphRouterPPEdgeGNN,
+    model: PromptModelRouterEdgeGNN,
     graph: HeteroGraphBatch,
     examples: List[ActionExample],
     device: torch.device,
@@ -524,7 +524,7 @@ def train_one_lambda(
     grouped_train = group_by_qid(train_ex)
     train_qid_list = sorted(grouped_train)
     query_dim = next(iter(query_embs.values())).shape[0]
-    model = GraphRouterPPEdgeGNN(
+    model = PromptModelRouterEdgeGNN(
         query_dim=query_dim,
         task_dim=task_embs.shape[1],
         prompt_dim=prompt_embs.shape[1],

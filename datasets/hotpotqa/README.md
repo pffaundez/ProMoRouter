@@ -1,4 +1,4 @@
-# HotpotQA for GraphRouter**
+# HotpotQA preprocessing
 
 We use the FullWiki version.
 Purpose: evaluation of sub-query routing for complex multi-hop queries (RQ1).

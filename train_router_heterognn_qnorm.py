@@ -348,7 +348,7 @@ class HeteroSageLayer(nn.Module):
         return new_h
 
 
-class GraphRouterPPHeteroGNN(nn.Module):
+class PromptModelRouterHeteroGNN(nn.Module):
     def __init__(
         self,
         query_dim: int,
@@ -413,7 +413,7 @@ def minibatch_indices(n: int, batch_size: int, device: torch.device, shuffle: bo
 
 @torch.no_grad()
 def evaluate_action_selection(
-    model: GraphRouterPPHeteroGNN,
+    model: PromptModelRouterHeteroGNN,
     graph: HeteroGraphBatch,
     examples: List[ActionExample],
     device: torch.device,
@@ -482,7 +482,7 @@ def train_one_lambda(
     train_data = tensorize_examples(train_ex, train_graph, device)
 
     query_dim = next(iter(query_embs.values())).numel()
-    model = GraphRouterPPHeteroGNN(
+    model = PromptModelRouterHeteroGNN(
         query_dim=query_dim,
         task_dim=static_features.task.shape[1],
         prompt_dim=static_features.prompt.shape[1],

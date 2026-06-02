@@ -1,5 +1,5 @@
 # MODIFIED FILE: configs/prompt_templates.yaml
-# Execution templates for GRPP-IL v1. These are used to call LLMs.
+# Execution templates for PMR-IL v1. These are used to call LLMs.
 # Node descriptions for router embeddings live in configs/prompt_strategies.yaml.
 # Compatible with simple .format() rendering.
 # Required variables: {subquery}

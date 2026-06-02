@@ -275,7 +275,7 @@ class HeteroSageLayer(nn.Module):
         return new_h
 
 
-class GraphRouterPPRankGNN(nn.Module):
+class PromptModelRouterRankGNN(nn.Module):
     def __init__(self, query_dim: int, node_desc_dim: int, hidden_dim: int, num_layers: int, dropout: float):
         super().__init__()
         self.query_proj = nn.Linear(query_dim, hidden_dim)
@@ -354,7 +354,7 @@ def listwise_loss(scores: torch.Tensor, rewards: torch.Tensor, groups: List[torc
 
 
 @torch.no_grad()
-def evaluate(model: GraphRouterPPRankGNN, graph: HeteroGraph, examples: List[ActionExample], device: torch.device) -> dict:
+def evaluate(model: PromptModelRouterRankGNN, graph: HeteroGraph, examples: List[ActionExample], device: torch.device) -> dict:
     model.eval()
     h = model.encode(graph)
     data = tensorize(examples, graph, device)
@@ -408,7 +408,7 @@ def train_one_lambda(reward_key: str, lam: float, rows: List[dict], query_embs: 
     query_dim = next(iter(query_embs.values())).shape[0]
     node_desc_dim = task_embs.shape[1]
 
-    model = GraphRouterPPRankGNN(
+    model = PromptModelRouterRankGNN(
         query_dim=query_dim,
         node_desc_dim=node_desc_dim,
         hidden_dim=args.hidden_dim,

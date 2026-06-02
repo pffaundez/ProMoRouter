@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Build GRPP Interaction Log (GRPP-IL) JSONL dataset from:
+Build PMR Interaction Log (PMR-IL) JSONL dataset from:
 - configs/rq2_dataset_builder_smoke.yaml
 - configs/prompt_templates.yaml
 - configs/llm_candidates.json
