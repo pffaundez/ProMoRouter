@@ -1,5 +1,5 @@
 """
-GraphRouter++ heterogeneous GNN router with query-normalized rewards.
+joint prompt--model router heterogeneous GNN router with query-normalized rewards.
 
 This script is intended as a drop-in, paper-consistent replacement for
 train_router_bipartite_qnorm.py. It implements message passing over a
@@ -549,7 +549,7 @@ def train_one_lambda(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train GraphRouter++ Hetero-GNN with qnorm rewards.")
+    parser = argparse.ArgumentParser(description="Train joint prompt--model router Hetero-GNN with qnorm rewards.")
     parser.add_argument("--data-path", type=Path, default=DEFAULT_BIPARTITE_DATA_PATH)
     parser.add_argument("--query-emb-path", type=Path, default=DEFAULT_QUERY_EMB_PATH)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
@@ -596,7 +596,7 @@ def main() -> None:
     vals = []
     for result in all_results:
         vals.extend([f"{result['P']:.3f}", f"{result['C']:.3f}", f"{result['R']:.3f}"])
-    print("GraphRouter++ Hetero-GNN (qnorm) & " + " & ".join(vals) + r" \\")
+    print("joint prompt--model router Hetero-GNN (qnorm) & " + " & ".join(vals) + r" \\")
     print(f"\nSaved results: {results_path}")
 
 

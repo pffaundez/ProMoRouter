@@ -1,5 +1,5 @@
-# Canonical builder config for: GRPP-IL v1 (GraphRouter++ Interaction Log v1)
-# Spec: GraphRouter++ Dataset Specification Pack
+# Canonical builder config for: GRPP-IL v1 (joint prompt--model router Interaction Log v1)
+# Spec: joint prompt--model router Dataset Specification Pack
 
 dataset_name: "grpp_il_v1"
 out_jsonl: "data/interaction_logs/grpp_il_v1/train.jsonl"   # sharding recommended later

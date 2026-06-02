@@ -27,3 +27,5 @@ wandb/
 
 # OS
 .DS_Store
+cleanup_backup_*.tar.gz
+*.tar.gz

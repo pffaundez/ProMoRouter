@@ -1,5 +1,5 @@
 # NEW FILE: configs/task_descriptions.yaml
-# Natural-language descriptions used to initialize GraphRouter++ task nodes.
+# Natural-language descriptions used to initialize joint prompt--model router task nodes.
 # These are router node features, not execution prompts.
 
 tasks:

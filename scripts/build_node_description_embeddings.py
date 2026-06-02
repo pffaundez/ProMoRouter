@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build text-description embeddings for GraphRouter++ non-query node types:
+Build text-description embeddings for joint prompt--model router non-query node types:
   - task nodes     from configs/task_descriptions.yaml
   - prompt nodes   from configs/prompt_strategies.yaml
   - model nodes    from configs/model_descriptions.json
@@ -150,7 +150,7 @@ def save_embedding_pack(name: str, texts_by_id: Dict[str, str], embedder: TextEm
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build GraphRouter++ node description embeddings.")
+    parser = argparse.ArgumentParser(description="Build joint prompt--model router node description embeddings.")
     parser.add_argument("--task-descriptions", type=Path, default=DEFAULT_TASK_DESCRIPTIONS)
     parser.add_argument("--prompt-strategies", type=Path, default=DEFAULT_PROMPT_STRATEGIES)
     parser.add_argument("--model-descriptions", type=Path, default=DEFAULT_MODEL_DESCRIPTIONS)

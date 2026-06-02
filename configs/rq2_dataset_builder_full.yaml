@@ -1,5 +1,5 @@
 # MODIFIED FILE: configs/rq2_dataset_builder_full.yaml
-# Canonical builder config for GRPP-IL v1 / GraphRouter++ paper experiments.
+# Canonical builder config for GRPP-IL v1 / joint prompt--model router paper experiments.
 # This version matches the paper setup: 4 prompting strategies × 9 LLMs = 36 actions/query.
 
 dataset_name: "grpp_il_v1"
@@ -47,7 +47,7 @@ reward:
   form: "performance_minus_lambda_cost"
 
 # Pools: paper-consistent 9-model pool. mixtral-8x22b remains in llm_candidates.json
-# as an available model, but it is not part of the reported GraphRouter++ setup.
+# as an available model, but it is not part of the reported joint prompt--model router setup.
 pools:
   models:
     - "mistral-7b"

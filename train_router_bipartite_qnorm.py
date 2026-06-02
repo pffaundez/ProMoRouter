@@ -379,7 +379,7 @@ def main():
             f"{result['C']:.3f}",
             f"{result['R']:.3f}",
         ])
-    print("GraphRouter++ (qnorm) & " + " & ".join(vals) + r" \\")
+    print("joint prompt--model router (qnorm) & " + " & ".join(vals) + r" \\")
     print(f"\nSaved results: {results_path}")
 
 

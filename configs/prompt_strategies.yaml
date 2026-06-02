@@ -1,5 +1,5 @@
 # NEW FILE: configs/prompt_strategies.yaml
-# Natural-language descriptions used to initialize GraphRouter++ prompt nodes.
+# Natural-language descriptions used to initialize joint prompt--model router prompt nodes.
 # Keep these separate from configs/prompt_templates.yaml, which is used for LLM execution.
 
 prompts:

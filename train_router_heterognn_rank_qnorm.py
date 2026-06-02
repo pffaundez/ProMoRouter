@@ -1,5 +1,5 @@
 """
-GraphRouter++ Hetero-GNN with query-level listwise ranking loss.
+joint prompt--model router Hetero-GNN with query-level listwise ranking loss.
 
 Why this script exists:
     The regression Hetero-GNN can collapse to a fixed prompt-model policy because
@@ -489,7 +489,7 @@ def train_one_lambda(reward_key: str, lam: float, rows: List[dict], query_embs: 
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Train GraphRouter++ Rank-GNN with qnorm rewards.")
+    p = argparse.ArgumentParser(description="Train joint prompt--model router Rank-GNN with qnorm rewards.")
     p.add_argument("--data-path", type=Path, default=DEFAULT_DATA_PATH)
     p.add_argument("--query-emb-path", type=Path, default=DEFAULT_QUERY_EMB_PATH)
     p.add_argument("--task-emb-path", type=Path, default=DEFAULT_TASK_EMB_PATH)
@@ -550,7 +550,7 @@ def main() -> None:
     vals = []
     for r in all_results:
         vals.extend([f"{r['P']:.3f}", f"{r['C']:.3f}", f"{r['R']:.3f}"])
-    print("GraphRouter++ Rank-GNN (qnorm) & " + " & ".join(vals) + r" \\")
+    print("joint prompt--model router Rank-GNN (qnorm) & " + " & ".join(vals) + r" \\")
     print(f"\nSaved results: {result_path}")
 
 

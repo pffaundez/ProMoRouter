@@ -1,5 +1,5 @@
 """
-GraphRouter++ Edge-GNN router with query-normalized rewards.
+joint prompt--model router Edge-GNN router with query-normalized rewards.
 
 This is the more GraphRouter-like variant:
 
@@ -630,7 +630,7 @@ def train_one_lambda(
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Train GraphRouter++ Edge-GNN with qnorm rewards.")
+    p = argparse.ArgumentParser(description="Train joint prompt--model router Edge-GNN with qnorm rewards.")
     p.add_argument("--data-path", type=Path, default=DEFAULT_BIPARTITE_DATA_PATH)
     p.add_argument("--query-emb-path", type=Path, default=DEFAULT_QUERY_EMB_PATH)
     p.add_argument("--task-emb-path", type=Path, default=DEFAULT_TASK_EMB_PATH)
@@ -693,7 +693,7 @@ def main() -> None:
     vals = []
     for r in all_results:
         vals.extend([f"{r['P']:.3f}", f"{r['C']:.3f}", f"{r['R']:.3f}"])
-    print("GraphRouter++ Edge-GNN (qnorm) & " + " & ".join(vals) + r" \\")
+    print("joint prompt--model router Edge-GNN (qnorm) & " + " & ".join(vals) + r" \\")
     print(f"\nSaved results: {results_path}")
 
 

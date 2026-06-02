@@ -1,0 +1,58 @@
+Modelos:
+
+mistral-7b
+A compact 7B instruction-tuned general-purpose language model. It is relatively low cost and suitable for concise instruction following, factual question answering, and lightweight reasoning, but may be less reliable on difficult multi-step reasoning than larger models.
+
+qwen2.5-7b
+A compact 7B instruction-tuned general-purpose model from the Qwen2.5 family. It is cost-efficient and often strong for mathematics, multilingual text, instruction following, and structured reasoning relative to its size.
+
+llama3.1-8b
+An 8B instruction-tuned general-purpose model from the Llama 3.1 family. It provides a low-to-moderate cost option for general QA, summarization-style responses, and instruction following, with limited capacity compared with larger models.
+
+qwen2.5-14b
+A mid-sized 14B instruction-tuned model from the Qwen2.5 family. It balances cost and quality and is suitable for mathematical reasoning, question answering, and general instruction following when 7B models may be insufficient.
+
+yi-34b
+A 34B chat-oriented general-purpose model. It is more capable but more expensive than compact 7B and 14B models, and is intended for harder instruction-following, reasoning, and question-answering cases where stronger language understanding is useful.
+
+codellama-34b
+A 34B instruction-tuned model specialized for code generation and code reasoning. It can handle programming-oriented prompts well, but may be less optimal than general-purpose chat models for ordinary factual QA, math word problems, or instruction-following tasks unrelated to code.
+
+mixtral-8x7b
+A sparse mixture-of-experts instruction-tuned model with 8 experts of 7B parameters. It is a strong general-purpose option with higher capacity than dense small models and can perform well on reasoning, QA, and instruction-following while maintaining efficient sparse activation.
+
+llama3.1-70b
+A large 70B instruction-tuned general-purpose model. It is expected to be stronger on complex reasoning, multi-hop QA, and instruction following than smaller Llama models, but has substantially higher inference cost.
+
+qwen2.5-72b
+A large 72B instruction-tuned general-purpose model from the Qwen2.5 family. It is a high-quality but high-cost option for difficult reasoning, mathematics, QA, and instruction-following tasks where smaller models may fail.
+
+
+Prompt strategies:
+
+direct
+A low-cost prompting strategy that asks the model to answer the user query directly and correctly without explicit intermediate reasoning, planning, or verification. It is suitable for simple factual questions, extractive QA, and straightforward instruction-following cases where concise responses are enough.
+
+cot
+A reasoning-oriented prompting strategy that encourages the model to think step by step before giving a final answer. It is useful for arithmetic, multi-hop reasoning, and questions that benefit from explicit intermediate inference, but it usually increases output length and inference cost.
+
+decompose
+A high-cost prompting strategy that asks the model to break the problem into a short plan or smaller reasoning steps and then solve them before producing the final answer. It is useful for complex multi-step or compositional queries, but can substantially increase token usage.
+
+selfcheck
+A verification-oriented prompting strategy in which the model first answers, then briefly checks for mistakes, missing assumptions, or inconsistencies, and finally outputs a corrected final answer. It can improve reliability but adds additional token cost.
+
+
+Tasks:
+
+gsm8k
+Grade-school math word problems requiring multi-step arithmetic reasoning, numerical computation, and extraction of a final numeric answer. The primary metric is exact-match accuracy after answer normalization.
+
+hotpotqa
+Multi-hop question answering over natural-language evidence, requiring the model to combine multiple supporting facts before producing a concise answer. The primary metric is token-level F1 against reference answers.
+
+squad
+Extractive question answering over a provided context passage. The model must identify an answer span or concise answer supported by the passage. The primary metric is token-level F1 or exact match against annotated answers.
+
+alpaca
+General instruction-following examples in which the model must satisfy a user instruction, optionally conditioned on an additional input field. The task emphasizes helpfulness, relevance, and matching the expected response content.
