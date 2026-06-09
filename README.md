@@ -19,7 +19,7 @@ The repository also includes static and adaptive baselines, including fixed-mode
 ## Method Overview
 
 <p align="center">
-  <img src="figures/ProMoRouter.pdf" width="95%">
+  <img src="figures/ProMoRouter.png" width="95%">
 </p>
 
 **Figure 1.** Overview of ProMoRouter. Queries are embedded into a heterogeneous graph containing task, prompt, and model nodes. The router scores candidate prompt--model actions and selects the highest-scoring action for inference.
