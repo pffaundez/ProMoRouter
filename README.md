@@ -2,7 +2,7 @@
 
 This repository contains the implementation and experimental artifacts for **ProMoRouter**, a heterogeneous graph-based router for joint prompt--model selection. ProMoRouter treats prompting strategy as a first-class routing decision: for each input query, it selects both a prompting strategy and an LLM from a candidate pool under a deployment objective that trades off performance and cost.
 
-The code is provided for anonymous review. Author-identifying metadata, private paths, and non-essential generated artifacts have been removed.
+This repository accompanies an anonymous ACL submission. Author information, project webpages, citation metadata, and other identifying information have been removed for double-blind review and will be restored after the review process.
 
 ## Overview
 
@@ -30,7 +30,7 @@ The repository also includes static and adaptive baselines, including fixed-mode
 .
 ├── data/
 │   ├── interaction_logs/
-│   │   └── grpp_il_v1/
+│   │   └── interaction_logs_v1/
 │   │       └── router_bipartite_qnorm.jsonl
 │   └── router/
 │       ├── query_embeddings.pt
@@ -73,7 +73,7 @@ If your local setup uses CUDA-specific PyTorch wheels, install PyTorch following
 The main router data is expected at:
 
 ```text
-data/interaction_logs/grpp_il_v1/router_bipartite_qnorm.jsonl
+data/interaction_logs/interaction_logs_v1/router_bipartite_qnorm.jsonl
 ```
 
 The expected embedding files are:
