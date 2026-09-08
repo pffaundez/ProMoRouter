@@ -31,6 +31,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from router.splits import load_or_create_splits
+
 
 SOURCE_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_bipartite_qnorm.jsonl")
 ROUTER_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm.jsonl")
@@ -248,10 +250,7 @@ def build_query_embedding_table(rows, raw_query_embeddings):
 
 
 def build_model_embedding_table(models, raw_model_embeddings):
-    """
-    Builds a model embedding matrix aligned with the model list.
-    Supports either a tensor already aligned with `models`, or a dict keyed by model name.
-    """
+    """Build a model matrix aligned explicitly by model identifier."""
     if torch.is_tensor(raw_model_embeddings):
         if raw_model_embeddings.shape[0] != len(models):
             raise ValueError(
@@ -261,17 +260,23 @@ def build_model_embedding_table(models, raw_model_embeddings):
         return raw_model_embeddings.float()
 
     if isinstance(raw_model_embeddings, dict):
-        # Case: {"embeddings": tensor} was already handled in load_embeddings,
-        # so here we assume model-name -> embedding.
+        by_id = raw_model_embeddings.get("embedding_by_id")
+        if isinstance(by_id, dict):
+            raw_model_embeddings = by_id
+        elif "ids" in raw_model_embeddings and torch.is_tensor(raw_model_embeddings.get("embeddings")):
+            ids = list(raw_model_embeddings["ids"])
+            matrix = raw_model_embeddings["embeddings"]
+            raw_model_embeddings = {name: matrix[i] for i, name in enumerate(ids)}
+
         missing = [m for m in models if m not in raw_model_embeddings]
         if missing:
             raise KeyError(
                 f"Missing {len(missing)} models in model embeddings. "
                 f"Missing examples: {missing[:5]}"
             )
-
-        model_x = torch.stack([_to_1d_tensor(raw_model_embeddings[m]) for m in models], dim=0)
-        return model_x.float()
+        return torch.stack(
+            [_to_1d_tensor(raw_model_embeddings[m]) for m in models], dim=0
+        ).float()
 
     raise ValueError(f"Unsupported model embeddings type: {type(raw_model_embeddings)}")
 
@@ -306,7 +311,7 @@ class DirectModelOnlyRouter(nn.Module):
     ):
         super().__init__()
 
-        in_dim = query_dim + model_dim + 4
+        in_dim = query_dim + model_dim
 
         self.scorer = nn.Sequential(
             nn.Linear(in_dim, hidden_dim),
@@ -320,8 +325,8 @@ class DirectModelOnlyRouter(nn.Module):
             nn.Linear(hidden_dim, 1),
         )
 
-    def forward(self, query_emb, model_emb, scalar_feats):
-        x = torch.cat([query_emb, model_emb, scalar_feats], dim=-1)
+    def forward(self, query_emb, model_emb):
+        x = torch.cat([query_emb, model_emb], dim=-1)
         return self.scorer(x).squeeze(-1)
 
 
@@ -338,7 +343,6 @@ def make_query_batch(
 
     q_list = []
     m_list = []
-    feat_list = []
     y_reward = []
     y_perf = []
     y_cost = []
@@ -355,26 +359,8 @@ def make_query_batch(
         perf = safe_float(cand["performance"])
         cost = safe_float(cand["cost_norm_query"])
         reward = safe_float(cand[reward_key])
-        tokens = safe_float(cand.get("tokens_total", 0.0))
-        money = safe_float(cand.get("cost_proxy_money", 0.0))
-
-        # Light scalar features. Cost/perf are available in offline training,
-        # but at decision time the router uses learned scores over candidates;
-        # these features are candidate metadata from logs.
-        scalar = torch.tensor(
-            [
-                cost,
-                np.log1p(tokens),
-                np.log1p(money),
-                1.0,
-            ],
-            dtype=torch.float32,
-            device=device,
-        )
-
         q_list.append(q_emb)
         m_list.append(m_emb)
-        feat_list.append(scalar)
         y_reward.append(reward)
         y_perf.append(perf)
         y_cost.append(cost)
@@ -386,7 +372,6 @@ def make_query_batch(
     return {
         "q": torch.stack(q_list, dim=0),
         "m": torch.stack(m_list, dim=0),
-        "feat": torch.stack(feat_list, dim=0),
         "reward": torch.tensor(y_reward, dtype=torch.float32, device=device),
         "perf": torch.tensor(y_perf, dtype=torch.float32, device=device),
         "cost": torch.tensor(y_cost, dtype=torch.float32, device=device),
@@ -441,7 +426,7 @@ def train_one(
             if batch is None:
                 continue
 
-            scores = model(batch["q"], batch["m"], batch["feat"])
+            scores = model(batch["q"], batch["m"])
             rewards = batch["reward"]
 
             # Regression target.
@@ -530,7 +515,7 @@ def evaluate(
         if batch is None:
             continue
 
-        scores = model(batch["q"], batch["m"], batch["feat"])
+        scores = model(batch["q"], batch["m"])
         idx = int(torch.argmax(scores).item())
 
         p = float(batch["perf"][idx].detach().cpu())
@@ -623,13 +608,14 @@ def run_seed(args, seed: int):
 
     rows = load_or_build_direct_dataset(args)
 
-    raw_query_embeddings = load_embeddings(args.query_embeddings)
-    raw_model_embeddings = load_embeddings(args.model_embeddings)
-
-    query_embeddings = unwrap_embedding_tensor(raw_query_embeddings, "query")
-    model_embeddings = unwrap_embedding_tensor(raw_model_embeddings, "model")
+    raw_query_embeddings = torch.load(args.query_embeddings, map_location="cpu")
+    raw_model_embeddings = torch.load(args.model_embeddings, map_location="cpu")
 
     models, model_to_idx = build_model_vocab(rows)
+    query_embeddings, _ = build_query_embedding_table(rows, raw_query_embeddings)
+    model_embeddings = build_model_embedding_table(models, raw_model_embeddings)
+    for qidx, row in enumerate(rows):
+        row["qidx"] = qidx
 
     def _unwrap_tensor_container(obj, preferred_keys):
         """
@@ -676,70 +662,26 @@ def run_seed(args, seed: int):
 
         raise ValueError(f"Unsupported embedding object type: {type(obj)}")
 
-    query_embeddings = _unwrap_tensor_container(
-        raw_query_embeddings,
-        preferred_keys=[
-            "query_embeddings",
-            "embeddings",
-            "x",
-            "tensor",
-        ],
+
+
+    split_manifest = args.split_manifest or (
+        Path("data/router/splits") / f"qnorm_seed{seed}.json"
     )
-
-    model_embeddings = _unwrap_tensor_container(
-        raw_model_embeddings,
-        preferred_keys=[
-            "model_embeddings",
-            "embeddings",
-            "x",
-            "tensor",
-        ],
-    )
-
-    query_embeddings = _to_float_embeddings(query_embeddings)
-    model_embeddings = _to_float_embeddings(model_embeddings)
-
-    # If model embeddings are stored as a dict keyed by model name, stack them
-    # in the exact model order used by this dataset.
-    if isinstance(model_embeddings, dict):
-        missing = [m for m in models if m not in model_embeddings]
-        if missing:
-            raise KeyError(
-                "Model embeddings are stored as a dict, but these models are missing: "
-                + ", ".join(missing)
-            )
-        model_embeddings = torch.stack(
-            [
-                model_embeddings[m]
-                if torch.is_tensor(model_embeddings[m])
-                else torch.tensor(model_embeddings[m], dtype=torch.float32)
-                for m in models
-            ],
-            dim=0,
-        ).float()
-
-    if not torch.is_tensor(model_embeddings):
-        raise ValueError(
-            f"model_embeddings must be a tensor or dict of model->embedding, got {type(model_embeddings)}"
-        )
-
-    if len(models) != model_embeddings.shape[0]:
-        print("\nWARNING:")
-        print(f"  dataset models: {len(models)}")
-        print(f"  model embeddings: {model_embeddings.shape[0]}")
-        print("  Assuming sorted dataset model order matches embedding order only if dimensions agree.")
-        print("  If this warning appears, verify model embedding metadata.")
-
-    rows_train, rows_val, rows_test = split_rows(
-        rows,
+    train_qids, val_qids, test_qids = load_or_create_splits(
+        (row["qid"] for row in rows),
+        manifest_path=split_manifest,
         seed=seed,
-        train_frac=args.train_frac,
-        val_frac=args.val_frac,
+        train_ratio=args.train_frac,
+        val_ratio=args.val_frac,
     )
+    rows_train = [row for row in rows if row["qid"] in train_qids]
+    rows_val = [row for row in rows if row["qid"] in val_qids]
+    rows_test = [row for row in rows if row["qid"] in test_qids]
 
     print("\n==== DIRECT MODEL-ONLY SPLIT ====")
     print(f"seed={seed}")
     print(f"queries: train={len(rows_train)} val={len(rows_val)} test={len(rows_test)}")
+    print(f"shared split manifest: {split_manifest}")
     print(f"models={models}")
 
     device = torch.device("cuda" if torch.cuda.is_available() and not args.cpu else "cpu")
@@ -752,6 +694,7 @@ def run_seed(args, seed: int):
         "train_queries": len(rows_train),
         "val_queries": len(rows_val),
         "test_queries": len(rows_test),
+        "split_manifest": str(split_manifest),
         "models": models,
     }
 
@@ -917,6 +860,12 @@ def parse_args():
 
     parser.add_argument("--train-frac", type=float, default=0.70)
     parser.add_argument("--val-frac", type=float, default=0.15)
+    parser.add_argument(
+        "--split-manifest",
+        type=Path,
+        default=None,
+        help="Shared split JSON. Defaults to data/router/splits/qnorm_seed<seed>.json.",
+    )
 
     parser.add_argument("--epochs", type=int, default=80)
     parser.add_argument("--patience", type=int, default=15)
