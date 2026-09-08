@@ -25,6 +25,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--atol", type=float, default=1e-9)
     parser.add_argument("--expected-prompts", type=int, default=4)
     parser.add_argument("--expected-models", type=int, default=9)
+    parser.add_argument("--expected-queries-per-task", type=int, default=200)
+    parser.add_argument(
+        "--expected-tasks",
+        nargs="+",
+        default=["hotpotqa", "gsm8k", "squad", "alpaca"],
+    )
     parser.add_argument(
         "--allow-incomplete",
         action="store_true",
@@ -91,10 +97,19 @@ def main() -> None:
                             f"stored={float(actual):.12g}, expected={expected:.12g}"
                         )
 
+    if args.expected_queries_per_task > 0:
+        for task in args.expected_tasks:
+            count = task_counts.get(task, 0)
+            if count != args.expected_queries_per_task:
+                errors.append(
+                    f"{task}: queries={count}, "
+                    f"expected={args.expected_queries_per_task}"
+                )
+
     coverage_errors = [
         error for error in errors
         if "prompts=" in error or "models=" in error or "actions=" in error
-        or "duplicate" in error
+        or "queries=" in error or "duplicate" in error
     ]
     algebra_errors = [error for error in errors if error not in coverage_errors]
 
