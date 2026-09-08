@@ -1,6 +1,8 @@
+import argparse
 import json
-import random
 from pathlib import Path
+
+from router.splits import load_or_create_splits
 from collections import defaultdict, Counter
 
 MODEL_ONLY_PATH = Path("data/interaction_logs/grpp_il_v1/router_model_only_qnorm.jsonl")
@@ -13,11 +15,6 @@ LAMBDA_CONFIGS = [
     ("reward_qnorm_lam_09", 0.9),
 ]
 
-SEED = 42
-
-
-def set_seed(seed: int):
-    random.seed(seed)
 
 
 def safe_mean(values):
@@ -30,21 +27,6 @@ def load_jsonl(path: Path):
         for line in f:
             rows.append(json.loads(line))
     return rows
-
-
-def split_qids(rows, train_ratio=0.7, val_ratio=0.15):
-    qids = sorted(row["qid"] for row in rows)
-    random.shuffle(qids)
-
-    n = len(qids)
-    n_train = int(n * train_ratio)
-    n_val = int(n * val_ratio)
-
-    train_qids = set(qids[:n_train])
-    val_qids = set(qids[n_train:n_train + n_val])
-    test_qids = set(qids[n_train + n_val:])
-
-    return train_qids, val_qids, test_qids
 
 
 def model_size_map():
@@ -239,13 +221,33 @@ def format_metric(x):
     return "--" if x is None else f"{x:.3f}"
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--train-ratio", type=float, default=0.70)
+    parser.add_argument("--val-ratio", type=float, default=0.15)
+    parser.add_argument("--model-only-path", type=Path, default=MODEL_ONLY_PATH)
+    parser.add_argument("--bipartite-path", type=Path, default=BIPARTITE_PATH)
+    parser.add_argument("--output-path", type=Path, default=None)
+    parser.add_argument("--split-manifest", type=Path, default=None)
+    return parser.parse_args()
+
+
 def main():
-    set_seed(SEED)
+    args = parse_args()
+    model_only_rows = load_jsonl(args.model_only_path)
+    bipartite_rows = load_jsonl(args.bipartite_path)
 
-    model_only_rows = load_jsonl(MODEL_ONLY_PATH)
-    bipartite_rows = load_jsonl(BIPARTITE_PATH)
-
-    train_qids, val_qids, test_qids = split_qids(model_only_rows)
+    split_manifest = args.split_manifest or (
+        Path("data/router/splits") / f"qnorm_seed{args.seed}.json"
+    )
+    train_qids, val_qids, test_qids = load_or_create_splits(
+        (row["qid"] for row in model_only_rows),
+        manifest_path=split_manifest,
+        seed=args.seed,
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
+    )
     smallest_model, largest_model = find_smallest_and_largest_models(model_only_rows)
 
     test_task_counts = Counter(row["task"] for row in model_only_rows if row["qid"] in test_qids)
@@ -256,6 +258,7 @@ def main():
     print(f"Val queries: {len(val_qids)}")
     print(f"Test queries: {len(test_qids)}")
     print(f"Test task counts: {dict(test_task_counts)}")
+    print(f"Shared split manifest: {split_manifest}")
     print(f"Smallest model: {smallest_model}")
     print(f"Largest model: {largest_model}")
 
@@ -281,8 +284,11 @@ def main():
             "results": results,
         }
 
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with OUTPUT_PATH.open("w", encoding="utf-8") as f:
+    output_path = args.output_path or (
+        OUTPUT_PATH.parent / f"baselines_qnorm_test_results_seed{args.seed}.json"
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2)
 
     for reward_key, payload in all_results.items():
@@ -319,7 +325,7 @@ def main():
             ])
         print(f"{method} & " + " & ".join(vals) + r" \\")
 
-    print(f"\nSaved results: {OUTPUT_PATH}")
+    print(f"\nSaved results: {output_path}")
 
 
 if __name__ == "__main__":
