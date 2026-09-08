@@ -133,8 +133,12 @@ outputs/router_edgegnn_qnorm/
 
 ### Static baselines
 
+Run each static baseline evaluation with the same seed used by the learned
+routers. All methods automatically reuse
+`data/router/splits/qnorm_seed<seed>.json`.
+
 ```bash
-python train_router_fixed_baselines_qnorm.py
+python analysis/evaluate_qnorm_baselines_on_test.py --seed 1
 ```
 
 This evaluates:
@@ -156,7 +160,10 @@ python train_router_model_only_direct_qnorm.py --seed 4
 python train_router_model_only_direct_qnorm.py --seed 5
 ```
 
-This baseline routes only over models and does not explicitly select prompting strategies.
+This baseline routes only over models and does not explicitly select prompting
+strategies. Its scorer uses only query and model embeddings; realized
+performance, token usage, monetary cost, and normalized cost remain evaluation
+labels and are not routing-time inputs.
 
 ## Optional Ablations
 
@@ -203,9 +210,26 @@ R = P - lambda * C
 
 where `lambda` controls the strength of the cost penalty.
 
+## Routing-integrity validation
+
+Before training or reporting results, validate reward algebra and action-space
+coverage:
+
+```bash
+python analysis/validate_qnorm_pipeline.py
+```
+
+The command fails if a stored reward differs from
+`performance - lambda * cost_norm_query`, if normalized costs fall outside
+`[0, 1]`, or if a query does not contain the expected 4 x 9 action space.
+Use `--allow-incomplete` only for explicitly incomplete diagnostic datasets.
+
 ## Reproducibility Notes
 
-The experiments are stochastic and should be reported over multiple seeds. For the main table, use the mean over seeds. Standard deviations can be reported in an appendix or ablation table when available.
+The experiments are stochastic and should be reported over multiple seeds.
+For a given seed, the Edge-GNN, GraphRouter-direct, and static baselines reuse
+the same persisted train/validation/test manifest. Do not compare results
+produced from different split manifests. For the main table, use the mean over seeds. Standard deviations can be reported in an appendix or ablation table when available.
 
 Recommended reporting format:
 
