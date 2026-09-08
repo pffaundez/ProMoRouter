@@ -14,11 +14,21 @@ def _qid_fingerprint(qids: Iterable[str]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _validate_manifest(manifest: dict, qids: set[str], seed: int) -> Tuple[set[str], set[str], set[str]]:
+def _validate_manifest(
+    manifest: dict,
+    qids: set[str],
+    seed: int,
+    train_ratio: float,
+    val_ratio: float,
+) -> Tuple[set[str], set[str], set[str]]:
     if int(manifest.get("seed", -1)) != int(seed):
         raise ValueError(
             f"Split manifest seed={manifest.get('seed')} does not match requested seed={seed}."
         )
+    if abs(float(manifest.get("train_ratio", -1.0)) - train_ratio) > 1e-12:
+        raise ValueError("Split manifest train ratio does not match the requested ratio.")
+    if abs(float(manifest.get("val_ratio", -1.0)) - val_ratio) > 1e-12:
+        raise ValueError("Split manifest validation ratio does not match the requested ratio.")
 
     train = set(manifest.get("train_qids", []))
     val = set(manifest.get("val_qids", []))
@@ -58,7 +68,9 @@ def load_or_create_splits(
     manifest_path = Path(manifest_path)
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        return _validate_manifest(manifest, qid_set, seed)
+        return _validate_manifest(
+            manifest, qid_set, seed, train_ratio, val_ratio
+        )
 
     ordered = sorted(qid_set)
     random.Random(seed).shuffle(ordered)
@@ -78,7 +90,7 @@ def load_or_create_splits(
         "val_qids": sorted(val),
         "test_qids": sorted(test),
     }
-    _validate_manifest(manifest, qid_set, seed)
+    _validate_manifest(manifest, qid_set, seed, train_ratio, val_ratio)
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
