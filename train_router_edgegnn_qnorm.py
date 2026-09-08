@@ -32,6 +32,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from router.splits import load_or_create_splits
+
 
 DEFAULT_BIPARTITE_DATA_PATH = Path("data/interaction_logs/grpp_il_v1/router_bipartite_qnorm.jsonl")
 DEFAULT_QUERY_EMB_PATH = Path("data/router/query_embeddings.pt")
@@ -484,7 +486,16 @@ def train_one_lambda(
     device: torch.device,
 ) -> dict:
     examples = build_examples(router_queries, query_embs, lambda_key)
-    train_qids, val_qids, test_qids = split_qids(examples, args.train_ratio, args.val_ratio)
+    split_manifest = args.split_manifest or (
+        Path("data/router/splits") / f"qnorm_seed{args.seed}.json"
+    )
+    train_qids, val_qids, test_qids = load_or_create_splits(
+        (ex.qid for ex in examples),
+        manifest_path=split_manifest,
+        seed=args.seed,
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
+    )
     train_ex = filter_examples(examples, train_qids)
     val_ex = filter_examples(examples, val_qids)
     test_ex = filter_examples(examples, test_qids)
@@ -538,6 +549,7 @@ def train_one_lambda(
     print(f"\n==== TRAINING EDGE-GNN {lambda_key} / lambda={lam} ====")
     print(f"Actions: total={len(examples)} train={len(train_ex)} val={len(val_ex)} test={len(test_ex)}")
     print(f"Queries: train={len(train_qids)} val={len(val_qids)} test={len(test_qids)}")
+    print(f"Shared split manifest: {split_manifest}")
     print(f"Observed train graph edges from top_k={args.edge_top_k}: {len(observed_edges)} action edges")
     print(
         f"Loss: mse + {args.listwise_alpha}*KL + {args.ce_alpha}*CE - {args.entropy_beta}*entropy | "
@@ -618,6 +630,7 @@ def train_one_lambda(
         "prompt_counts": test_metrics["prompt_counts"],
         "model_counts": test_metrics["model_counts"],
         "task_counts": test_metrics["task_counts"],
+        "split_manifest": str(split_manifest),
         "model_path": str(model_path),
     }
     print("\n==== TEST RESULTS ====")
@@ -650,6 +663,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--grad-clip", type=float, default=5.0)
     p.add_argument("--train-ratio", type=float, default=0.70)
     p.add_argument("--val-ratio", type=float, default=0.15)
+    p.add_argument(
+        "--split-manifest",
+        type=Path,
+        default=None,
+        help="Shared split JSON. Defaults to data/router/splits/qnorm_seed<seed>.json.",
+    )
     p.add_argument("--edge-top-k", type=int, default=3, help="Top-k train actions per query used as visible graph edges.")
     p.add_argument("--edge-threshold-quantile", type=float, default=None, help="Optional reward quantile threshold for visible edges.")
     p.add_argument("--full-prompt-model-lattice", action="store_true", help="Also connect all prompt-model pairs structurally.")
