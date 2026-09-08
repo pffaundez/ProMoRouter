@@ -1,6 +1,6 @@
 # ProMoRouter
 
-This repository contains the implementation and experimental artifacts for **ProMoRouter**, a heterogeneous graph-based router for joint prompt--model selection. ProMoRouter treats prompting strategy as a first-class routing decision: for each input query, it selects both a prompting strategy and an LLM from a candidate pool under a deployment objective that trades off performance and cost.
+This repository contains the implementation and experimental artifacts for **ProMoRouter**, a heterogeneous graph-based router for joint prompt--model selection. ProMoRouter treats prompting strategy as a first-class routing decision: **for each input query, it selects both a prompting strategy and an LLM from a candidate pool under a deployment objective that trades off performance and cost.**
 
 This repository accompanies an anonymous ACL submission. Author information, project webpages, citation metadata, and other identifying information have been removed for double-blind review and will be restored after the review process.
 
