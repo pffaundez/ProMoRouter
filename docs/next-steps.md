@@ -61,6 +61,7 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
   python train_router_edgegnn_qnorm.py \
     --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
     --split-manifest data/router/splits/qnorm_complete_seed1.json \
+    --output-dir outputs/p0_router_edgegnn_qnorm \
     --seed 1
   ```
 - **State:** ready
