@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-005.
+  one current action: T-006.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -72,6 +72,11 @@ routing is evaluated with:
   candidates, tasks, costs, and reward arithmetic together.
 - Cross-input validation passed on the experiment host: each input has 797
   queries and the combined validator reported zero errors.
+- Edge-GNN seed 1 completed for all three lambdas on 121 test queries using
+  the repaired complete population and dedicated split manifest.
+- Seed-1 results were P=0.498273, C=0.389587, R=0.459314 for lambda=0.1;
+  P=0.417263, C=0.116930, R=0.358799 for lambda=0.5; and
+  P=0.410675, C=0.107292, R=0.314112 for lambda=0.9.
 
 ### Open hypotheses
 
@@ -213,6 +218,9 @@ indexes embeddings only for qids present in the selected dataset.
 - Cross-input validation completed on the real repaired inputs: 797 queries in
   each dataset, zero validation errors, and aligned populations, candidates,
   tasks, and rewards.
+- Edge-GNN seed 1 completed and produced three model files plus the Overleaf
+  row; all test splits contain 121 queries and printed R values match P-lambda*C
+  to rounding precision.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
@@ -241,43 +249,26 @@ indexes embeddings only for qids present in the selected dataset.
 - The aligned direct-only dataset has been generated for all 797 retained
   queries.
 - Cross-dataset equality and reward checks now have a reusable validator.
+- A repaired Edge-GNN seed-1 run now exists for all three lambda settings.
 
 ## Problems pending
 
-1. Run Edge-GNN seed 1 on the complete joint input using the dedicated
-   `qnorm_complete_seed1.json` split manifest.
-2. Run GraphRouter-direct and static baselines on that same seed-1
-   manifest.
-3. Compare seed-1 action distributions and confirm no fixed-pair collapse.
-4. Run seeds 1--5 only after seed 1 passes.
-5. Regenerate every (P,C,R) table from machine-readable outputs.
-6. Recreate the routing-configuration ablation with the corrected pipeline.
-7. Rewrite the paper's graph construction, scorer, and loss so they match the
+1. Run GraphRouter-direct and static baselines on the same seed-1 manifest.
+2. Inspect seed-1 action distributions, including the lambda=0.1 selfcheck
+   pattern, and confirm no fixed-pair collapse.
+3. Run seeds 1--5 only after the seed-1 gate passes.
+4. Regenerate every (P,C,R) table from machine-readable outputs.
+5. Recreate the routing-configuration ablation with the corrected pipeline.
+6. Rewrite the paper's graph construction, scorer, and loss so they match the
    actual implementation.
-8. Decide whether query-normalized cost is the final deployment cost
+7. Decide whether query-normalized cost is the final deployment cost
    definition and document its limitations.
-9. Retire or isolate legacy pre-qnorm scripts and artifacts.
-10. Correct remaining README paths and commands that refer to absent or legacy
-    files.
+8. Retire or isolate legacy pre-qnorm scripts and artifacts.
+9. Correct remaining README paths and commands that refer to absent or legacy
+   files.
 
 ## Exact next step
 
-Execute T-005 from `docs/next-steps.md`: run Edge-GNN seed 1 with the complete
-joint dataset, verified embeddings, and a repaired-population-specific split
-manifest:
-
-```bash
-python train_router_edgegnn_qnorm.py \
-  --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-  --query-emb-path data/router/query_embeddings.pt \
-  --task-emb-path data/router/task_embeddings.pt \
-  --prompt-emb-path data/router/prompt_embeddings.pt \
-  --model-emb-path data/router/model_embeddings.pt \
-  --split-manifest data/router/splits/qnorm_complete_seed1.json \
-  --output-dir outputs/p0_router_edgegnn_qnorm \
-  --seed 1
-```
-
-The run must finish all three lambda settings, use the same test population
-throughout, and write its result JSON. Do not launch other methods or seeds
-until the seed-1 output is inspected.
+Execute T-006 from `docs/next-steps.md`: run GraphRouter-direct on the aligned
+direct dataset using the same repaired-population split manifest as Edge-GNN.
+Do not run additional seeds yet.
