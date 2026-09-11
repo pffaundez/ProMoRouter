@@ -224,6 +224,27 @@ The command fails if a stored reward differs from
 `[0, 1]`, or if a query does not contain the expected 4 x 9 action space.
 Use `--allow-incomplete` only for explicitly incomplete diagnostic datasets.
 
+If the source contains partial queries, preserve it and create a complete-only
+copy:
+
+```bash
+python analysis/filter_complete_qnorm_queries.py
+python analysis/validate_qnorm_pipeline.py \
+  --data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+  --expected-queries-per-task 0
+```
+
+Train the Edge-GNN on that explicit input:
+
+```bash
+python train_router_edgegnn_qnorm.py \
+  --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+  --seed 1
+```
+
+The trainer independently enforces complete, unique action spaces and stops
+before optimization if the contract is violated.
+
 ## Reproducibility Notes
 
 The experiments are stochastic and should be reported over multiple seeds.
