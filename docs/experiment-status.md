@@ -21,6 +21,8 @@ routing is evaluated with:
 - Development branch: `fix/p0-routing-integrity`.
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
+- The executable task queue is maintained in `docs/next-steps.md`, with exactly
+  one current action: T-001.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -82,6 +84,8 @@ routing is evaluated with:
    unless the original checkpoints and inference environment are reproduced.
 10. Preserve significant decision history in `docs/decisions.md`; supersede or
     revert entries explicitly rather than silently rewriting them.
+11. Maintain a single executable next action and task-state transitions in
+    `docs/next-steps.md`.
 
 ## Modified files
 
@@ -99,6 +103,7 @@ The following files are modified or added on
 - `README.md`
 - `docs/experiment-status.md`
 - `docs/decisions.md`
+- `docs/next-steps.md`
 
 Key effects:
 
@@ -111,7 +116,8 @@ Key effects:
 - query-population consistency checks for derived model-only data;
 - documented validation and training commands; and
 - an append-only decision log with explicit implementation discrepancies and
-  decisions requiring confirmation.
+  decisions requiring confirmation; and
+- a dependency-aware task queue with one unambiguous next action.
 
 ## Current datasets and artifacts
 
@@ -173,6 +179,8 @@ indexes embeddings only for qids present in the selected dataset.
   successfully from the remote branch.
 - Decision log cross-checked against the repair branch; unresolved README and
   default-input discrepancies are recorded in `docs/decisions.md`.
+- Next-step queue cross-checked against the current builders, trainer CLIs, and
+  dataset state; T-001 is the only task in `Now`.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
@@ -215,13 +223,10 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Rebuild both model-only inputs from the same 797-query population before any
-training. The next code change is to make the model-only dataset builder accept
-the complete bipartite dataset as its qid allowlist and produce:
+Execute T-001 from `docs/next-steps.md`: modify
+`analysis/build_model_only_router_dataset.py` to accept the complete
+bipartite dataset as a qid allowlist and fail unless its output contains the
+same qids with exactly nine model candidates per query.
 
-- `router_model_only_qnorm_complete.jsonl`; and
-- `router_model_only_direct_qnorm_complete.jsonl`.
-
-After validating that both contain exactly the same 797 qids, run all three
-methods with the shared seed-1 split manifest. Do not start seed 1 before these
-derived inputs are aligned.
+Do not generate repaired model-only inputs or start seed-1 training until this
+builder change passes syntax and synthetic success/failure checks.
