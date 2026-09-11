@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-008**. Do not run multiple seeds before the
-seed-1 integrity gate is explicitly passed.
+**Single next action:** execute **T-009**. The seed-1 gate passed with a
+behavioral warning; run the remaining seeds before final claims.
 
 ## Verified facts affecting the queue
 
@@ -46,8 +46,7 @@ seed-1 integrity gate is explicitly passed.
 - GraphRouter-direct seed 1 completed on the same manifest with 121 test
   queries for each lambda. Results are recorded in T-006 below.
 - The lambda=0.1 Edge-GNN run selected `selfcheck` for all 121 test queries;
-  this is an observed policy pattern under inspection in T-008, not an
-  automatic failure.
+  T-008 classified this as a behavioral warning, not an integrity failure.
 - Machine-readable Edge-GNN and GraphRouter-direct outputs both report 121
   test queries per lambda and the identical `qnorm_complete_seed1.json` path.
 - Their stored P/C/R values satisfy `R=P-lambda*C` within floating-point
@@ -55,45 +54,23 @@ seed-1 integrity gate is explicitly passed.
 
 ## Now
 
-### T-008 — Inspect the seed-1 integrity gate
-
-- **Description:** Compare query counts, manifests, reward arithmetic, selected
-  prompt/model distributions, and any fixed-action collapse across T-005 to
-  T-007.
-- **Objective/reason:** Decide whether the repaired pipeline is sound enough
-  for the multi-seed sweep.
-- **Files involved:** Seed-1 JSON outputs and split manifest; status and
-  decision documents.
-- **Dependencies:** T-005, T-006, and T-007.
-- **Completion criterion:** Written pass/fail conclusion with evidence; all
-  methods share test qids; no algebra errors; suspicious collapse is explained
-  or converted into a blocking defect.
-- **Validation command:** Inspect the nested baseline `results` objects and
-  record the pass/fail conclusion in `docs/experiment-status.md`.
-- **State:** in_progress
-- **Priority:** P0
-- **Blocker:** T-007 baseline output is still pending
-
-## Later
-
-## Later
-
-## Later
-
 ### T-009 — Run the repaired five-seed sweep
 
-- **Description:** Execute learned routers and static evaluations for seeds
-  1--5 with one shared manifest per seed.
+- **Description:** Execute learned routers and static evaluations for the
+  remaining seeds 2--5, retaining the validated seed-1 outputs, with one shared
+  manifest per seed.
 - **Objective/reason:** Produce variability-aware evidence for the long paper.
 - **Files involved:** Trainers, evaluator, manifests, output directories.
-- **Dependencies:** T-008 must pass.
+- **Dependencies:** T-008 (completed).
 - **Completion criterion:** Complete outputs for five seeds and three lambdas,
   with matching populations per seed and no validation failures.
 - **Validation command:** Run the seed-specific commands established in
   T-005--T-007 for seeds 1 through 5.
-- **State:** deferred
-- **Priority:** P1
-- **Blocker:** Seed-1 gate has not passed
+- **State:** ready
+- **Priority:** P0
+- **Blocker:** none
+
+## Later
 
 ### T-010 — Regenerate all P/C/R tables from outputs
 
@@ -226,6 +203,26 @@ seed-1 integrity gate is explicitly passed.
   authorized as current scope.
 
 ## Completed
+
+### T-008 — Inspect the seed-1 integrity gate
+
+- **Description:** Compare query counts, manifests, reward arithmetic, selected
+  prompt/model distributions, and any fixed-action collapse across T-005 to
+  T-007.
+- **Objective/reason:** Decide whether the repaired pipeline is sound enough
+  for the multi-seed sweep.
+- **Files involved:** Seed-1 JSON outputs and split manifest; status and
+  decision documents.
+- **Dependencies:** T-005, T-006, and T-007.
+- **Completion criterion:** Written pass/fail conclusion with evidence; all
+  methods share test qids; no algebra errors; suspicious collapse is explained
+  or converted into a blocking defect.
+- **Validation command:** Inspect the nested baseline `results` objects and
+  record the pass/fail conclusion in `docs/experiment-status.md`.
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** T-007 baseline output is still pending
+
 
 ### T-007 — Evaluate static baselines on the same seed-1 manifest
 
