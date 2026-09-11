@@ -283,11 +283,8 @@ These are unresolved choices, not adopted decisions:
    the long paper, and how its limitations will be presented.
 2. Whether trainer/evaluator defaults should point directly to complete-only
    datasets or require explicit CLI paths to preserve source visibility.
-3. The exact rebuild interface for
-   `router_model_only_qnorm_complete.jsonl`; the required 797-qid equality is
-   confirmed, but the builder change has not yet been implemented.
-4. Whether to retain, relocate, or remove legacy pre-qnorm scripts and
+3. Whether to retain, relocate, or remove legacy pre-qnorm scripts and
    artifacts after all references are audited.
-5. Whether to add a separately evaluated pre-routing cost predictor. No such
+4. Whether to add a separately evaluated pre-routing cost predictor. No such
    predictor is part of the current repaired implementation.
-6. When and how `fix/p0-routing-integrity` will be merged into `main`.
+5. When and how `fix/p0-routing-integrity` will be merged into `main`.
