@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-002**. Do not train seed 1 or launch a
-multi-seed run before T-002 through T-004 pass.
+**Single next action:** execute **T-003**. Do not train seed 1 or launch a
+multi-seed run before T-003 and T-004 pass.
 
 ## Verified facts affecting the queue
 
@@ -26,46 +26,20 @@ multi-seed run before T-002 through T-004 pass.
 - `analysis/build_model_only_router_dataset.py` now accepts `--qid-source`,
   filters to that exact qid population, and rejects duplicate/mismatched qids,
   empty outputs, missing rewards, and non-nine-model candidate sets.
-- `train_router_model_only_direct_qnorm.py` can rebuild a direct-only
-  derivative and checks source coverage/qid equality, but its defaults still
-  point to the original 799-query source and stale derived filename.
+- `router_model_only_qnorm_complete.jsonl` was generated on the experiment
+  host with 797 queries, nine models per query, and exact allowlist validation.
+- `train_router_model_only_direct_qnorm.py` now supports `--build-only` and
+  validates exact qid equality, nine unique expected models, direct prompt
+  policy, and reward presence before exiting without training.
 - The static evaluator and both learned routers can reuse a persisted split
   manifest, but their input populations must first be identical.
 - No repaired seed-1 comparison has been run yet.
 
 ## Now
 
-### T-002 — Generate the aligned averaged model-only dataset
-
-- **Description:** Build
-  `router_model_only_qnorm_complete.jsonl` from the flat qnorm log while
-  filtering against the complete joint qids.
-- **Objective/reason:** Give static model-only baselines the same 797-query
-  universe as the joint router.
-- **Files involved:**
-  `train_clean_qnorm_lambdas.jsonl`,
-  `router_bipartite_qnorm_complete.jsonl`,
-  `router_model_only_qnorm_complete.jsonl`.
-- **Dependencies:** T-001 (completed).
-- **Completion criterion:** Exactly 797 unique qids; exact qid equality with the
-  complete joint dataset; exactly nine unique model candidates per query; no
-  missing reward fields.
-- **Validation command:**
-  ```bash
-  python analysis/build_model_only_router_dataset.py \
-    --input data/interaction_logs/grpp_il_v1/train_clean_qnorm_lambdas.jsonl \
-    --qid-source data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --output data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
-
 ### T-003 — Generate the aligned direct-only model dataset without training
 
-- **Description:** Provide a build-only path if necessary, then derive
+- **Description:** Use the implemented build-only path to derive
   `router_model_only_direct_qnorm_complete.jsonl` from the complete joint
   source using only `prompt == "direct"`.
 - **Objective/reason:** Prepare GraphRouter-direct on the same query population
@@ -73,7 +47,7 @@ multi-seed run before T-002 through T-004 pass.
 - **Files involved:** `train_router_model_only_direct_qnorm.py`,
   `router_bipartite_qnorm_complete.jsonl`,
   `router_model_only_direct_qnorm_complete.jsonl`.
-- **Dependencies:** T-001; D-003 and D-007.
+- **Dependencies:** T-001 and T-002 (completed); D-003 and D-007.
 - **Completion criterion:** Exactly 797 unique qids; nine unique direct-model
   candidates per query; exact qid equality with the complete joint source; the
   command exits before optimizer construction.
@@ -84,9 +58,11 @@ multi-seed run before T-002 through T-004 pass.
     --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
     --rebuild-direct-dataset --build-only
   ```
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
-- **Blocker:** `--build-only` is not implemented yet
+- **Blocker:** none
+
+## Next
 
 ### T-004 — Cross-validate all three repaired input populations
 
@@ -344,6 +320,34 @@ multi-seed run before T-002 through T-004 pass.
   authorized as current scope.
 
 ## Completed
+
+### T-002 — Generate the aligned averaged model-only dataset
+
+- **Description:** Build
+  `router_model_only_qnorm_complete.jsonl` from the flat qnorm log while
+  filtering against the complete joint qids.
+- **Objective/reason:** Give static model-only baselines the same 797-query
+  universe as the joint router.
+- **Files involved:**
+  `train_clean_qnorm_lambdas.jsonl`,
+  `router_bipartite_qnorm_complete.jsonl`,
+  `router_model_only_qnorm_complete.jsonl`.
+- **Dependencies:** T-001 (completed).
+- **Completion criterion:** Exactly 797 unique qids; exact qid equality with the
+  complete joint dataset; exactly nine unique model candidates per query; no
+  missing reward fields.
+- **Validation command:**
+  ```bash
+  python analysis/build_model_only_router_dataset.py \
+    --input data/interaction_logs/grpp_il_v1/train_clean_qnorm_lambdas.jsonl \
+    --qid-source data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --output data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl
+  ```
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** 797 queries; nine models per query; population validation passed.
+
 
 ### T-001 — Add complete-population filtering to the model-only builder
 
