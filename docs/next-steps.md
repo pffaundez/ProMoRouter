@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-004**. Do not train seed 1 or launch a
-multi-seed run before T-004 passes.
+**Single next action:** execute **T-005**. Do not run GraphRouter-direct,
+static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
 
 ## Verified facts affecting the queue
 
@@ -38,35 +38,12 @@ multi-seed run before T-004 passes.
   models.
 - `analysis/validate_aligned_router_inputs.py` now provides one reproducible
   cross-dataset population, candidate, task, cost, and reward check.
-- No repaired seed-1 comparison has been run yet.
+- Cross-input validation passed on the experiment host: all three inputs
+  contain the same 797 queries and report zero population, candidate, task,
+  cost, or reward errors.
+- No repaired seed-1 learned-router run has been completed yet.
 
 ## Now
-
-### T-004 — Cross-validate all three repaired input populations
-
-- **Description:** Verify exact qid equality among the complete joint,
-  averaged model-only, and direct-only datasets, plus their respective
-  candidate counts.
-- **Objective/reason:** Establish the precondition for fair shared-split
-  evaluation.
-- **Files involved:** The three `*_complete.jsonl` inputs; validation tooling.
-- **Dependencies:** T-002 and T-003 (completed).
-- **Completion criterion:** All qid sets equal the same 797 IDs; joint rows have
-  36 unique prompt--model actions; model-only rows have nine unique models;
-  direct rows have nine unique direct-model actions; validation exits zero.
-- **Validation command:**
-  ```bash
-  python analysis/validate_qnorm_pipeline.py \
-    --data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --expected-queries-per-task 0
-  ```
-  The model-only equality command is to be finalized as part of T-001/T-003
-  rather than relying on an undocumented one-off snippet.
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
 
 ### T-005 — Run the Edge-GNN seed-1 integrity experiment
 
@@ -75,7 +52,7 @@ multi-seed run before T-004 passes.
 - **Objective/reason:** Establish the first repaired learned-router result.
 - **Files involved:** `train_router_edgegnn_qnorm.py`, complete joint data,
   embeddings, split manifest, `outputs/router_edgegnn_qnorm/`.
-- **Dependencies:** T-004; verified embeddings.
+- **Dependencies:** T-004 (completed); verified embeddings.
 - **Completion criterion:** All three lambda runs finish; result JSON and model
   files exist; test query count matches the manifest; stored output
   `R = P-lambda*C` within tolerance.
@@ -83,11 +60,14 @@ multi-seed run before T-004 passes.
   ```bash
   python train_router_edgegnn_qnorm.py \
     --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --split-manifest data/router/splits/qnorm_complete_seed1.json \
     --seed 1
   ```
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
-- **Blocker:** T-004 incomplete
+- **Blocker:** none
+
+## Next
 
 ### T-006 — Run GraphRouter-direct on the same seed-1 manifest
 
@@ -105,7 +85,7 @@ multi-seed run before T-004 passes.
     --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
     --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
     --seeds 1 \
-    --split-manifest data/router/splits/qnorm_seed1.json
+    --split-manifest data/router/splits/qnorm_complete_seed1.json
   ```
 - **State:** queued
 - **Priority:** P0
@@ -127,7 +107,7 @@ multi-seed run before T-004 passes.
     --seed 1 \
     --model-only-path data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl \
     --bipartite-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --split-manifest data/router/splits/qnorm_seed1.json
+    --split-manifest data/router/splits/qnorm_complete_seed1.json
   ```
 - **State:** queued
 - **Priority:** P0
@@ -300,6 +280,33 @@ multi-seed run before T-004 passes.
   authorized as current scope.
 
 ## Completed
+
+### T-004 — Cross-validate all three repaired input populations
+
+- **Description:** Verify exact qid equality among the complete joint,
+  averaged model-only, and direct-only datasets, plus their respective
+  candidate counts.
+- **Objective/reason:** Establish the precondition for fair shared-split
+  evaluation.
+- **Files involved:** The three `*_complete.jsonl` inputs; validation tooling.
+- **Dependencies:** T-002 and T-003 (completed).
+- **Completion criterion:** All qid sets equal the same 797 IDs; joint rows have
+  36 unique prompt--model actions; model-only rows have nine unique models;
+  direct rows have nine unique direct-model actions; validation exits zero.
+- **Validation command:**
+  ```bash
+  python analysis/validate_qnorm_pipeline.py \
+    --data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --expected-queries-per-task 0
+  ```
+  The model-only equality command is to be finalized as part of T-001/T-003
+  rather than relying on an undocumented one-off snippet.
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** 797 queries in each input; validation errors: 0;
+  populations, candidates, tasks, and rewards aligned.
+
 
 ### T-003 — Generate the aligned direct-only model dataset without training
 
