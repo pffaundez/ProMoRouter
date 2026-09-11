@@ -22,9 +22,8 @@ visible and are not treated as resolved:
 - The static evaluator still defaults to `router_model_only_qnorm.jsonl` and
   `router_bipartite_qnorm.jsonl`, not their aligned complete-only variants.
 - GraphRouter-direct still defaults to the original bipartite source and the
-  pre-existing derived direct dataset. Its code validates source coverage and
-  qid equality when rebuilt, but the 797-query derivative has not yet been
-  generated and verified.
+  pre-existing derived direct filename, although the aligned 797-query
+  complete derivative has now been generated and build-only validated.
 - The repaired implementation confirms that validation/test queries connect
   only to task nodes and that the Edge-GNN objective is
   MSE + KL + CE - entropy. Any paper text describing connections to every
@@ -183,6 +182,8 @@ visible and are not treated as resolved:
 - **Implementation update (2026-09-11):** GraphRouter-direct now has a
   `--build-only` mode and validates exact qid equality, the nine expected
   models, direct prompt policy, and rewards before exiting without training.
+  The complete derivative passed with 797 queries and full 797-per-model
+  coverage.
 
 ### D-008 — Align embedding matrices by semantic identifier
 
@@ -284,7 +285,9 @@ visible and are not treated as resolved:
 - **Operational update (2026-09-11):** T-001 passed four synthetic tests and
   moved to `Completed`; T-002 became the sole task in `Now`.
 - **Operational update (2026-09-11):** T-002 generated and validated the
-  797-query averaged model-only dataset; T-003 is now the sole task in `Now`.
+  797-query averaged model-only dataset; T-003 became the sole task in `Now`.
+- **Operational update (2026-09-11):** T-003 generated and validated the
+  797-query direct dataset; T-004 is now the sole task in `Now`.
 
 ## Decisions requiring confirmation
 
