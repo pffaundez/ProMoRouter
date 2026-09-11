@@ -19,6 +19,8 @@ routing is evaluated with:
 ### Verified facts
 
 - Development branch: `fix/p0-routing-integrity`.
+- Permanent decision history is maintained in `docs/decisions.md`; unresolved
+  choices are kept separate from confirmed decisions.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -78,6 +80,8 @@ routing is evaluated with:
 8. Run and inspect seed 1 before launching the complete five-seed sweep.
 9. Do not mix newly generated LLM interactions with the March interaction logs
    unless the original checkpoints and inference environment are reproduced.
+10. Preserve significant decision history in `docs/decisions.md`; supersede or
+    revert entries explicitly rather than silently rewriting them.
 
 ## Modified files
 
@@ -93,6 +97,8 @@ The following files are modified or added on
 - `train_router_edgegnn_qnorm.py`
 - `train_router_model_only_direct_qnorm.py`
 - `README.md`
+- `docs/experiment-status.md`
+- `docs/decisions.md`
 
 Key effects:
 
@@ -103,7 +109,9 @@ Key effects:
 - removal of post-execution features from GraphRouter-direct;
 - ID-based model-embedding alignment;
 - query-population consistency checks for derived model-only data; and
-- documented validation and training commands.
+- documented validation and training commands; and
+- an append-only decision log with explicit implementation discrepancies and
+  decisions requiring confirmation.
 
 ## Current datasets and artifacts
 
@@ -163,6 +171,8 @@ indexes embeddings only for qids present in the selected dataset.
 - Git diff whitespace validation completed.
 - Repair branch recloned and the complete filtering/validation workflow rerun
   successfully from the remote branch.
+- Decision log cross-checked against the repair branch; unresolved README and
+  default-input discrepancies are recorded in `docs/decisions.md`.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
