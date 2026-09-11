@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-004.
+  one current action: T-005.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -70,6 +70,8 @@ routing is evaluated with:
   models have coverage 797.
 - A dedicated cross-input validator now checks the three repaired populations,
   candidates, tasks, costs, and reward arithmetic together.
+- Cross-input validation passed on the experiment host: each input has 797
+  queries and the combined validator reported zero errors.
 
 ### Open hypotheses
 
@@ -208,6 +210,9 @@ indexes embeddings only for qids present in the selected dataset.
   build-only validation passed.
 - Cross-input validator passed syntax compilation and three synthetic tests:
   valid candidates, missing model detection, and reward-error detection.
+- Cross-input validation completed on the real repaired inputs: 797 queries in
+  each dataset, zero validation errors, and aligned populations, candidates,
+  tasks, and rewards.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
@@ -239,9 +244,9 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Problems pending
 
-1. Cross-validate exact qid and candidate equality across the three repaired
-   inputs using `analysis/validate_aligned_router_inputs.py`.
-3. Run Edge-GNN, GraphRouter-direct, and static baselines on the same seed-1
+1. Run Edge-GNN seed 1 on the complete joint input using the dedicated
+   `qnorm_complete_seed1.json` split manifest.
+2. Run GraphRouter-direct and static baselines on that same seed-1
    manifest.
 4. Compare seed-1 action distributions and confirm no fixed-pair collapse.
 5. Run seeds 1--5 only after seed 1 passes.
@@ -257,17 +262,21 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-004 from `docs/next-steps.md` on the experiment host after pulling
-the branch:
+Execute T-005 from `docs/next-steps.md`: run Edge-GNN seed 1 with the complete
+joint dataset, verified embeddings, and a repaired-population-specific split
+manifest:
 
 ```bash
-python analysis/validate_aligned_router_inputs.py \
-  --bipartite data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-  --model-only data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl \
-  --direct data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
-  --expected-queries 797
+python train_router_edgegnn_qnorm.py \
+  --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+  --query-emb-path data/router/query_embeddings.pt \
+  --task-emb-path data/router/task_embeddings.pt \
+  --prompt-emb-path data/router/prompt_embeddings.pt \
+  --model-emb-path data/router/model_embeddings.pt \
+  --split-manifest data/router/splits/qnorm_complete_seed1.json \
+  --seed 1
 ```
 
-The command must report 797 queries for all three inputs, zero validation
-errors, and aligned populations, candidates, tasks, and rewards. Do not begin
-training until this check passes.
+The run must finish all three lambda settings, use the same test population
+throughout, and write its result JSON. Do not launch other methods or seeds
+until the seed-1 output is inspected.
