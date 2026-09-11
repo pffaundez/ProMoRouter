@@ -31,6 +31,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from router.data_validation import require_complete_action_space
 from router.splits import load_or_create_splits
 
 
@@ -47,6 +48,19 @@ LAMBDAS = {
     "reward_qnorm_lam_05": 0.5,
     "reward_qnorm_lam_09": 0.9,
 }
+
+EXPECTED_PROMPTS = ("direct", "cot", "decompose", "selfcheck")
+EXPECTED_MODELS = (
+    "mistral-7b",
+    "qwen2.5-7b",
+    "llama3.1-8b",
+    "qwen2.5-14b",
+    "yi-34b",
+    "codellama-34b",
+    "mixtral-8x7b",
+    "llama3.1-70b",
+    "qwen2.5-72b",
+)
 
 
 def set_seed(seed: int):
@@ -178,9 +192,26 @@ def build_direct_model_only_dataset(
 
 
 def load_or_build_direct_dataset(args):
+    source_rows = load_jsonl(args.source_data)
+    require_complete_action_space(
+        source_rows,
+        expected_prompts=EXPECTED_PROMPTS,
+        expected_models=EXPECTED_MODELS,
+    )
+
     if args.rebuild_direct_dataset or not args.router_data.exists():
-        return build_direct_model_only_dataset(args.source_data, args.router_data)
-    return load_jsonl(args.router_data)
+        rows = build_direct_model_only_dataset(args.source_data, args.router_data)
+    else:
+        rows = load_jsonl(args.router_data)
+
+    source_qids = {row["qid"] for row in source_rows}
+    derived_qids = {row["qid"] for row in rows}
+    if derived_qids != source_qids:
+        raise ValueError(
+            "The direct model-only dataset was derived from a different query "
+            "population. Re-run with --rebuild-direct-dataset."
+        )
+    return rows
 
 
 def load_embeddings(path: Path):
