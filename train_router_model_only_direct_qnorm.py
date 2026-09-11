@@ -987,7 +987,7 @@ def main():
 
     if args.build_only:
         rows = load_or_build_direct_dataset(args)
-        print("\\n==== BUILD-ONLY VALIDATION PASSED ====")
+        print("\n==== BUILD-ONLY VALIDATION PASSED ====")
         print(f"Queries: {len(rows)}")
         print(f"Models per query: {len(EXPECTED_MODELS)}")
         print("Prompt policy: direct")
