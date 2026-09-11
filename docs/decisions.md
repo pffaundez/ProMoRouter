@@ -117,6 +117,9 @@ visible and are not treated as resolved:
   `router/data_validation.py`, `README.md`.
 - **Status:** active
 - **Replaced by:** —
+- **Implementation update (2026-09-11):** The averaged model-only builder now
+  accepts the complete bipartite dataset as a qid allowlist and validates exact
+  output population equality before writing.
 
 ### D-005 — Require the full unique 4 x 9 action space before joint training
 
@@ -274,6 +277,8 @@ visible and are not treated as resolved:
   `docs/decisions.md`, `docs/next-steps.md`.
 - **Status:** active
 - **Replaced by:** —
+- **Operational update (2026-09-11):** T-001 passed four synthetic tests and
+  moved to `Completed`; T-002 is now the sole task in `Now`.
 
 ## Decisions requiring confirmation
 
