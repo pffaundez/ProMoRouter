@@ -252,6 +252,29 @@ visible and are not treated as resolved:
 - **Status:** active
 - **Replaced by:** —
 
+### D-012 — Maintain a single executable next-action queue
+
+- **Date:** 2026-09-11
+- **Context/problem:** Status and decision history alone do not establish an
+  unambiguous execution order or expose blockers between tasks.
+- **Decision:** Maintain `docs/next-steps.md` after every significant change,
+  keep exactly one task in `Now`, move tasks between `Now`, `Next`,
+  `Later`, `Blocked`, and `Completed`, and retain only a short completed
+  history.
+- **Justification:** Another working session must be able to continue using
+  only the three project handoff documents, without reconstructing chat
+  history.
+- **Alternatives considered or discarded:** Keeping the roadmap only in the
+  status document or chat was rejected because it mixes facts with intended
+  actions.
+- **Consequences:** Every significant implementation or experiment change must
+  synchronize `docs/experiment-status.md`, this decision log when a decision
+  changes, and `docs/next-steps.md`. The current sole next action is T-001.
+- **Files affected:** `docs/experiment-status.md`,
+  `docs/decisions.md`, `docs/next-steps.md`.
+- **Status:** active
+- **Replaced by:** —
+
 ## Decisions requiring confirmation
 
 These are unresolved choices, not adopted decisions:
