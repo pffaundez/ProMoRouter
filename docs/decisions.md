@@ -161,6 +161,9 @@ visible and are not treated as resolved:
   `analysis/evaluate_qnorm_baselines_on_test.py`.
 - **Status:** active
 - **Replaced by:** —
+- **Implementation update (2026-09-11):** The repaired 797-query experiment
+  uses the explicit shared manifest name `qnorm_complete_seed1.json`, avoiding
+  collisions with manifests produced from the former 799-query population.
 
 ### D-007 — Define GraphRouter-direct as a fixed-direct, model-only baseline
 
