@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-007**. Do not run multiple seeds before T-008
-inspects the complete seed-1 comparison.
+**Single next action:** execute **T-008**. Do not run multiple seeds before the
+seed-1 integrity gate is explicitly passed.
 
 ## Verified facts affecting the queue
 
@@ -51,30 +51,6 @@ inspects the complete seed-1 comparison.
 
 ## Now
 
-### T-007 — Evaluate static baselines on the same seed-1 manifest
-
-- **Description:** Run fixed and oracle baselines with the aligned averaged
-  model-only and complete joint datasets.
-- **Objective/reason:** Produce directly comparable non-learned references.
-- **Files involved:** `analysis/evaluate_qnorm_baselines_on_test.py`, aligned
-  datasets, `qnorm_seed1.json`, baseline output JSON.
-- **Dependencies:** T-004, T-005, and T-006 (completed).
-- **Completion criterion:** All baseline rows use the manifest's test qids;
-  each reports the expected test count; output JSON is created.
-- **Validation command:**
-  ```bash
-  python analysis/evaluate_qnorm_baselines_on_test.py \
-    --seed 1 \
-    --model-only-path data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl \
-    --bipartite-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --split-manifest data/router/splits/qnorm_complete_seed1.json
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
-
 ### T-008 — Inspect the seed-1 integrity gate
 
 - **Description:** Compare query counts, manifests, reward arithmetic, selected
@@ -90,9 +66,11 @@ inspects the complete seed-1 comparison.
   or converted into a blocking defect.
 - **Validation command:** No single command yet; inspect machine-readable
   outputs and record the checks in `docs/experiment-status.md`.
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
 - **Blocker:** T-007 baseline output is still pending
+
+## Later
 
 ## Later
 
@@ -242,6 +220,33 @@ inspects the complete seed-1 comparison.
   authorized as current scope.
 
 ## Completed
+
+### T-007 — Evaluate static baselines on the same seed-1 manifest
+
+- **Description:** Run fixed and oracle baselines with the aligned averaged
+  model-only and complete joint datasets.
+- **Objective/reason:** Produce directly comparable non-learned references.
+- **Files involved:** `analysis/evaluate_qnorm_baselines_on_test.py`, aligned
+  datasets, `qnorm_seed1.json`, baseline output JSON.
+- **Dependencies:** T-004, T-005, and T-006 (completed).
+- **Completion criterion:** All baseline rows use the manifest's test qids;
+  each reports the expected test count; output JSON is created.
+- **Validation command:**
+  ```bash
+  python analysis/evaluate_qnorm_baselines_on_test.py \
+    --seed 1 \
+    --model-only-path data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl \
+    --bipartite-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --split-manifest data/router/splits/qnorm_complete_seed1.json
+  ```
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** Latex rows reported for all six static/oracle
+  methods and three lambdas, each on the 121-query test split. Best Fixed Pair:
+  (P,C,R)=(0.513,0.555,0.457), (0.412,0.111,0.356),
+  (0.412,0.111,0.312). Oracle rows are upper bounds, not deployable baselines.
+
 
 ### T-006 — Run GraphRouter-direct on the same seed-1 manifest
 
