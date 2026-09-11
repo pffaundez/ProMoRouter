@@ -43,8 +43,11 @@ inspects the complete seed-1 comparison.
   cost, or reward errors.
 - Edge-GNN seed 1 completed for all three lambdas on 121 test queries. The
   printed P/C/R values and action counts are recorded in T-005 below.
-- The lambda=0.1 run selected `selfcheck` for all 121 test queries; this is an
-  observed policy pattern to inspect in T-008, not an automatic failure.
+- GraphRouter-direct seed 1 completed on the same manifest with 121 test
+  queries for each lambda. Results are recorded in T-006 below.
+- The lambda=0.1 Edge-GNN run selected `selfcheck` for all 121 test queries;
+  this is an observed policy pattern to inspect in T-008, not an automatic
+  failure.
 
 ## Now
 
@@ -68,7 +71,7 @@ inspects the complete seed-1 comparison.
   ```
 - **State:** ready
 - **Priority:** P0
-- **Blocker:** T-005 completed; T-006 is not required for static execution
+- **Blocker:** none
 
 ## Next
 
@@ -89,7 +92,7 @@ inspects the complete seed-1 comparison.
   outputs and record the checks in `docs/experiment-status.md`.
 - **State:** queued
 - **Priority:** P0
-- **Blocker:** Seed-1 outputs do not yet exist
+- **Blocker:** T-007 baseline output is still pending
 
 ## Later
 
@@ -246,7 +249,7 @@ inspects the complete seed-1 comparison.
   with the aligned direct dataset and the manifest created/reused by T-005.
 - **Objective/reason:** Obtain a leakage-free adaptive-model comparison.
 - **Files involved:** `train_router_model_only_direct_qnorm.py`, aligned
-  direct data, embeddings, `qnorm_seed1.json`, direct-router outputs.
+  direct data, embeddings, `qnorm_complete_seed1.json`, direct-router outputs.
 - **Dependencies:** T-004 and T-005 (completed).
 - **Completion criterion:** Three lambda runs finish on the identical test qids;
   result JSON exists; scorer inputs remain query/model embeddings only.
@@ -271,7 +274,7 @@ inspects the complete seed-1 comparison.
 ### T-005 — Run the Edge-GNN seed-1 integrity experiment
 
 - **Description:** Train/evaluate Edge-GNN for seed 1 using the complete joint
-  dataset and create/reuse `qnorm_seed1.json`.
+  dataset and create/reuse `qnorm_complete_seed1.json`.
 - **Objective/reason:** Establish the first repaired learned-router result.
 - **Files involved:** `train_router_edgegnn_qnorm.py`, complete joint data,
   embeddings, split manifest, `outputs/router_edgegnn_qnorm/`.
