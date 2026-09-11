@@ -37,8 +37,15 @@ routing is evaluated with:
 - The complete-only dataset contains 797 queries and 28,692 action edges:
   200 HotpotQA, 200 GSM8K, 197 SQuAD, and 200 Alpaca.
 - It has zero reward/data errors and zero within-query coverage errors.
-- All four embedding files exist locally under `data/router/`; their internal
-  IDs, dimensions, and coverage have not yet been inspected.
+- All four embedding files exist locally under `data/router/` and their
+  internal IDs, dimensions, and coverage have been verified.
+- Query embeddings cover all 797 retained queries. The file contains 799 query
+  embeddings: zero are missing and the two extras correspond to removed
+  incomplete queries.
+- Task, prompt, and model embedding matrices are correctly aligned:
+  - tasks: `['gsm8k', 'hotpotqa', 'squad', 'alpaca']`, shape `(4, 384)`;
+  - prompts: `['direct', 'cot', 'decompose', 'selfcheck']`, shape `(4, 384)`;
+  - models: the expected nine model IDs in trainer order, shape `(9, 384)`.
 - The main Edge-GNN scorer does not consume realized reward, performance, cost,
   token count, or monetary cost as numeric routing-time features.
 - Offline reward labels do affect Edge-GNN topology: top-k training actions are
@@ -50,8 +57,6 @@ routing is evaluated with:
 
 ### Open hypotheses
 
-- The query-embedding file likely contains the two removed incomplete queries
-  as harmless extras; this must be verified.
 - Removing three SQuAD queries will probably have a small numerical effect, but
   no result magnitude should be assumed before rerunning.
 - Existing tables may mix runs, splits, or legacy reward pipelines. Exact
@@ -135,7 +140,9 @@ The following files exist:
 - `data/router/prompt_embeddings.pt`
 - `data/router/model_embeddings.pt`
 
-Their semantic contents and ID coverage are pending verification.
+Their IDs, shapes, and query coverage are verified. All retained queries have
+embeddings; the two unused query embeddings are harmless because the trainer
+indexes embeddings only for qids present in the selected dataset.
 
 ## Verifications performed
 
@@ -156,6 +163,13 @@ Their semantic contents and ID coverage are pending verification.
 - Git diff whitespace validation completed.
 - Repair branch recloned and the complete filtering/validation workflow rerun
   successfully from the remote branch.
+- Embedding audit completed:
+  - dataset qids: 797;
+  - query embedding qids: 799;
+  - missing query embeddings: 0;
+  - extra query embeddings: 2;
+  - task/prompt/model ID order matches the trainer;
+  - task, prompt, and model embedding dimension: 384.
 
 ## Problems resolved
 
@@ -171,65 +185,33 @@ Their semantic contents and ID coverage are pending verification.
 
 ## Problems pending
 
-1. Inspect embedding IDs, dimensions, and coverage against the 797-query input.
-2. Ensure the qnorm model-only dataset is filtered/rebuilt for the same 797
+1. Ensure the qnorm model-only dataset is filtered/rebuilt for the same 797
    queries before static baseline evaluation.
-3. Rebuild `router_model_only_direct_qnorm.jsonl` from the complete-only
+2. Rebuild `router_model_only_direct_qnorm.jsonl` from the complete-only
    bipartite dataset.
-4. Run Edge-GNN, GraphRouter-direct, and static baselines on the same seed-1
+3. Run Edge-GNN, GraphRouter-direct, and static baselines on the same seed-1
    manifest.
-5. Compare seed-1 action distributions and confirm no fixed-pair collapse.
-6. Run seeds 1--5 only after seed 1 passes.
-7. Regenerate every (P,C,R) table from machine-readable outputs.
-8. Recreate the routing-configuration ablation with the corrected pipeline.
-9. Rewrite the paper's graph construction, scorer, and loss so they match the
+4. Compare seed-1 action distributions and confirm no fixed-pair collapse.
+5. Run seeds 1--5 only after seed 1 passes.
+6. Regenerate every (P,C,R) table from machine-readable outputs.
+7. Recreate the routing-configuration ablation with the corrected pipeline.
+8. Rewrite the paper's graph construction, scorer, and loss so they match the
    actual implementation.
-10. Decide whether query-normalized cost is the final deployment cost
-    definition and document its limitations.
-11. Retire or isolate legacy pre-qnorm scripts and artifacts.
-12. Correct remaining README paths and commands that refer to absent or legacy
+9. Decide whether query-normalized cost is the final deployment cost
+   definition and document its limitations.
+10. Retire or isolate legacy pre-qnorm scripts and artifacts.
+11. Correct remaining README paths and commands that refer to absent or legacy
     files.
 
 ## Exact next step
 
-Inspect embedding coverage and identifier alignment before any training run.
-From `~/repos/ProMoRouter`, with the existing environment active, run:
+Rebuild both model-only inputs from the same 797-query population before any
+training. The next code change is to make the model-only dataset builder accept
+the complete bipartite dataset as its qid allowlist and produce:
 
-```bash
-python - <<'PY'
-import json
-import torch
-from pathlib import Path
+- `router_model_only_qnorm_complete.jsonl`; and
+- `router_model_only_direct_qnorm_complete.jsonl`.
 
-root = Path.home() / "repos/graph-router-2"
-data = root / "data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl"
-emb = root / "data/router"
-
-rows = [json.loads(line) for line in data.open() if line.strip()]
-dataset_qids = {row["qid"] for row in rows}
-
-q = torch.load(emb / "query_embeddings.pt", map_location="cpu")
-query_qids = set(q) if isinstance(q, dict) else set()
-
-print("Dataset queries:", len(dataset_qids))
-print("Query embeddings:", len(query_qids))
-print("Missing query embeddings:", len(dataset_qids - query_qids))
-print("Extra query embeddings:", len(query_qids - dataset_qids))
-
-for name in ["task", "prompt", "model"]:
-    obj = torch.load(emb / f"{name}_embeddings.pt", map_location="cpu")
-    print(f"\n{name}:")
-    print("  ids:", obj.get("ids"))
-    print("  shape:", tuple(obj["embeddings"].shape))
-PY
-```
-
-Expected, but not yet verified:
-
-- zero missing query embeddings;
-- two extra query embeddings;
-- four task IDs;
-- four prompt IDs; and
-- nine model IDs.
-
-Do not start seed 1 until this check passes.
+After validating that both contain exactly the same 797 qids, run all three
+methods with the shared seed-1 split manifest. Do not start seed 1 before these
+derived inputs are aligned.
