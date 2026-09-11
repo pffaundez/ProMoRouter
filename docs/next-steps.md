@@ -16,15 +16,16 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-001**. Do not train seed 1 or launch a
-multi-seed run before T-001 through T-004 pass.
+**Single next action:** execute **T-002**. Do not train seed 1 or launch a
+multi-seed run before T-002 through T-004 pass.
 
 ## Verified facts affecting the queue
 
 - The complete joint dataset has been validated locally with 797 queries and
   36 unique actions per query.
-- `analysis/build_model_only_router_dataset.py` currently reads the full flat
-  qnorm log and has no qid allowlist or exact-population validation.
+- `analysis/build_model_only_router_dataset.py` now accepts `--qid-source`,
+  filters to that exact qid population, and rejects duplicate/mismatched qids,
+  empty outputs, missing rewards, and non-nine-model candidate sets.
 - `train_router_model_only_direct_qnorm.py` can rebuild a direct-only
   derivative and checks source coverage/qid equality, but its defaults still
   point to the original 799-query source and stale derived filename.
@@ -33,34 +34,6 @@ multi-seed run before T-001 through T-004 pass.
 - No repaired seed-1 comparison has been run yet.
 
 ## Now
-
-### T-001 — Add complete-population filtering to the model-only builder
-
-- **Description:** Modify
-  `analysis/build_model_only_router_dataset.py` to accept a
-  `--qid-source` bipartite JSONL, use its qids as an allowlist, reject
-  duplicate source qids, and fail unless the output qid set matches the
-  allowlist exactly. Add explicit candidate-count checks for the expected nine
-  models per query.
-- **Objective/reason:** Prevent the averaged model-only dataset from silently
-  retaining queries removed from the complete joint population.
-- **Files involved:** `analysis/build_model_only_router_dataset.py`;
-  `docs/experiment-status.md`; `docs/next-steps.md`; update
-  `docs/decisions.md` only if implementation requires a new policy choice.
-- **Dependencies:** D-004, D-005, D-006; availability of
-  `router_bipartite_qnorm_complete.jsonl`.
-- **Completion criterion:** The builder exposes the allowlist CLI, fails on
-  mismatched/duplicate populations or non-nine-model outputs, compiles, and a
-  small synthetic test demonstrates both success and expected failure.
-- **Validation command:**
-  ```bash
-  python -m py_compile analysis/build_model_only_router_dataset.py
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
 
 ### T-002 — Generate the aligned averaged model-only dataset
 
@@ -73,7 +46,7 @@ multi-seed run before T-001 through T-004 pass.
   `train_clean_qnorm_lambdas.jsonl`,
   `router_bipartite_qnorm_complete.jsonl`,
   `router_model_only_qnorm_complete.jsonl`.
-- **Dependencies:** T-001.
+- **Dependencies:** T-001 (completed).
 - **Completion criterion:** Exactly 797 unique qids; exact qid equality with the
   complete joint dataset; exactly nine unique model candidates per query; no
   missing reward fields.
@@ -84,9 +57,11 @@ multi-seed run before T-001 through T-004 pass.
     --qid-source data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
     --output data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl
   ```
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
-- **Blocker:** T-001 incomplete
+- **Blocker:** none
+
+## Next
 
 ### T-003 — Generate the aligned direct-only model dataset without training
 
@@ -369,6 +344,35 @@ multi-seed run before T-001 through T-004 pass.
   authorized as current scope.
 
 ## Completed
+
+### T-001 — Add complete-population filtering to the model-only builder
+
+- **Description:** Modify
+  `analysis/build_model_only_router_dataset.py` to accept a
+  `--qid-source` bipartite JSONL, use its qids as an allowlist, reject
+  duplicate source qids, and fail unless the output qid set matches the
+  allowlist exactly. Add explicit candidate-count checks for the expected nine
+  models per query.
+- **Objective/reason:** Prevent the averaged model-only dataset from silently
+  retaining queries removed from the complete joint population.
+- **Files involved:** `analysis/build_model_only_router_dataset.py`;
+  `docs/experiment-status.md`; `docs/next-steps.md`; update
+  `docs/decisions.md` only if implementation requires a new policy choice.
+- **Dependencies:** D-004, D-005, D-006; availability of
+  `router_bipartite_qnorm_complete.jsonl`.
+- **Completion criterion:** The builder exposes the allowlist CLI, fails on
+  mismatched/duplicate populations or non-nine-model outputs, compiles, and a
+  small synthetic test demonstrates both success and expected failure.
+- **Validation command:**
+  ```bash
+  python -m py_compile analysis/build_model_only_router_dataset.py
+  ```
+  Four synthetic tests passed: valid allowlist, duplicate source qid, empty
+  output, and missing model.
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+
 
 ### T-C001 — Audit the qnorm reward and action-space integrity
 
