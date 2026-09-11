@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-006**. T-007 follows on the same manifest;
-do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
+**Single next action:** execute **T-007**. Do not run multiple seeds before T-008
+inspects the complete seed-1 comparison.
 
 ## Verified facts affecting the queue
 
@@ -48,30 +48,6 @@ do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
 
 ## Now
 
-### T-006 — Run GraphRouter-direct on the same seed-1 manifest
-
-- **Description:** Train/evaluate the repaired fixed-direct model-only router
-  with the aligned direct dataset and the manifest created/reused by T-005.
-- **Objective/reason:** Obtain a leakage-free adaptive-model comparison.
-- **Files involved:** `train_router_model_only_direct_qnorm.py`, aligned
-  direct data, embeddings, `qnorm_seed1.json`, direct-router outputs.
-- **Dependencies:** T-004 and T-005 (completed).
-- **Completion criterion:** Three lambda runs finish on the identical test qids;
-  result JSON exists; scorer inputs remain query/model embeddings only.
-- **Validation command:**
-  ```bash
-  python train_router_model_only_direct_qnorm.py \
-    --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
-    --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --seeds 1 \
-    --split-manifest data/router/splits/qnorm_complete_seed1.json
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
-
 ### T-007 — Evaluate static baselines on the same seed-1 manifest
 
 - **Description:** Run fixed and oracle baselines with the aligned averaged
@@ -79,7 +55,7 @@ do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
 - **Objective/reason:** Produce directly comparable non-learned references.
 - **Files involved:** `analysis/evaluate_qnorm_baselines_on_test.py`, aligned
   datasets, `qnorm_seed1.json`, baseline output JSON.
-- **Dependencies:** T-004 and T-005.
+- **Dependencies:** T-004, T-005, and T-006 (completed).
 - **Completion criterion:** All baseline rows use the manifest's test qids;
   each reports the expected test count; output JSON is created.
 - **Validation command:**
@@ -90,9 +66,11 @@ do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
     --bipartite-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
     --split-manifest data/router/splits/qnorm_complete_seed1.json
   ```
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
 - **Blocker:** T-005 completed; T-006 is not required for static execution
+
+## Next
 
 ### T-008 — Inspect the seed-1 integrity gate
 
@@ -261,6 +239,34 @@ do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
   authorized as current scope.
 
 ## Completed
+
+### T-006 — Run GraphRouter-direct on the same seed-1 manifest
+
+- **Description:** Train/evaluate the repaired fixed-direct model-only router
+  with the aligned direct dataset and the manifest created/reused by T-005.
+- **Objective/reason:** Obtain a leakage-free adaptive-model comparison.
+- **Files involved:** `train_router_model_only_direct_qnorm.py`, aligned
+  direct data, embeddings, `qnorm_seed1.json`, direct-router outputs.
+- **Dependencies:** T-004 and T-005 (completed).
+- **Completion criterion:** Three lambda runs finish on the identical test qids;
+  result JSON exists; scorer inputs remain query/model embeddings only.
+- **Validation command:**
+  ```bash
+  python train_router_model_only_direct_qnorm.py \
+    --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
+    --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --seeds 1 \
+    --split-manifest data/router/splits/qnorm_complete_seed1.json
+  ```
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** 557/119/121 train/val/test queries from
+  `qnorm_complete_seed1.json`. P/C/R: lambda=0.1 0.406660/0.390340/0.367626;
+  lambda=0.5 0.364210/0.224417/0.252001; lambda=0.9
+  0.315689/0.100702/0.225057. Model selection used 4, 6, and 4 models,
+  respectively; no single-model collapse.
+
 
 ### T-005 — Run the Edge-GNN seed-1 integrity experiment
 
