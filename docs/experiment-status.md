@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-007.
+  one current action: T-008.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -258,6 +258,7 @@ indexes embeddings only for qids present in the selected dataset.
 - A repaired Edge-GNN seed-1 run now exists for all three lambda settings.
 - A repaired GraphRouter-direct seed-1 run now exists for all three lambda
   settings on the shared manifest.
+- Static seed-1 baseline results now exist for all three lambda settings.
 
 ## Problems pending
 
@@ -277,6 +278,7 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-007 from `docs/next-steps.md`: evaluate static baselines with the
-aligned averaged model-only and complete joint datasets on
-`qnorm_complete_seed1.json`. Do not run additional seeds yet.
+Execute T-008 from `docs/next-steps.md`: inspect the machine-readable Edge-GNN,
+GraphRouter-direct, and static baseline outputs from seed 1, verify shared
+test counts and reward arithmetic, and record a pass/fail integrity conclusion.
+Do not launch seeds 2--5 until this gate is documented.
