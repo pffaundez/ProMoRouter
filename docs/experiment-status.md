@@ -274,6 +274,7 @@ python train_router_edgegnn_qnorm.py \
   --prompt-emb-path data/router/prompt_embeddings.pt \
   --model-emb-path data/router/model_embeddings.pt \
   --split-manifest data/router/splits/qnorm_complete_seed1.json \
+  --output-dir outputs/p0_router_edgegnn_qnorm \
   --seed 1
 ```
 
