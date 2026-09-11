@@ -258,7 +258,9 @@ indexes embeddings only for qids present in the selected dataset.
 - A repaired Edge-GNN seed-1 run now exists for all three lambda settings.
 - A repaired GraphRouter-direct seed-1 run now exists for all three lambda
   settings on the shared manifest.
-- Static seed-1 baseline results now exist for all three lambda settings.
+- Static seed-1 baseline results now exist for all three lambda settings. The
+  machine-readable file stores their metrics under each lambda's nested
+  `results` object; the top-level lambda entries do not themselves hold P/C/R.
 
 ## Problems pending
 
@@ -278,7 +280,7 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-008 from `docs/next-steps.md`: inspect the machine-readable Edge-GNN,
-GraphRouter-direct, and static baseline outputs from seed 1, verify shared
-test counts and reward arithmetic, and record a pass/fail integrity conclusion.
-Do not launch seeds 2--5 until this gate is documented.
+Complete T-008 from `docs/next-steps.md`: inspect the nested `results` objects
+in the static-baseline JSON, then record a pass/fail integrity conclusion for
+seed 1, including the all-`selfcheck` lambda=0.1 Edge-GNN pattern. Do not
+launch seeds 2--5 before that conclusion is documented.
