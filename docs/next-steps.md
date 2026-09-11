@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-005**. Do not run GraphRouter-direct,
-static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
+**Single next action:** execute **T-006**. T-007 follows on the same manifest;
+do not run multiple seeds before T-008 inspects the complete seed-1 comparison.
 
 ## Verified facts affecting the queue
 
@@ -41,34 +41,12 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
 - Cross-input validation passed on the experiment host: all three inputs
   contain the same 797 queries and report zero population, candidate, task,
   cost, or reward errors.
-- No repaired seed-1 learned-router run has been completed yet.
+- Edge-GNN seed 1 completed for all three lambdas on 121 test queries. The
+  printed P/C/R values and action counts are recorded in T-005 below.
+- The lambda=0.1 run selected `selfcheck` for all 121 test queries; this is an
+  observed policy pattern to inspect in T-008, not an automatic failure.
 
 ## Now
-
-### T-005 — Run the Edge-GNN seed-1 integrity experiment
-
-- **Description:** Train/evaluate Edge-GNN for seed 1 using the complete joint
-  dataset and create/reuse `qnorm_seed1.json`.
-- **Objective/reason:** Establish the first repaired learned-router result.
-- **Files involved:** `train_router_edgegnn_qnorm.py`, complete joint data,
-  embeddings, split manifest, `outputs/router_edgegnn_qnorm/`.
-- **Dependencies:** T-004 (completed); verified embeddings.
-- **Completion criterion:** All three lambda runs finish; result JSON and model
-  files exist; test query count matches the manifest; stored output
-  `R = P-lambda*C` within tolerance.
-- **Validation command:**
-  ```bash
-  python train_router_edgegnn_qnorm.py \
-    --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --split-manifest data/router/splits/qnorm_complete_seed1.json \
-    --output-dir outputs/p0_router_edgegnn_qnorm \
-    --seed 1
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
 
 ### T-006 — Run GraphRouter-direct on the same seed-1 manifest
 
@@ -77,7 +55,7 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
 - **Objective/reason:** Obtain a leakage-free adaptive-model comparison.
 - **Files involved:** `train_router_model_only_direct_qnorm.py`, aligned
   direct data, embeddings, `qnorm_seed1.json`, direct-router outputs.
-- **Dependencies:** T-004 and T-005.
+- **Dependencies:** T-004 and T-005 (completed).
 - **Completion criterion:** Three lambda runs finish on the identical test qids;
   result JSON exists; scorer inputs remain query/model embeddings only.
 - **Validation command:**
@@ -88,9 +66,11 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
     --seeds 1 \
     --split-manifest data/router/splits/qnorm_complete_seed1.json
   ```
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
-- **Blocker:** T-004 and T-005 incomplete
+- **Blocker:** none
+
+## Next
 
 ### T-007 — Evaluate static baselines on the same seed-1 manifest
 
@@ -112,7 +92,7 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
   ```
 - **State:** queued
 - **Priority:** P0
-- **Blocker:** T-004 and T-005 incomplete
+- **Blocker:** T-005 completed; T-006 is not required for static execution
 
 ### T-008 — Inspect the seed-1 integrity gate
 
@@ -281,6 +261,35 @@ static baselines, or multiple seeds before the Edge-GNN seed-1 run is checked.
   authorized as current scope.
 
 ## Completed
+
+### T-005 — Run the Edge-GNN seed-1 integrity experiment
+
+- **Description:** Train/evaluate Edge-GNN for seed 1 using the complete joint
+  dataset and create/reuse `qnorm_seed1.json`.
+- **Objective/reason:** Establish the first repaired learned-router result.
+- **Files involved:** `train_router_edgegnn_qnorm.py`, complete joint data,
+  embeddings, split manifest, `outputs/router_edgegnn_qnorm/`.
+- **Dependencies:** T-004 (completed); verified embeddings.
+- **Completion criterion:** All three lambda runs finish; result JSON and model
+  files exist; test query count matches the manifest; stored output
+  `R = P-lambda*C` within tolerance.
+- **Validation command:**
+  ```bash
+  python train_router_edgegnn_qnorm.py \
+    --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --split-manifest data/router/splits/qnorm_complete_seed1.json \
+    --output-dir outputs/p0_router_edgegnn_qnorm \
+    --seed 1
+  ```
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** 121 test queries for each lambda. Exact printed metrics:
+  lambda=0.1: P=0.498273, C=0.389587, R=0.459314;
+  lambda=0.5: P=0.417263, C=0.116930, R=0.358799;
+  lambda=0.9: P=0.410675, C=0.107292, R=0.314112. The lambda=0.1
+  policy selected `selfcheck` for all 121 queries; no single model collapsed.
+
 
 ### T-004 — Cross-validate all three repaired input populations
 
