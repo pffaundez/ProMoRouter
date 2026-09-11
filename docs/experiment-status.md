@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-003.
+  one current action: T-004.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -65,6 +65,11 @@ routing is evaluated with:
   host: 797 queries, nine models per query, population validation passed.
 - GraphRouter-direct now exposes `--build-only` and validates exact qid/model
   coverage, direct prompt policy, and reward presence before any training.
+- `router_model_only_direct_qnorm_complete.jsonl` was generated on the
+  experiment host: 797 queries, zero skipped direct queries, and all nine
+  models have coverage 797.
+- A dedicated cross-input validator now checks the three repaired populations,
+  candidates, tasks, costs, and reward arithmetic together.
 
 ### Open hypotheses
 
@@ -106,6 +111,7 @@ The following files are modified or added on
 - `analysis/filter_complete_qnorm_queries.py`
 - `analysis/evaluate_qnorm_baselines_on_test.py`
 - `analysis/build_model_only_router_dataset.py`
+- `analysis/validate_aligned_router_inputs.py`
 - `train_router_edgegnn_qnorm.py`
 - `train_router_model_only_direct_qnorm.py`
 - `README.md`
@@ -140,7 +146,8 @@ Key effects:
 | `router_bipartite_qnorm_complete.jsonl` | Current repaired input | Complete-only Edge-GNN dataset; 797 queries |
 | `router_model_only_qnorm.jsonl` | Legacy/stale for repair | Original model-only aggregate; do not use for repaired runs |
 | `router_model_only_qnorm_complete.jsonl` | Current repaired input | Validated 797-query averaged model-only dataset |
-| `router_model_only_direct_qnorm.jsonl` | Derived/stale unless rebuilt | Must be rebuilt from the complete-only source |
+| `router_model_only_direct_qnorm.jsonl` | Legacy/stale for repair | Original direct derivative; do not use for repaired runs |
+| `router_model_only_direct_qnorm_complete.jsonl` | Current repaired input | Validated build-only derivative; 797 queries and nine direct models |
 
 ### Legacy artifacts
 
@@ -189,13 +196,18 @@ indexes embeddings only for qids present in the selected dataset.
 - Decision log cross-checked against the repair branch; unresolved README and
   default-input discrepancies are recorded in `docs/decisions.md`.
 - Next-step queue cross-checked against the current builders, trainer CLIs, and
-  dataset state; T-003 is the only task in `Now`.
+  dataset state; T-004 is the only task in `Now`.
 - Model-only builder syntax compilation passed, together with four synthetic
   tests covering a valid allowlist, duplicate source qids, empty output, and a
   missing model candidate.
 - Averaged model-only generation completed on the experiment host: 797 queries,
   nine models per query, and population validation passed.
 - GraphRouter-direct build-only changes passed remote syntax compilation.
+- Direct dataset generation completed on the experiment host: 797 queries,
+  zero skipped direct queries, nine models each covering all 797 queries, and
+  build-only validation passed.
+- Cross-input validator passed syntax compilation and three synthetic tests:
+  valid candidates, missing model detection, and reward-error detection.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
@@ -221,13 +233,14 @@ indexes embeddings only for qids present in the selected dataset.
   retained queries.
 - Direct-only data can now be generated and validated without starting an
   optimizer or loading embeddings.
+- The aligned direct-only dataset has been generated for all 797 retained
+  queries.
+- Cross-dataset equality and reward checks now have a reusable validator.
 
 ## Problems pending
 
-1. Build and verify `router_model_only_direct_qnorm_complete.jsonl` from the
-   complete-only bipartite dataset.
-2. Cross-validate exact qid and candidate equality across the three repaired
-   inputs.
+1. Cross-validate exact qid and candidate equality across the three repaired
+   inputs using `analysis/validate_aligned_router_inputs.py`.
 3. Run Edge-GNN, GraphRouter-direct, and static baselines on the same seed-1
    manifest.
 4. Compare seed-1 action distributions and confirm no fixed-pair collapse.
@@ -244,17 +257,17 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-003 from `docs/next-steps.md` on the experiment host, after pulling
-the repair branch:
+Execute T-004 from `docs/next-steps.md` on the experiment host after pulling
+the branch:
 
 ```bash
-python train_router_model_only_direct_qnorm.py \
-  --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-  --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
-  --rebuild-direct-dataset \
-  --build-only
+python analysis/validate_aligned_router_inputs.py \
+  --bipartite data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+  --model-only data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl \
+  --direct data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
+  --expected-queries 797
 ```
 
-The command must report 797 queries, nine models per query, prompt policy
-`direct`, and `BUILD-ONLY VALIDATION PASSED`. It must not create training
-outputs or initialize an optimizer.
+The command must report 797 queries for all three inputs, zero validation
+errors, and aligned populations, candidates, tasks, and rewards. Do not begin
+training until this check passes.
