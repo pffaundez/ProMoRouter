@@ -248,16 +248,16 @@ indexes embeddings only for qids present in the selected dataset.
    `qnorm_complete_seed1.json` split manifest.
 2. Run GraphRouter-direct and static baselines on that same seed-1
    manifest.
-4. Compare seed-1 action distributions and confirm no fixed-pair collapse.
-5. Run seeds 1--5 only after seed 1 passes.
-6. Regenerate every (P,C,R) table from machine-readable outputs.
-7. Recreate the routing-configuration ablation with the corrected pipeline.
-8. Rewrite the paper's graph construction, scorer, and loss so they match the
+3. Compare seed-1 action distributions and confirm no fixed-pair collapse.
+4. Run seeds 1--5 only after seed 1 passes.
+5. Regenerate every (P,C,R) table from machine-readable outputs.
+6. Recreate the routing-configuration ablation with the corrected pipeline.
+7. Rewrite the paper's graph construction, scorer, and loss so they match the
    actual implementation.
-9. Decide whether query-normalized cost is the final deployment cost
+8. Decide whether query-normalized cost is the final deployment cost
    definition and document its limitations.
-10. Retire or isolate legacy pre-qnorm scripts and artifacts.
-11. Correct remaining README paths and commands that refer to absent or legacy
+9. Retire or isolate legacy pre-qnorm scripts and artifacts.
+10. Correct remaining README paths and commands that refer to absent or legacy
     files.
 
 ## Exact next step
