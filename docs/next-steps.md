@@ -46,8 +46,12 @@ seed-1 integrity gate is explicitly passed.
 - GraphRouter-direct seed 1 completed on the same manifest with 121 test
   queries for each lambda. Results are recorded in T-006 below.
 - The lambda=0.1 Edge-GNN run selected `selfcheck` for all 121 test queries;
-  this is an observed policy pattern to inspect in T-008, not an automatic
-  failure.
+  this is an observed policy pattern under inspection in T-008, not an
+  automatic failure.
+- Machine-readable Edge-GNN and GraphRouter-direct outputs both report 121
+  test queries per lambda and the identical `qnorm_complete_seed1.json` path.
+- Their stored P/C/R values satisfy `R=P-lambda*C` within floating-point
+  precision.
 
 ## Now
 
@@ -64,11 +68,13 @@ seed-1 integrity gate is explicitly passed.
 - **Completion criterion:** Written pass/fail conclusion with evidence; all
   methods share test qids; no algebra errors; suspicious collapse is explained
   or converted into a blocking defect.
-- **Validation command:** No single command yet; inspect machine-readable
-  outputs and record the checks in `docs/experiment-status.md`.
-- **State:** ready
+- **Validation command:** Inspect the nested baseline `results` objects and
+  record the pass/fail conclusion in `docs/experiment-status.md`.
+- **State:** in_progress
 - **Priority:** P0
 - **Blocker:** T-007 baseline output is still pending
+
+## Later
 
 ## Later
 
