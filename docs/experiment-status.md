@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-008.
+  one current action: T-009.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -261,6 +261,9 @@ indexes embeddings only for qids present in the selected dataset.
 - Static seed-1 baseline results now exist for all three lambda settings. The
   machine-readable file stores their metrics under each lambda's nested
   `results` object; the top-level lambda entries do not themselves hold P/C/R.
+- Seed-1 integrity gate passed with a behavioral warning: every method reports
+  n=121, learned-router rewards satisfy P-lambda*C, and Edge-GNN exceeds Best
+  Fixed Pair in reward by about 0.002 for each lambda.
 
 ## Problems pending
 
@@ -280,7 +283,7 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Complete T-008 from `docs/next-steps.md`: inspect the nested `results` objects
-in the static-baseline JSON, then record a pass/fail integrity conclusion for
-seed 1, including the all-`selfcheck` lambda=0.1 Edge-GNN pattern. Do not
-launch seeds 2--5 before that conclusion is documented.
+Execute T-009 from `docs/next-steps.md`: run seeds 2--5 for Edge-GNN,
+GraphRouter-direct, and static baselines, creating one validated split manifest
+per seed and preserving the seed-1 outputs. Investigate whether the lambda=0.1
+`selfcheck) concentration persists across seeds.
