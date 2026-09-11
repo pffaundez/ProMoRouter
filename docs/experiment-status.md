@@ -108,7 +108,7 @@ Key effects:
 - a non-destructive complete-query filter;
 - removal of post-execution features from GraphRouter-direct;
 - ID-based model-embedding alignment;
-- query-population consistency checks for derived model-only data; and
+- query-population consistency checks for derived model-only data;
 - documented validation and training commands; and
 - an append-only decision log with explicit implementation discrepancies and
   decisions requiring confirmation.
