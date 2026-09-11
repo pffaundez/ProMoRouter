@@ -32,6 +32,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from router.data_validation import require_complete_action_space
 from router.splits import load_or_create_splits
 
 
@@ -692,6 +693,11 @@ def main() -> None:
     print("Model embeddings:", args.model_emb_path)
 
     router_queries = load_router_queries(args.data_path)
+    require_complete_action_space(
+        router_queries,
+        expected_prompts=tuple(PROMPT_TO_ID),
+        expected_models=tuple(MODEL_TO_ID),
+    )
     query_embs = torch.load(args.query_emb_path, map_location="cpu")
     task_embs = load_tensor(args.task_emb_path)
     prompt_embs = load_tensor(args.prompt_emb_path)
