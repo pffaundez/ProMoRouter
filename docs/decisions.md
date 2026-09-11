@@ -119,7 +119,8 @@ visible and are not treated as resolved:
 - **Replaced by:** —
 - **Implementation update (2026-09-11):** The averaged model-only builder now
   accepts the complete bipartite dataset as a qid allowlist and validates exact
-  output population equality before writing.
+  output population equality before writing. The aligned derivative was then
+  generated successfully with 797 queries and nine models per query.
 
 ### D-005 — Require the full unique 4 x 9 action space before joint training
 
@@ -179,6 +180,9 @@ visible and are not treated as resolved:
 - **Files affected:** `train_router_model_only_direct_qnorm.py`.
 - **Status:** active
 - **Replaced by:** —
+- **Implementation update (2026-09-11):** GraphRouter-direct now has a
+  `--build-only` mode and validates exact qid equality, the nine expected
+  models, direct prompt policy, and rewards before exiting without training.
 
 ### D-008 — Align embedding matrices by semantic identifier
 
@@ -278,7 +282,9 @@ visible and are not treated as resolved:
 - **Status:** active
 - **Replaced by:** —
 - **Operational update (2026-09-11):** T-001 passed four synthetic tests and
-  moved to `Completed`; T-002 is now the sole task in `Now`.
+  moved to `Completed`; T-002 became the sole task in `Now`.
+- **Operational update (2026-09-11):** T-002 generated and validated the
+  797-query averaged model-only dataset; T-003 is now the sole task in `Now`.
 
 ## Decisions requiring confirmation
 
