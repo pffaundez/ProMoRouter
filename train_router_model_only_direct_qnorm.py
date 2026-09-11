@@ -93,6 +93,60 @@ def safe_float(x, default=0.0):
         return default
 
 
+def validate_direct_model_only_dataset(rows, expected_qids):
+    """Require exact qid equality and nine unique direct-model candidates."""
+    qids = [str(row.get("qid")) for row in rows]
+    if len(qids) != len(set(qids)):
+        raise ValueError("Direct model-only dataset contains duplicate qids.")
+
+    expected_qids = {str(qid) for qid in expected_qids}
+    actual_qids = set(qids)
+    if actual_qids != expected_qids:
+        missing = sorted(expected_qids - actual_qids)
+        extra = sorted(actual_qids - expected_qids)
+        raise ValueError(
+            "The direct model-only dataset has a different query population "
+            f"(missing={missing[:10]}, extra={extra[:10]})."
+        )
+
+    expected_models = set(EXPECTED_MODELS)
+    errors = []
+    for row in rows:
+        qid = str(row.get("qid"))
+        candidates = row.get("candidates", [])
+        models = [candidate.get("model") for candidate in candidates]
+        model_set = set(models)
+        if len(models) != len(expected_models) or model_set != expected_models:
+            errors.append(
+                f"{qid}: models={len(models)}, unique={len(model_set)}, "
+                f"missing={sorted(expected_models - model_set)}, "
+                f"unexpected={sorted(model_set - expected_models)}"
+            )
+            continue
+        if row.get("prompt_policy") != "direct":
+            errors.append(f"{qid}: prompt_policy is not 'direct'")
+        for candidate in candidates:
+            model = candidate.get("model")
+            if candidate.get("prompt") != "direct":
+                errors.append(f"{qid}/{model}: candidate prompt is not 'direct'")
+            missing_rewards = [
+                key for key in LAMBDAS if candidate.get(key) is None
+            ]
+            if missing_rewards:
+                errors.append(
+                    f"{qid}/{model}: missing rewards={missing_rewards}"
+                )
+
+    if errors:
+        details = "\\n".join(f"  - {error}" for error in errors[:20])
+        suffix = (
+            f"\\n  ... {len(errors) - 20} additional errors"
+            if len(errors) > 20
+            else ""
+        )
+        raise ValueError(f"Invalid direct model-only dataset:\\n{details}{suffix}")
+
+
 def build_direct_model_only_dataset(
     source_path: Path = SOURCE_DATA_PATH,
     out_path: Path = ROUTER_DATA_PATH,
@@ -177,6 +231,9 @@ def build_direct_model_only_dataset(
             }
         )
 
+    validate_direct_model_only_dataset(
+        out_rows, (row["qid"] for row in source_rows)
+    )
     write_jsonl(out_path, out_rows)
 
     print("\n==== BUILT DIRECT MODEL-ONLY DATASET ====")
@@ -204,13 +261,10 @@ def load_or_build_direct_dataset(args):
     else:
         rows = load_jsonl(args.router_data)
 
-    source_qids = {row["qid"] for row in source_rows}
-    derived_qids = {row["qid"] for row in rows}
-    if derived_qids != source_qids:
-        raise ValueError(
-            "The direct model-only dataset was derived from a different query "
-            "population. Re-run with --rebuild-direct-dataset."
-        )
+    source_qids = [str(row["qid"]) for row in source_rows]
+    if len(source_qids) != len(set(source_qids)):
+        raise ValueError("Source bipartite dataset contains duplicate qids.")
+    validate_direct_model_only_dataset(rows, source_qids)
     return rows
 
 
@@ -887,6 +941,11 @@ def parse_args():
 
     parser.add_argument("--seeds", type=int, nargs="+", default=[1, 2, 3, 4, 5])
     parser.add_argument("--rebuild-direct-dataset", action="store_true")
+    parser.add_argument(
+        "--build-only",
+        action="store_true",
+        help="Build/load and validate the direct dataset, then exit before training.",
+    )
     parser.add_argument("--cpu", action="store_true")
 
     parser.add_argument("--train-frac", type=float, default=0.70)
@@ -925,6 +984,14 @@ def main():
     print(f"Model embeddings: {args.model_embeddings}")
     print(f"Output dir: {args.outdir}")
     print(f"Seeds: {args.seeds}")
+
+    if args.build_only:
+        rows = load_or_build_direct_dataset(args)
+        print("\\n==== BUILD-ONLY VALIDATION PASSED ====")
+        print(f"Queries: {len(rows)}")
+        print(f"Models per query: {len(EXPECTED_MODELS)}")
+        print("Prompt policy: direct")
+        return
 
     args.outdir.mkdir(parents=True, exist_ok=True)
 
