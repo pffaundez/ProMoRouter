@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-001.
+  one current action: T-002.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -58,6 +58,9 @@ routing is evaluated with:
   token-use features. Those inputs have been removed on the repair branch.
 - The previous GraphRouter-direct implementation could misalign model
   embeddings by relying on order. Model embeddings are now aligned by ID.
+- The averaged model-only builder now accepts a bipartite qid allowlist and
+  rejects duplicate/mismatched populations, empty outputs, missing rewards,
+  and candidate sets other than the expected nine models.
 
 ### Open hypotheses
 
@@ -98,6 +101,7 @@ The following files are modified or added on
 - `analysis/validate_qnorm_pipeline.py`
 - `analysis/filter_complete_qnorm_queries.py`
 - `analysis/evaluate_qnorm_baselines_on_test.py`
+- `analysis/build_model_only_router_dataset.py`
 - `train_router_edgegnn_qnorm.py`
 - `train_router_model_only_direct_qnorm.py`
 - `README.md`
@@ -180,7 +184,10 @@ indexes embeddings only for qids present in the selected dataset.
 - Decision log cross-checked against the repair branch; unresolved README and
   default-input discrepancies are recorded in `docs/decisions.md`.
 - Next-step queue cross-checked against the current builders, trainer CLIs, and
-  dataset state; T-001 is the only task in `Now`.
+  dataset state; T-002 is the only task in `Now`.
+- Model-only builder syntax compilation passed, together with four synthetic
+  tests covering a valid allowlist, duplicate source qids, empty output, and a
+  missing model candidate.
 - Embedding audit completed:
   - dataset qids: 797;
   - query embedding qids: 799;
@@ -200,11 +207,13 @@ indexes embeddings only for qids present in the selected dataset.
 - GraphRouter-direct no longer receives realized cost/token information.
 - GraphRouter-direct model embeddings are aligned by identifier.
 - Derived direct-model data must match the source query population.
+- Averaged model-only data can now be restricted to an exact qid allowlist and
+  is validated before being written.
 
 ## Problems pending
 
-1. Ensure the qnorm model-only dataset is filtered/rebuilt for the same 797
-   queries before static baseline evaluation.
+1. Generate and verify `router_model_only_qnorm_complete.jsonl` for the same
+   797 queries before static baseline evaluation.
 2. Rebuild `router_model_only_direct_qnorm.jsonl` from the complete-only
    bipartite dataset.
 3. Run Edge-GNN, GraphRouter-direct, and static baselines on the same seed-1
@@ -223,10 +232,15 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-001 from `docs/next-steps.md`: modify
-`analysis/build_model_only_router_dataset.py` to accept the complete
-bipartite dataset as a qid allowlist and fail unless its output contains the
-same qids with exactly nine model candidates per query.
+Execute T-002 from `docs/next-steps.md`: generate the aligned averaged
+model-only dataset on the experiment host:
 
-Do not generate repaired model-only inputs or start seed-1 training until this
-builder change passes syntax and synthetic success/failure checks.
+```bash
+python analysis/build_model_only_router_dataset.py \
+  --input data/interaction_logs/grpp_il_v1/train_clean_qnorm_lambdas.jsonl \
+  --qid-source data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+  --output data/interaction_logs/grpp_il_v1/router_model_only_qnorm_complete.jsonl
+```
+
+The command must report 797 queries, nine models per query, and
+`Population validation passed.` Do not begin training yet.
