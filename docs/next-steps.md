@@ -16,8 +16,8 @@ A new working session should read, in order:
 2. `docs/decisions.md`;
 3. this file.
 
-**Single next action:** execute **T-003**. Do not train seed 1 or launch a
-multi-seed run before T-003 and T-004 pass.
+**Single next action:** execute **T-004**. Do not train seed 1 or launch a
+multi-seed run before T-004 passes.
 
 ## Verified facts affecting the queue
 
@@ -33,36 +33,14 @@ multi-seed run before T-003 and T-004 pass.
   policy, and reward presence before exiting without training.
 - The static evaluator and both learned routers can reuse a persisted split
   manifest, but their input populations must first be identical.
+- `router_model_only_direct_qnorm_complete.jsonl` was generated with 797
+  queries, zero skipped direct queries, and 797 candidates for each of the nine
+  models.
+- `analysis/validate_aligned_router_inputs.py` now provides one reproducible
+  cross-dataset population, candidate, task, cost, and reward check.
 - No repaired seed-1 comparison has been run yet.
 
 ## Now
-
-### T-003 — Generate the aligned direct-only model dataset without training
-
-- **Description:** Use the implemented build-only path to derive
-  `router_model_only_direct_qnorm_complete.jsonl` from the complete joint
-  source using only `prompt == "direct"`.
-- **Objective/reason:** Prepare GraphRouter-direct on the same query population
-  without accidentally starting training during data preparation.
-- **Files involved:** `train_router_model_only_direct_qnorm.py`,
-  `router_bipartite_qnorm_complete.jsonl`,
-  `router_model_only_direct_qnorm_complete.jsonl`.
-- **Dependencies:** T-001 and T-002 (completed); D-003 and D-007.
-- **Completion criterion:** Exactly 797 unique qids; nine unique direct-model
-  candidates per query; exact qid equality with the complete joint source; the
-  command exits before optimizer construction.
-- **Validation command:**
-  ```bash
-  python train_router_model_only_direct_qnorm.py \
-    --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
-    --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
-    --rebuild-direct-dataset --build-only
-  ```
-- **State:** ready
-- **Priority:** P0
-- **Blocker:** none
-
-## Next
 
 ### T-004 — Cross-validate all three repaired input populations
 
@@ -72,7 +50,7 @@ multi-seed run before T-003 and T-004 pass.
 - **Objective/reason:** Establish the precondition for fair shared-split
   evaluation.
 - **Files involved:** The three `*_complete.jsonl` inputs; validation tooling.
-- **Dependencies:** T-002 and T-003.
+- **Dependencies:** T-002 and T-003 (completed).
 - **Completion criterion:** All qid sets equal the same 797 IDs; joint rows have
   36 unique prompt--model actions; model-only rows have nine unique models;
   direct rows have nine unique direct-model actions; validation exits zero.
@@ -84,9 +62,11 @@ multi-seed run before T-003 and T-004 pass.
   ```
   The model-only equality command is to be finalized as part of T-001/T-003
   rather than relying on an undocumented one-off snippet.
-- **State:** queued
+- **State:** ready
 - **Priority:** P0
-- **Blocker:** T-002 and T-003 incomplete
+- **Blocker:** none
+
+## Next
 
 ### T-005 — Run the Edge-GNN seed-1 integrity experiment
 
@@ -320,6 +300,34 @@ multi-seed run before T-003 and T-004 pass.
   authorized as current scope.
 
 ## Completed
+
+### T-003 — Generate the aligned direct-only model dataset without training
+
+- **Description:** Use the implemented build-only path to derive
+  `router_model_only_direct_qnorm_complete.jsonl` from the complete joint
+  source using only `prompt == "direct"`.
+- **Objective/reason:** Prepare GraphRouter-direct on the same query population
+  without accidentally starting training during data preparation.
+- **Files involved:** `train_router_model_only_direct_qnorm.py`,
+  `router_bipartite_qnorm_complete.jsonl`,
+  `router_model_only_direct_qnorm_complete.jsonl`.
+- **Dependencies:** T-001 and T-002 (completed); D-003 and D-007.
+- **Completion criterion:** Exactly 797 unique qids; nine unique direct-model
+  candidates per query; exact qid equality with the complete joint source; the
+  command exits before optimizer construction.
+- **Validation command:**
+  ```bash
+  python train_router_model_only_direct_qnorm.py \
+    --source-data data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \
+    --router-data data/interaction_logs/grpp_il_v1/router_model_only_direct_qnorm_complete.jsonl \
+    --rebuild-direct-dataset --build-only
+  ```
+- **State:** completed
+- **Priority:** P0
+- **Blocker:** none
+- **Observed result:** 797 queries; zero skipped direct queries; nine models
+  each with coverage 797; build-only validation passed.
+
 
 ### T-002 — Generate the aligned averaged model-only dataset
 
