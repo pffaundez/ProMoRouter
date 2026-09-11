@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-006.
+  one current action: T-007.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -77,6 +77,12 @@ routing is evaluated with:
 - Seed-1 results were P=0.498273, C=0.389587, R=0.459314 for lambda=0.1;
   P=0.417263, C=0.116930, R=0.358799 for lambda=0.5; and
   P=0.410675, C=0.107292, R=0.314112 for lambda=0.9.
+- GraphRouter-direct seed 1 completed on the same manifest with P=0.406660,
+  C=0.390340, R=0.367626 for lambda=0.1; P=0.364210, C=0.224417,
+  R=0.252001 for lambda=0.5; and P=0.315689, C=0.100702,
+  R=0.225057 for lambda=0.9.
+- GraphRouter-direct selected 4, 6, and 4 distinct models across the three
+  lambdas; no single-model collapse was observed.
 
 ### Open hypotheses
 
@@ -250,6 +256,8 @@ indexes embeddings only for qids present in the selected dataset.
   queries.
 - Cross-dataset equality and reward checks now have a reusable validator.
 - A repaired Edge-GNN seed-1 run now exists for all three lambda settings.
+- A repaired GraphRouter-direct seed-1 run now exists for all three lambda
+  settings on the shared manifest.
 
 ## Problems pending
 
@@ -269,6 +277,6 @@ indexes embeddings only for qids present in the selected dataset.
 
 ## Exact next step
 
-Execute T-006 from `docs/next-steps.md`: run GraphRouter-direct on the aligned
-direct dataset using the same repaired-population split manifest as Edge-GNN.
-Do not run additional seeds yet.
+Execute T-007 from `docs/next-steps.md`: evaluate static baselines with the
+aligned averaged model-only and complete joint datasets on
+`qnorm_complete_seed1.json`. Do not run additional seeds yet.
