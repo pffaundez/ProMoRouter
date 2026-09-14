@@ -305,3 +305,16 @@ These are unresolved choices, not adopted decisions:
 4. Whether to add a separately evaluated pre-routing cost predictor. No such
    predictor is part of the current repaired implementation.
 5. When and how `fix/p0-routing-integrity` will be merged into `main`.
+
+
+### D-013 — Closed-pool offline training with online per-query selection
+
+- Date: 2026-09-14
+- Context: The paper must define offline/online operation and candidate-pool scope.
+- Decision: ProMoRouter is trained offline from logged interactions and performs online per-query action selection without online parameter updates. The evaluated pool is closed: four prompts and nine models, identical across training and inference.
+- Justification: This is the behavior and candidate population used by the repaired trainers and five-seed outputs.
+- Alternatives: Continual online learning and zero-shot routing to unseen prompts/models were not evaluated and are not claimed. A pre-routing cost predictor remains a separate extension.
+- Consequences: The paper must state closed-pool limitations; adding candidates requires embeddings, pipeline support, and dedicated evaluation.
+- Files affected: trainers, docs/methodology-scope.md, paper methodology.
+- Status: active
+- Replaced by: —
