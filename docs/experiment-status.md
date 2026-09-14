@@ -287,3 +287,20 @@ Execute T-009 from `docs/next-steps.md`: run seeds 2--5 for Edge-GNN,
 GraphRouter-direct, and static baselines, creating one validated split manifest
 per seed and preserving the seed-1 outputs. Investigate whether the lambda=0.1
 `selfcheck) concentration persists across seeds.
+
+
+## Synchronization update (2026-09-14)
+
+The repaired five-seed sweep is complete. Verified output files exist for seeds 1--5 for Edge-GNN, GraphRouter-direct, and static baselines under outputs/p0_*_qnorm/.
+
+Aggregated test rewards (mean +/- sample standard deviation over five seeds):
+
+| Method | lambda=0.1 R | lambda=0.5 R | lambda=0.9 R |
+|---|---:|---:|---:|
+| Edge-GNN | 0.4815 +/- 0.0368 | 0.3830 +/- 0.0357 | 0.3557 +/- 0.0343 |
+| GraphRouter-direct | 0.4245 +/- 0.0542 | 0.2895 +/- 0.0599 | 0.2322 +/- 0.0308 |
+| Best Fixed Pair | 0.4894 +/- 0.0409 | 0.3709 +/- 0.0219 | 0.3239 +/- 0.0215 |
+
+Fixed-pair identities are stable across all five seeds: llama3.1-70b + selfcheck for lambda=0.1 and qwen2.5-7b + selfcheck for lambda=0.5 and 0.9. These are verified outputs and supersede the earlier pending sweep status.
+
+Embeddings and generated outputs remain experiment-host artifacts and are not present in the public Git tree unless explicitly added. See docs/methodology-scope.md for offline/online and closed-pool scope.
