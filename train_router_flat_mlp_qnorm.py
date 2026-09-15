@@ -226,9 +226,13 @@ def main():
     args = parse_args()
     device = torch.device(args.device)
     rows = load_jsonl(args.data_path)
-    require_complete_action_space(rows)
     prompt_order = sorted({c["prompt"] for r in rows for c in r["action_edges"]})
     model_order = sorted({c["model"] for r in rows for c in r["action_edges"]})
+    require_complete_action_space(
+        rows,
+        expected_prompts=tuple(prompt_order),
+        expected_models=tuple(model_order),
+    )
     query_table = load_embedding_object(args.query_emb_path)
     prompt_table = load_embedding_object(args.prompt_emb_path)
     model_table = load_embedding_object(args.model_emb_path)
