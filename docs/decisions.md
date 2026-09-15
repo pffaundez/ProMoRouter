@@ -318,3 +318,22 @@ These are unresolved choices, not adopted decisions:
 - Files affected: trainers, docs/methodology-scope.md, paper methodology.
 - Status: active
 - Replaced by: —
+
+
+### D-014 — Add a flat 36-action no-graph baseline
+
+- Date: 2026-09-15
+- Context: Reviewers require an equal-action-space comparison to separate the
+  contribution of the graph from the benefit of joint prompt-model actions.
+- Decision: Add a Flat-MLP baseline scoring all 36 prompt-model actions from
+  concatenated query, prompt, and model embeddings, with no graph message
+  passing and no realized outcome features.
+- Justification: It isolates architectural benefit while preserving the same
+  candidates, rewards, splits, and evaluation protocol as ProMoRouter.
+- Alternatives: A different action space or outcome-derived cost features were
+  rejected for this comparison.
+- Consequences: Run this baseline on seeds 1--5 before final table generation.
+- Files affected: `train_router_flat_mlp_qnorm.py`, baseline outputs, paper
+  tables, and experiment documentation.
+- Status: active
+- Replaced by: —
