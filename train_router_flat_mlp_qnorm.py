@@ -258,10 +258,11 @@ def main():
                         "config": vars(args)}, model_path)
             result["model_path"] = str(model_path)
             all_results.append(result)
+        seed_results = [r for r in all_results if r.get("split_manifest") == str(args.split_manifest)]
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        out = args.output_dir / f"flat_mlp_qnorm_results_seed{seed}.json"
+        out.write_text(json.dumps(seed_results, indent=2), encoding="utf-8")
         args.split_manifest = None if len(seeds) > 1 else args.split_manifest
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    out = args.output_dir / f"flat_mlp_qnorm_results_seed{seeds[-1]}.json"
-    out.write_text(json.dumps(all_results, indent=2), encoding="utf-8")
     print(json.dumps(all_results, indent=2))
 
 
