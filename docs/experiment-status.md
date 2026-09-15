@@ -304,3 +304,12 @@ Aggregated test rewards (mean +/- sample standard deviation over five seeds):
 Fixed-pair identities are stable across all five seeds: llama3.1-70b + selfcheck for lambda=0.1 and qwen2.5-7b + selfcheck for lambda=0.5 and 0.9. These are verified outputs and supersede the earlier pending sweep status.
 
 Embeddings and generated outputs remain experiment-host artifacts and are not present in the public Git tree unless explicitly added. See docs/methodology-scope.md for offline/online and closed-pool scope.
+
+
+## Synchronization update (2026-09-15)
+
+A Flat 36-action MLP baseline was added in `train_router_flat_mlp_qnorm.py`.
+It uses the same complete 4x9 action space, qnorm rewards, embeddings, and
+persisted splits as Edge-GNN, but no graph/message passing; each prompt-model
+pair is scored from concatenated query, prompt, and model embeddings. This is
+an implementation addition; its results are not yet available.
