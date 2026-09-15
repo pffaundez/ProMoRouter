@@ -27,6 +27,13 @@ LAMBDA_CONFIGS = (
     ("reward_qnorm_lam_09", 0.9),
 )
 
+EXPECTED_PROMPTS = ("direct", "cot", "decompose", "selfcheck")
+EXPECTED_MODELS = (
+    "mistral-7b", "qwen2.5-7b", "llama3.1-8b",
+    "qwen2.5-14b", "yi-34b", "codellama-34b",
+    "mixtral-8x7b", "llama3.1-70b", "qwen2.5-72b",
+)
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -226,12 +233,12 @@ def main():
     args = parse_args()
     device = torch.device(args.device)
     rows = load_jsonl(args.data_path)
-    prompt_order = sorted({c["prompt"] for r in rows for c in r["action_edges"]})
-    model_order = sorted({c["model"] for r in rows for c in r["action_edges"]})
+    prompt_order = list(EXPECTED_PROMPTS)
+    model_order = list(EXPECTED_MODELS)
     require_complete_action_space(
         rows,
-        expected_prompts=tuple(prompt_order),
-        expected_models=tuple(model_order),
+        expected_prompts=EXPECTED_PROMPTS,
+        expected_models=EXPECTED_MODELS,
     )
     query_table = load_embedding_object(args.query_emb_path)
     prompt_table = load_embedding_object(args.prompt_emb_path)
