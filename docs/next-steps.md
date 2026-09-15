@@ -1,49 +1,67 @@
 # P1 - Experiment Repair next steps
 
-_Last updated: 2026-09-14_
+_Last updated: 2026-09-15_
 
-Read docs/experiment-status.md, docs/decisions.md, and docs/methodology-scope.md before continuing. Keep exactly one task in Now.
+Read `docs/experiment-status.md`, `docs/decisions.md`, and
+`docs/methodology-scope.md` before continuing. Keep exactly one task in **Now**.
 
 ## Now
 
-### T-010 — Generate canonical multi-seed result tables
+### T-018 — Run the Flat 36-action MLP baseline
 
-- Description: Create a versioned summary artifact from the 15 machine-readable seed outputs for Edge-GNN, GraphRouter-direct, and baselines, reporting P, C, R, mean, standard deviation, and seed list.
-- Objective: Replace manually copied or legacy paper numbers with one reproducible source.
-- Files: outputs/p0_router_edgegnn_qnorm/, outputs/p0_router_model_only_direct_qnorm/, outputs/p0_baselines_qnorm/, new summary artifact, paper tables.
-- Dependencies: Five-seed outputs are present; no retraining required.
-- Completion criterion: Every file is checked and all aggregates pass R=P-lambda*C validation.
+- Description: Train and evaluate `train_router_flat_mlp_qnorm.py` on the
+  complete 797-query dataset for seeds 1--5 and lambda values 0.1, 0.5, 0.9.
+- Objective: Compare ProMoRouter against an equal-action-space scorer without
+  graph message passing.
+- Files involved: `train_router_flat_mlp_qnorm.py`,
+  `data/router/*.pt`,
+  `data/router/splits/qnorm_complete_seed{1..5}.json`, and
+  `outputs/p1_router_flat_mlp_qnorm/`.
+- Dependencies: Local embeddings and existing split manifests.
+- Completion criterion: Five per-seed JSON result files and 15 model files;
+  every test set has 121 queries and rewards satisfy `R=P-lambda*C`.
+- Command:
+  ```bash
+  python train_router_flat_mlp_qnorm.py \\
+    --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \\
+    --seeds 1 2 3 4 5 \\
+    --output-dir outputs/p1_router_flat_mlp_qnorm
+  ```
 - State: ready
 - Priority: P0
-- Blocker: none
+- Blocker: Embeddings must exist locally under `data/router/`.
 
 ## Next
 
+### T-010 — Generate canonical multi-seed result tables
+State: pending. Priority: P0. Dependency: T-018.
+
 ### T-011 — Recreate routing-configuration ablation
-State: pending. Priority: P1. Dependency: T-010. Blocker: identify exact ablation entry points.
+State: pending. Priority: P1. Dependency: T-010.
 
 ### T-012 — Rewrite methodology and algorithm text
-State: pending. Priority: P1. Dependency: T-010 and D-013. Blocker: none.
+State: pending. Priority: P1. Dependency: T-010 and D-013.
 
 ## Later
 
 ### T-013 — Correct README paths, defaults, and local-artifact instructions
-State: deferred. Priority: P1. Dependency: T-010. Blocker: none.
+State: deferred. Priority: P1. Dependency: T-010.
 
 ### T-014 — Audit and isolate legacy pre-qnorm artifacts
-State: deferred. Priority: P2. Dependency: T-013. Blocker: none.
+State: deferred. Priority: P2. Dependency: T-013.
 
 ## Blocked
 
-### T-015 — Merge repair branch into main
+### T-015 — Merge repair branch into `main`
 State: blocked. Priority: P1. Blocker: review and explicit user approval.
 
 ### T-016 — Add a pre-routing cost predictor
-State: blocked. Priority: P2. Blocker: separate research-scope decision; not current implementation.
+State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
 
-- Five-seed outputs verified for all three methods and lambda settings.
-- Aggregated P/C/R values computed from machine-readable JSON files.
-- Fixed-pair identities checked and stable across seeds.
-- Offline/online and closed-pool scope documented in docs/methodology-scope.md and decision D-013.
+- Five-seed Edge-GNN, GraphRouter-direct, and static baseline outputs verified.
+- Multi-seed P/C/R aggregates computed for those methods.
+- Fixed-pair identities stable across seeds.
+- Offline/online and closed-pool scope documented; D-013 active.
+- Flat 36-action MLP baseline implemented; D-014 active.
