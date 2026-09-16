@@ -490,3 +490,12 @@ Because the qnorm log lacks response text, the proposed two-shot `fewshot`
 strategy was replaced by `step_back`, which requires only a static instruction.
 `self_consistency` remains with three samples. The unseen prompt set is now
 `step_back` and `self_consistency`; no demonstration dataset is required.
+
+
+## Unseen prompt smoke test passed (2026-09-16)
+
+Using SmolLM2-1.7B-Instruct, the `step_back` template generated a principle,
+application, and final answer. The `self_consistency` contract generated
+exactly three samples with the configured sampling parameters; all three
+answered the arithmetic test consistently. This validates prompt execution
+only, not routing performance or held-out cost.
