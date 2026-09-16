@@ -7,26 +7,25 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-019 — Prepare the inductive unseen-candidate protocol
+### T-019 — Create the confirmed inductive candidate manifest
 
-- Description: Select and document one external model and one external prompt,
-  add their static descriptions, and define held-out interaction files for
-  unseen-model, unseen-prompt, and masked prompt-model-pair evaluation.
-- Objective: Make the intended GraphRouter-style generalization test
-  executable without confusing it with the existing closed-pool results.
-- Files involved: `configs/model_descriptions.json`,
-  `configs/prompt_strategies.yaml`,
-  `scripts/build_node_description_embeddings.py`, new held-out datasets,
-  `data/router/inductive_embeddings/`, and experiment docs.
-- Dependencies: Availability of external model/prompt descriptions and their
-  test interaction outcomes.
-- Completion criterion: A written protocol identifies the 10 models and 5
-  prompts, specifies train/test candidate visibility, and validates that unseen
-  candidates have no training interactions.
-- State: blocked
+- Description: Record the three unseen model IDs and two unseen prompt IDs in
+  `configs/inductive_candidates.yaml`, with descriptions, source links, and
+  integration metadata.
+- Objective: Turn D-016 into a reproducible input contract without changing
+  the closed-pool P0/P1 datasets.
+- Files involved: `configs/inductive_candidates.yaml`,
+  `configs/model_descriptions.json`, `configs/prompt_strategies.yaml`,
+  and `docs/inductive-evaluation-protocol.md`.
+- Dependencies: D-016; verify model loading and license metadata before
+  execution.
+- Completion criterion: The manifest validates exactly 12 total model IDs and
+  6 total prompt IDs, with 9/4 seen and 3/2 unseen, and no unseen ID appears
+  in the training population.
+- Command: `python analysis/validate_inductive_candidates.py`
+- State: in_progress
 - Priority: P0
-- Blocker: The external tenth model and fifth prompt, plus evaluation outcomes,
-  have not yet been selected or supplied.
+- Blocker: None for manifest authoring; integration checks remain after this task.
 
 ## Next
 
@@ -68,4 +67,4 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Protocol references
 
-Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `docs/inductive-evaluation-protocol.md`. Candidate-specific choices and unseen outcomes remain unconfirmed.
+Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `docs/inductive-evaluation-protocol.md`. Candidate IDs are confirmed by D-016; held-out interaction outcomes and cost-estimation details remain to be produced.
