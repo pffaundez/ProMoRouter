@@ -37,6 +37,7 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completion criterion: All five unseen candidates pass metadata/integration checks and embedding files contain exactly the 3 unseen model IDs and 2 unseen prompt IDs.
 - Command: `python analysis/validate_inductive_candidates.py` followed by the model-loading smoke test.
 - Completed: embeddings generated with `sentence-transformers/all-MiniLM-L6-v2`; 3 unseen model vectors and 2 unseen prompt vectors, all dimension 384.
+- Completed: `analysis/validate_inductive_candidates.py` passed exact pool, non-overlap, and artifact checks.
 - Blocker: Model-loading and prompt-execution checks remain pending.
 
 ### T-010 — Generate canonical closed-pool result tables
