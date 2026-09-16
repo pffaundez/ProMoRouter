@@ -433,3 +433,22 @@ These are unresolved choices, not adopted decisions:
   and inductive protocol docs.
 - Status: active
 - Replaced by: —
+
+
+### D-019 — Use automatic token-level F1 for Alpaca
+
+- Date: 2026-09-16
+- Context: The configuration declared a disabled judge, while the builder
+  implementation already computes Alpaca performance with token-level F1.
+- Decision: Set Alpaca to `primary_metric: f1` and `eval_mode: auto`, using
+  the same reference-output F1 for inductive evaluation.
+- Justification: This matches the implemented scorer and avoids introducing an
+  uncalibrated external judge.
+- Alternatives considered or discarded: A new LLM judge was rejected for the
+  current repair because it would break comparability with existing logs.
+- Consequences: Historical P0 Alpaca records must be checked for the same F1
+  computation before being reported; no manual gold answers are created.
+- Files affected: `configs/rq2_dataset_builder_smoke.yaml`, dataset builder,
+  validation scripts, and paper metrics description.
+- Status: active
+- Replaced by: —
