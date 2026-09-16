@@ -447,3 +447,11 @@ changing only the `model_id` in the minimal Transformers test. All three
 unseen model candidates therefore pass configuration and basic generation
 checks. This does not yet validate the router's candidate integration,
 costs, or the fewshot/self_consistency execution contracts.
+
+
+## Unseen prompt templates added (2026-09-16)
+
+Added `fewshot` and `self_consistency` execution templates to
+`configs/prompt_templates.yaml`. The templates define the prompt text only;
+demonstration selection, sample count, aggregation, decoding parameters, and
+cost accounting still require an executable evaluation harness.
