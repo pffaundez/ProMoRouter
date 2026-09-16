@@ -1,0 +1,90 @@
+# Inductive candidate manifest
+#
+# Confirmed by D-016. The nine seen models and four seen prompts remain the
+# closed-pool training population. Unseen candidates are inference-only until
+# held-out interactions and integration checks are available.
+
+version: 1
+training_pool:
+  models:
+    - mistral-7b
+    - qwen2.5-7b
+    - llama3.1-8b
+    - qwen2.5-14b
+    - yi-34b
+    - codellama-34b
+    - mixtral-8x7b
+    - llama3.1-70b
+    - qwen2.5-72b
+  prompts:
+    - direct
+    - cot
+    - decompose
+    - selfcheck
+
+unseen_models:
+  - id: smollm2-1.7b
+    name: SmolLM2-1.7B-Instruct
+    hf_id: HuggingFaceTB/SmolLM2-1.7B-Instruct
+    size: 1.7B
+    source: https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct
+    description: >-
+      A compact instruction-tuned model for low-resource and low-cost inference.
+    integration:
+      backend_candidates: [transformers, vllm]
+      license_review: required
+      status: pending
+
+  - id: olmo2-7b
+    name: OLMo-2-1124-7B-Instruct
+    hf_id: allenai/OLMo-2-1124-7B-Instruct
+    size: 7B
+    source: https://huggingface.co/allenai/OLMo-2-1124-7B-Instruct
+    description: >-
+      An instruction-tuned 7B model from the OLMo-2 family, adding a family
+      distinct from the seen Mistral, Qwen, Llama, Yi, and Mixtral models.
+    integration:
+      backend_candidates: [transformers, vllm]
+      license_review: required
+      status: pending
+
+  - id: phi-4
+    name: Phi-4
+    hf_id: microsoft/phi-4
+    size: 14B
+    source: https://huggingface.co/microsoft/phi-4
+    description: >-
+      A mid-sized instruction-tuned model intended to test generalization to
+      a new model family at approximately the 14B scale.
+    integration:
+      backend_candidates: [transformers, vllm]
+      license_review: required
+      status: pending
+
+unseen_prompts:
+  - id: fewshot
+    name: Few-shot Demonstration
+    description: >-
+      Prepends a fixed set of task-relevant input-output demonstrations before
+      the query, allowing the model to infer the desired answer format and
+      behavior from examples.
+    expected_cost: medium_high
+    execution_contract: fixed demonstrations selected before inference
+    status: pending
+
+  - id: self_consistency
+    name: Self-Consistency
+    description: >-
+      Samples multiple independent reasoning traces and aggregates their final
+      answers, targeting robustness when individual generations are uncertain.
+    expected_cost: high
+    execution_contract: fixed number of samples and deterministic aggregation
+    status: pending
+
+evaluation:
+  total_models: 12
+  total_prompts: 6
+  action_space: 72
+  zero_shot: true
+  few_shot_calibration: optional
+  no_parameter_updates_at_inference: true
