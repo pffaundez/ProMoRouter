@@ -64,3 +64,8 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
   outputs verified.
 - Flat-MLP added as equal-action-space no-graph baseline; D-014 active.
 - Inductive 10-model/5-prompt evaluation protocol adopted as D-015.
+
+
+## Protocol references
+
+Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `docs/inductive-evaluation-protocol.md`. Candidate-specific choices and unseen outcomes remain unconfirmed.
