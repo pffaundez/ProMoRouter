@@ -343,3 +343,18 @@ lambda=0.1 and 0.5 and is nearly tied at lambda=0.9 (0.3534 vs 0.3557). This
 verified result means the current evidence does not isolate a broad graph
 advantage; the graph contribution must be reported cautiously and further
 architectural analysis remains required.
+
+
+## Inductive evaluation protocol update (2026-09-16)
+
+The target extension is an inductive protocol with ten total models and five
+total prompting strategies. Training uses the existing nine-model/four-prompt
+pool; one additional model and one additional prompt are held out as unseen
+candidates and introduced only at inference through description-derived
+embeddings. Evaluation also includes prompt-model combinations masked from
+training. This protocol is a planned extension, not a completed result.
+
+A valid evaluation requires static descriptions and pre-execution metadata for
+the new candidates, plus interaction outcomes for their test actions. The
+current nine-model/four-prompt logs alone cannot establish performance or cost
+for an external tenth model or fifth prompt.
