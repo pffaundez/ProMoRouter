@@ -455,3 +455,11 @@ Added `fewshot` and `self_consistency` execution templates to
 `configs/prompt_templates.yaml`. The templates define the prompt text only;
 demonstration selection, sample count, aggregation, decoding parameters, and
 cost accounting still require an executable evaluation harness.
+
+
+## Unseen prompt budgets confirmed (2026-09-16)
+
+The execution budgets are fixed: `fewshot` uses exactly two demonstrations
+per task; `self_consistency` uses exactly three independent samples and
+majority aggregation over normalized final answers. Demonstration content,
+decoding parameters, and realized costs remain to be specified.
