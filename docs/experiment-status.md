@@ -472,3 +472,13 @@ the first two valid training qids per task (sorted lexicographically), excluding
 validation and test. Self-consistency uses three samples with fixed decoding
 parameters and deterministic normalized-majority aggregation. No held-out
 interactions or realized costs have been generated yet.
+
+
+## Prompt demonstration source audit (2026-09-16)
+
+The first record of `router_bipartite_qnorm_complete.jsonl` contains
+`query_text` and action outcomes, but no response/completion text. Therefore
+the qnorm log cannot supply few-shot demonstrations. Demonstrations must come
+from a separate benchmark/training source, with IDs and answers recorded
+without using validation or test outcomes. No demonstrations have been
+fabricated and no held-out interactions have been generated.
