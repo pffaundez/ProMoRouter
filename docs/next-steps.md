@@ -39,7 +39,8 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: embeddings generated with `sentence-transformers/all-MiniLM-L6-v2`; 3 unseen model vectors and 2 unseen prompt vectors, all dimension 384.
 - Completed: `analysis/validate_inductive_candidates.py` passed exact pool, non-overlap, and artifact checks.
 - Completed: `AutoConfig.from_pretrained` succeeded for all three unseen model IDs (`llama`, `olmo2`, `phi3`).
-- Blocker: Full generation and prompt-execution checks remain pending.
+- Completed: SmolLM2-1.7B-Instruct passed a minimal Transformers generation smoke test.
+- Blocker: OLMo-2 and Phi-4 generation, plus prompt-execution checks, remain pending.
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
