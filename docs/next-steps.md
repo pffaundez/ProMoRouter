@@ -23,14 +23,19 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
   6 total prompt IDs, with 9/4 seen and 3/2 unseen, and no unseen ID appears
   in the training population.
 - Command: `python analysis/validate_inductive_candidates.py`
-- State: in_progress
+- State: completed
 - Priority: P0
-- Blocker: None for manifest authoring; integration checks remain after this task.
+- Blocker: None.
+- Completed: `configs/inductive_candidates.yaml` created with 12 models total (9 seen, 3 unseen) and 6 prompts total (4 seen, 2 unseen). License and backend checks remain pending.
 
 ## Next
 
-### T-020 — Implement description-conditioned inductive Edge-GNN
-State: pending. Priority: P0. Dependency: T-019.
+### T-020 — Verify candidate integration and generate description embeddings
+State: in_progress. Priority: P0. Dependency: T-019.
+
+- Description: Validate the three Hugging Face model identifiers and prompt execution contracts, then generate embeddings under `data/router/inductive_embeddings/` without overwriting P0 artifacts.
+- Completion criterion: All five unseen candidates pass metadata/integration checks and embedding files contain exactly the 3 unseen model IDs and 2 unseen prompt IDs.
+- Command: `python scripts/build_node_description_embeddings.py --help` (then the repository's documented generation command).
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
@@ -62,7 +67,8 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 - Five-seed Edge-GNN, GraphRouter-direct, static-baseline, and Flat-MLP
   outputs verified.
 - Flat-MLP added as equal-action-space no-graph baseline; D-014 active.
-- Inductive 10-model/5-prompt evaluation protocol adopted as D-015.
+- Inductive 12-model/6-prompt evaluation protocol adopted as D-016.
+- Confirmed candidate manifest created at `configs/inductive_candidates.yaml`.
 
 
 ## Protocol references
