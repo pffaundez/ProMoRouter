@@ -54,3 +54,20 @@ Report, for each condition and lambda, P, C, and R; selection frequency of seen 
 ## Non-claims
 
 This protocol does not establish unrestricted generalization to arbitrary models or prompts. Results apply only to the selected candidates, descriptions, calibration budget, and test distribution.
+
+
+## Prompt execution contracts
+
+The unseen strategies use the following fixed contracts:
+
+- `fewshot`: prepend a fixed, task-specific demonstration block to the
+  query. Demonstrations are selected before inference and are not drawn from
+  the test query or its outcome.
+- `self_consistency`: issue a fixed number of independent samples with the
+  same strategy template and aggregate final answers using a deterministic
+  task-appropriate rule. The sample count and decoding parameters must be
+  reported.
+
+The templates are defined in `configs/prompt_templates.yaml`. Demonstration
+content, sample count, decoding parameters, and their input/output token costs
+must be recorded before evaluating the router.
