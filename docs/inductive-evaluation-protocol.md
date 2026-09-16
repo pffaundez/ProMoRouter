@@ -6,7 +6,7 @@ This protocol extends the repaired closed-pool evaluation to candidates that hav
 
 ## Candidate visibility
 
-The target configuration contains 9 seen models and 4 seen prompting strategies for training, plus three external unseen models and two external unseen prompting strategies. The confirmed candidates are `HuggingFaceTB/SmolLM2-1.7B-Instruct`, `allenai/OLMo-2-1124-7B-Instruct`, `microsoft/phi-4`, `fewshot`, and `self_consistency`; record them in `configs/inductive_candidates.yaml`.
+The target configuration contains 9 seen models and 4 seen prompting strategies for training, plus three external unseen models and two external unseen prompting strategies. The confirmed candidates are `HuggingFaceTB/SmolLM2-1.7B-Instruct`, `allenai/OLMo-2-1124-7B-Instruct`, `microsoft/phi-4`, `step_back`, and `self_consistency`; record them in `configs/inductive_candidates.yaml`.
 
 ## Evaluation conditions
 
@@ -60,9 +60,9 @@ This protocol does not establish unrestricted generalization to arbitrary models
 
 The unseen strategies use the following fixed contracts:
 
-- `fewshot`: prepend exactly two fixed, task-specific demonstrations to the
-  query. Demonstrations are selected before inference and are not drawn from
-  the test query or its outcome.
+- `step_back`: issue a static instruction to identify the general principle
+  relevant to the query before applying it; no external demonstrations are
+  required.
 - `self_consistency`: issue exactly three independent samples with the same
   strategy template and aggregate final answers by majority over normalized
   answers. Decoding parameters must be reported.
@@ -77,8 +77,8 @@ must be recorded before evaluating the router.
 The reproducible settings are stored in
 `configs/inductive_prompt_execution.yaml`:
 
-- `fewshot` selects the first two valid training queries per task after
-  lexicographic `qid` sorting; validation and test queries are excluded.
+- `step_back` uses only its static instruction and query text; no calibration
+  examples are required.
 - `self_consistency` uses three samples with temperature 0.7, top-p 0.95,
   and a 256-token generation cap. Final answers are normalized before majority
   aggregation, with a deterministic lexicographic tie-break.
