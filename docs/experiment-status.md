@@ -388,3 +388,10 @@ Added `scripts/build_inductive_description_embeddings.py`. It reads
 `data/router/inductive_embeddings/`, preserving all closed-pool P0/P1
 embedding artifacts. The script has not yet been executed; backend, license,
 and model-loading checks remain pending.
+
+
+## Inductive embedding dependency update (2026-09-16)
+
+The first embedding attempt failed because the active virtual environment does
+not provide `sentence-transformers`. The repository requirement was added to
+`requirements.txt`; no embeddings were generated and no P0 artifacts changed.
