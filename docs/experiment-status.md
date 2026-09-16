@@ -430,3 +430,11 @@ prompt execution remain unverified.
 SmolLM2-1.7B-Instruct (`llama`), OLMo-2-1124-7B-Instruct (`olmo2`), and
 Phi-4 (`phi3`). This checked configuration accessibility only; no full
 weights were loaded and generation compatibility remains pending.
+
+
+## Unseen generation smoke test: SmolLM2 (2026-09-16)
+
+SmolLM2-1.7B-Instruct loaded successfully with Transformers and generated the
+expected answer to a minimal arithmetic prompt (`2+2 equals 4`). OLMo-2 and
+Phi-4 generation tests remain pending; no router experiment has been run with
+unseen candidates.
