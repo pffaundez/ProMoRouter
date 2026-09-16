@@ -41,3 +41,22 @@ templates:
     Answer:
     Check:
     Final:
+
+
+  fewshot: |
+    You are a helpful assistant. Use the demonstrations to infer the expected
+    solution style, then answer the user's request.
+
+    Demonstrations:
+    {demonstrations}
+
+    {context_block}{subquery}
+
+  self_consistency: |
+    You are a careful assistant. Solve the problem independently and output
+    only the final answer. The caller samples this template multiple times and
+    aggregates the resulting answers.
+
+    {context_block}{subquery}
+
+    Final:
