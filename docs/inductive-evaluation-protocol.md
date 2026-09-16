@@ -6,7 +6,7 @@ This protocol extends the repaired closed-pool evaluation to candidates that hav
 
 ## Candidate visibility
 
-The target configuration contains 9 seen models and 4 seen prompting strategies for training, 3 external unseen models with distinct parameter scales, and 1 or 2 external unseen prompting strategies. The concrete external candidates remain to be selected and recorded in configs/inductive_candidates.yaml.
+The target configuration contains 9 seen models and 4 seen prompting strategies for training, plus three external unseen models and two external unseen prompting strategies. The confirmed candidates are `HuggingFaceTB/SmolLM2-1.7B-Instruct`, `allenai/OLMo-2-1124-7B-Instruct`, `microsoft/phi-4`, `fewshot`, and `self_consistency`; record them in `configs/inductive_candidates.yaml`.
 
 ## Evaluation conditions
 
@@ -16,11 +16,11 @@ Train and evaluate with the existing 9-model/4-prompt pool. This is the referenc
 
 ### Unseen-model condition
 
-Remove all interactions involving the external models from training and validation. Add their nodes at inference using description-derived embeddings. Evaluate them together with the seen models and known prompts.
+Remove all interactions involving the external models from training and validation. Add their nodes at inference using description-derived embeddings. Evaluate them together with the nine seen models and the known prompts.
 
 ### Unseen-prompt condition
 
-Remove all interactions involving the external prompting strategies from training and validation. Add their nodes at inference using description-derived embeddings. Evaluate them together with seen prompts and models.
+Remove all interactions involving the external prompting strategies from training and validation. Add their nodes at inference using description-derived embeddings. Evaluate them together with the four seen prompts and seen models.
 
 ### Joint unseen condition
 
