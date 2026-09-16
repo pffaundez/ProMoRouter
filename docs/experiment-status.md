@@ -366,3 +366,16 @@ for an external tenth model or fifth prompt.
 - `docs/inductive-evaluation-protocol.md` defines closed-pool, unseen-model, unseen-prompt, joint-unseen, masked-pair, zero-shot, and few-shot conditions.
 - D-016 confirms the concrete unseen set: three models and two prompt strategies.
 These documents are protocol specifications; no unseen-candidate result has been produced yet.
+
+
+## Inductive candidate manifest update (2026-09-16)
+
+The confirmed candidate manifest is now stored at
+`configs/inductive_candidates.yaml`. It defines 12 inference models (9 seen
+and 3 unseen) and 6 prompting strategies (4 seen and 2 unseen), for 72
+prompt--model actions. The unseen entries are SmolLM2-1.7B-Instruct,
+OLMo-2-1124-7B-Instruct, Phi-4, fewshot, and self_consistency.
+
+This is a configuration artifact, not an experimental result. Backend,
+license, description-embedding, and held-out outcome checks remain pending.
+P0/P1 closed-pool datasets and embeddings were not modified.
