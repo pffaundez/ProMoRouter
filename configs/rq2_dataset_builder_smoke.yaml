@@ -141,12 +141,9 @@ tasks:
     query_field: "instruction"
     input_field: "input"
     gold_field: "output"
-    primary_metric: null
-    metric_name: "judge_score"
-    eval_mode: "judge"                       # performance can be null unless judge is enabled
-    judge:
-      enabled: false
-      judge_model: null
+    primary_metric: "f1"
+    metric_name: "F1"
+    eval_mode: "auto"                        # token-level F1 against the reference output
 
   humaneval:
     hf_path: "openai_humaneval"
