@@ -337,3 +337,28 @@ These are unresolved choices, not adopted decisions:
   tables, and experiment documentation.
 - Status: active
 - Replaced by: —
+
+
+### D-015 — Evaluate description-based inductive generalization with external candidates
+
+- Date: 2026-09-16
+- Context: The closed-pool experiments do not test whether the graph can
+  generalize to unseen models or prompting strategies.
+- Decision: Define a future inductive evaluation with ten total models and five
+  total prompting strategies. Train on the existing nine-model/four-prompt
+  pool; introduce one external model and one external prompt only at inference
+  using description-derived embeddings. Also evaluate prompt-model pairs whose
+  interactions are masked during training.
+- Justification: This directly tests the intended GraphRouter-style
+  description-conditioned generalization rather than only interpolation within
+  the original pool.
+- Alternatives: Treating the existing nine models/four prompts as unseen via
+  random query splits was rejected as insufficient; closed-pool results remain
+  a separate evaluation.
+- Consequences: New candidate descriptions, embeddings, and held-out
+  interaction outcomes are required. The protocol must not use realized reward,
+  performance, or cost to construct inference features.
+- Files affected: description configs, embedding builder, inductive trainer,
+  held-out datasets, experiment documentation, and paper.
+- Status: active
+- Replaced by: —
