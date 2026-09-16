@@ -379,3 +379,12 @@ OLMo-2-1124-7B-Instruct, Phi-4, fewshot, and self_consistency.
 This is a configuration artifact, not an experimental result. Backend,
 license, description-embedding, and held-out outcome checks remain pending.
 P0/P1 closed-pool datasets and embeddings were not modified.
+
+
+## Inductive embedding builder update (2026-09-16)
+
+Added `scripts/build_inductive_description_embeddings.py`. It reads
+`configs/inductive_candidates.yaml` and writes only
+`data/router/inductive_embeddings/`, preserving all closed-pool P0/P1
+embedding artifacts. The script has not yet been executed; backend, license,
+and model-loading checks remain pending.
