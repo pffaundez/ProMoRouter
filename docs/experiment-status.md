@@ -499,3 +499,13 @@ application, and final answer. The `self_consistency` contract generated
 exactly three samples with the configured sampling parameters; all three
 answered the arithmetic test consistently. This validates prompt execution
 only, not routing performance or held-out cost.
+
+
+## Gold-reference source verified (2026-09-16)
+
+`configs/rq2_dataset_builder_smoke.yaml` specifies reproducible Hugging Face
+sources and gold fields: `hotpot_qa/distractor` (`answer`), `gsm8k/main`
+(`answer`), `squad` (`answers`), and `tatsu-lab/alpaca` (`output`).
+Manual gold-answer authoring is not required and is discouraged. GSM8K,
+HotpotQA, and SQuAD have automatic metrics in the existing builder; Alpaca is
+configured for judge-based evaluation and needs an explicit judge policy.
