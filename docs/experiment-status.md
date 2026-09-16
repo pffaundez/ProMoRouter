@@ -324,3 +324,22 @@ lambda=0.5 P=0.478261, C=0.167827, R=0.394347; lambda=0.9 P=0.366372,
 C=0.061860, R=0.310698. The policy selected multiple prompts and models in
 all three settings; no fixed-pair collapse was observed. These are verified
 seed-1 baseline results, not five-seed aggregates.
+
+
+## Flat-MLP five-seed update (2026-09-16)
+
+The Flat 36-action no-graph MLP sweep completed for seeds 1--5. Every run
+used 121 test queries and the shared qnorm manifests. Aggregated test results
+(mean +/- sample standard deviation) are:
+
+| lambda | P | C | R |
+|---:|---:|---:|---:|
+| 0.1 | 0.5660 +/- 0.0392 | 0.4644 +/- 0.0576 | 0.5195 +/- 0.0429 |
+| 0.5 | 0.4409 +/- 0.0547 | 0.1087 +/- 0.0487 | 0.3866 +/- 0.0500 |
+| 0.9 | 0.4106 +/- 0.0338 | 0.0635 +/- 0.0073 | 0.3534 +/- 0.0297 |
+
+Relative to the repaired Edge-GNN aggregates, Flat-MLP has higher reward at
+lambda=0.1 and 0.5 and is nearly tied at lambda=0.9 (0.3534 vs 0.3557). This
+verified result means the current evidence does not isolate a broad graph
+advantage; the graph contribution must be reported cautiously and further
+architectural analysis remains required.
