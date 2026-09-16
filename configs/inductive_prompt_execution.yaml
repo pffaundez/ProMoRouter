@@ -1,0 +1,35 @@
+# Inductive prompt execution configuration
+# All choices are deterministic and use only the training split for calibration.
+
+fewshot:
+  id: fewshot
+  num_shots: 2
+  demonstration_source: training_split_only
+  selection:
+    policy: first_valid_by_sorted_qid
+    per_task: 2
+    require_distinct_qids: true
+    exclude_validation_and_test: true
+  fields:
+    input: query
+    output: response
+  cost_accounting: realized_input_and_output_tokens
+
+self_consistency:
+  id: self_consistency
+  num_samples: 3
+  sampling:
+    temperature: 0.7
+    top_p: 0.95
+    max_new_tokens: 256
+    seed_offsets: [0, 1, 2]
+  aggregation:
+    rule: majority
+    normalize_answers: true
+    tie_break: lowest_lexicographic_normalized_answer
+  cost_accounting: sum_realized_tokens_across_samples
+
+reproducibility:
+  split_manifest: data/router/splits/qnorm_complete_seed{seed}.json
+  calibration_queries_disjoint_from_test: true
+  parameter_updates_at_inference: false
