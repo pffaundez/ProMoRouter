@@ -509,3 +509,11 @@ sources and gold fields: `hotpot_qa/distractor` (`answer`), `gsm8k/main`
 Manual gold-answer authoring is not required and is discouraged. GSM8K,
 HotpotQA, and SQuAD have automatic metrics in the existing builder; Alpaca is
 configured for judge-based evaluation and needs an explicit judge policy.
+
+
+## Alpaca metric aligned with implementation (2026-09-16)
+
+Updated `configs/rq2_dataset_builder_smoke.yaml` to declare automatic
+token-level F1 for Alpaca, matching the builder's `alpaca_f1` scorer. The
+decision avoids introducing a new judge and preserves comparability. Historical
+P0 logs still require an audit confirming the same scorer was used.
