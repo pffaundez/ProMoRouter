@@ -31,11 +31,12 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 ## Next
 
 ### T-020 — Verify candidate integration and generate description embeddings
-State: pending. Priority: P0. Dependency: T-019.
+State: blocked. Priority: P0. Dependency: T-019.
 
 - Description: Validate the three Hugging Face model identifiers and prompt execution contracts, then generate embeddings under `data/router/inductive_embeddings/` without overwriting P0 artifacts.
 - Completion criterion: All five unseen candidates pass metadata/integration checks and embedding files contain exactly the 3 unseen model IDs and 2 unseen prompt IDs.
 - Command: `python scripts/build_inductive_description_embeddings.py --help` (then run it in the active venv).
+- Blocker: The active venv lacks `sentence-transformers`; install the dependency before execution.
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
