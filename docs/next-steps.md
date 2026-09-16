@@ -35,7 +35,7 @@ State: in_progress. Priority: P0. Dependency: T-019.
 
 - Description: Validate the three Hugging Face model identifiers and prompt execution contracts, then generate embeddings under `data/router/inductive_embeddings/` without overwriting P0 artifacts.
 - Completion criterion: All five unseen candidates pass metadata/integration checks and embedding files contain exactly the 3 unseen model IDs and 2 unseen prompt IDs.
-- Command: `python scripts/build_inductive_description_embeddings.py --help` (then run it in the active venv).
+- Command: `python analysis/validate_inductive_candidates.py` followed by the model-loading smoke test.
 - Completed: embeddings generated with `sentence-transformers/all-MiniLM-L6-v2`; 3 unseen model vectors and 2 unseen prompt vectors, all dimension 384.
 - Blocker: Model-loading and prompt-execution checks remain pending.
 
