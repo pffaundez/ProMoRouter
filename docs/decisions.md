@@ -446,8 +446,10 @@ These are unresolved choices, not adopted decisions:
   uncalibrated external judge.
 - Alternatives considered or discarded: A new LLM judge was rejected for the
   current repair because it would break comparability with existing logs.
-- Consequences: Historical P0 Alpaca records must be checked for the same F1
-  computation before being reported; no manual gold answers are created.
+- Consequences: Historical P0 Alpaca records use the same F1 computation; no
+  manual gold answers are created.
+- Verification update (2026-09-16): 7,200 raw/qnorm Alpaca edges joined with
+  zero missing keys and zero performance mismatches.
 - Files affected: `configs/rq2_dataset_builder_smoke.yaml`, dataset builder,
   validation scripts, and paper metrics description.
 - Status: active
