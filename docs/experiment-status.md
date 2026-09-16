@@ -313,3 +313,14 @@ It uses the same complete 4x9 action space, qnorm rewards, embeddings, and
 persisted splits as Edge-GNN, but no graph/message passing; each prompt-model
 pair is scored from concatenated query, prompt, and model embeddings. This is
 an implementation addition; its results are not yet available.
+
+
+## Flat-MLP seed-1 update (2026-09-16)
+
+The full Flat 36-action MLP seed-1 run completed with finite early stopping
+(32, 33, and 36 epochs for lambda 0.1, 0.5, and 0.9). Test results on the
+shared 121-query split were: lambda=0.1 P=0.551948, C=0.476123, R=0.504335;
+lambda=0.5 P=0.478261, C=0.167827, R=0.394347; lambda=0.9 P=0.366372,
+C=0.061860, R=0.310698. The policy selected multiple prompts and models in
+all three settings; no fixed-pair collapse was observed. These are verified
+seed-1 baseline results, not five-seed aggregates.
