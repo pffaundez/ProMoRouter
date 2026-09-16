@@ -463,3 +463,12 @@ The execution budgets are fixed: `fewshot` uses exactly two demonstrations
 per task; `self_consistency` uses exactly three independent samples and
 majority aggregation over normalized final answers. Demonstration content,
 decoding parameters, and realized costs remain to be specified.
+
+
+## Deterministic unseen prompt execution configured (2026-09-16)
+
+Added `configs/inductive_prompt_execution.yaml`. Few-shot calibration uses
+the first two valid training qids per task (sorted lexicographically), excluding
+validation and test. Self-consistency uses three samples with fixed decoding
+parameters and deterministic normalized-majority aggregation. No held-out
+interactions or realized costs have been generated yet.
