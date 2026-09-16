@@ -1,35 +1,35 @@
 # P1 - Experiment Repair next steps
 
-_Last updated: 2026-09-15_
+_Last updated: 2026-09-16_
 
 Read `docs/experiment-status.md`, `docs/decisions.md`, and
 `docs/methodology-scope.md` before continuing. Keep exactly one task in **Now**.
 
 ## Now
 
-### T-018 — Run the Flat 36-action MLP baseline
+### T-018 — Complete the Flat 36-action MLP sweep (seeds 2--5)
 
-- Description: Train and evaluate `train_router_flat_mlp_qnorm.py` on the
-  complete 797-query dataset for seeds 1--5 and lambda values 0.1, 0.5, 0.9.
-- Objective: Compare ProMoRouter against an equal-action-space scorer without
-  graph message passing.
+- Description: Run `train_router_flat_mlp_qnorm.py` for seeds 2, 3, 4, and 5
+  using the complete dataset, canonical embeddings, and persisted manifests.
+- Objective: Obtain multi-seed variance for the equal-action-space no-graph
+  baseline before comparing it with Edge-GNN.
 - Files involved: `train_router_flat_mlp_qnorm.py`,
-  `data/router/*.pt`,
-  `data/router/splits/qnorm_complete_seed{1..5}.json`, and
+  `data/router/splits/qnorm_complete_seed{2..5}.json`, and
   `outputs/p1_router_flat_mlp_qnorm/`.
-- Dependencies: Local embeddings and existing split manifests.
-- Completion criterion: Five per-seed JSON result files and 15 model files;
-  every test set has 121 queries and rewards satisfy `R=P-lambda*C`.
+- Dependencies: Seed-1 run completed; local embeddings available.
+- Completion criterion: Four additional per-seed JSON files and 12 model files;
+  every test set has 121 queries; each reward satisfies `R=P-lambda*C`.
 - Command:
   ```bash
   python train_router_flat_mlp_qnorm.py \\
-    --data-path data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \\
-    --seeds 1 2 3 4 5 \\
+    --data-path ~/repos/graph-router-2/data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \\
+    --seeds 2 3 4 5 \\
+    --device cuda:0 \\
     --output-dir outputs/p1_router_flat_mlp_qnorm
   ```
-- State: ready
+- State: in_progress
 - Priority: P0
-- Blocker: Embeddings must exist locally under `data/router/`.
+- Blocker: none
 
 ## Next
 
@@ -60,8 +60,8 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
 
-- Five-seed Edge-GNN, GraphRouter-direct, and static baseline outputs verified.
-- Multi-seed P/C/R aggregates computed for those methods.
-- Fixed-pair identities stable across seeds.
+- Five-seed outputs verified for Edge-GNN, GraphRouter-direct, and static
+  baselines.
+- Flat-MLP seed 1 completed with 121 test queries for all three lambdas.
 - Offline/online and closed-pool scope documented; D-013 active.
-- Flat 36-action MLP baseline implemented; D-014 active.
+- Flat 36-action no-graph baseline implemented; D-014 active.
