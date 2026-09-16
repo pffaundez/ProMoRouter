@@ -43,14 +43,16 @@ templates:
     Final:
 
 
-  fewshot: |
-    You are a helpful assistant. Use the demonstrations to infer the expected
-    solution style, then answer the user's request.
-
-    Demonstrations:
-    {demonstrations}
+  step_back: |
+    You are a helpful assistant. First identify the general principle or
+    reasoning pattern relevant to the request. Then apply it and provide the
+    final answer.
 
     {context_block}{subquery}
+
+    Principle:
+    Application:
+    Final:
 
   self_consistency: |
     You are a careful assistant. Solve the problem independently and output
