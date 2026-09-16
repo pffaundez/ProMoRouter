@@ -422,3 +422,11 @@ The local run of `analysis/validate_inductive_candidates.py` passed. It
 verified the 9 seen + 3 unseen model split, 4 seen + 2 unseen prompt split,
 non-overlap, and exact embedding shapes (3x384 and 2x384). Model loading and
 prompt execution remain unverified.
+
+
+## Unseen model configuration smoke test passed (2026-09-16)
+
+`AutoConfig.from_pretrained` successfully resolved all three candidates:
+SmolLM2-1.7B-Instruct (`llama`), OLMo-2-1124-7B-Instruct (`olmo2`), and
+Phi-4 (`phi3`). This checked configuration accessibility only; no full
+weights were loaded and generation compatibility remains pending.
