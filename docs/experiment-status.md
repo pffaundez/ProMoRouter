@@ -517,3 +517,12 @@ Updated `configs/rq2_dataset_builder_smoke.yaml` to declare automatic
 token-level F1 for Alpaca, matching the builder's `alpaca_f1` scorer. The
 decision avoids introducing a new judge and preserves comparability. Historical
 P0 logs still require an audit confirming the same scorer was used.
+
+
+## Alpaca F1 provenance verified (2026-09-16)
+
+The raw `train_clean_qnorm_lambdas.jsonl` contains response-level Alpaca
+records with `performance.metric = f1`. A join against
+`router_bipartite_qnorm_complete.jsonl` checked 7,200 Alpaca action edges with
+zero missing keys and zero performance mismatches. Alpaca may therefore be
+included in the inductive evaluation using automatic token-level F1.
