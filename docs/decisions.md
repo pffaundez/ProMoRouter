@@ -316,8 +316,8 @@ These are unresolved choices, not adopted decisions:
 - Alternatives: Continual online learning and zero-shot routing to unseen prompts/models were not evaluated and are not claimed. A pre-routing cost predictor remains a separate extension.
 - Consequences: The paper must state closed-pool limitations; adding candidates requires embeddings, pipeline support, and dedicated evaluation.
 - Files affected: trainers, docs/methodology-scope.md, paper methodology.
-- Status: active
-- Replaced by: —
+- Status: superseded
+- Replaced by: D-016
 
 
 ### D-014 — Add a flat 36-action no-graph baseline
@@ -346,9 +346,9 @@ These are unresolved choices, not adopted decisions:
   generalize to unseen models or prompting strategies.
 - Decision: Define a future inductive evaluation with ten total models and five
   total prompting strategies. Train on the existing nine-model/four-prompt
-  pool; introduce one external model and one external prompt only at inference
-  using description-derived embeddings. Also evaluate prompt-model pairs whose
-  interactions are masked during training.
+  pool; introduce external candidates only at inference using description-derived
+  embeddings. Also evaluate prompt-model pairs whose interactions are masked
+  during training.
 - Justification: This directly tests the intended GraphRouter-style
   description-conditioned generalization rather than only interpolation within
   the original pool.
@@ -360,5 +360,33 @@ These are unresolved choices, not adopted decisions:
   performance, or cost to construct inference features.
 - Files affected: description configs, embedding builder, inductive trainer,
   held-out datasets, experiment documentation, and paper.
+- Status: superseded
+- Replaced by: D-016
+
+
+### D-016 — Use three unseen models and two unseen prompt strategies
+
+- Date: 2026-09-16
+- Context: D-015 left the external candidate count open, preventing a
+  reproducible inductive evaluation design.
+- Decision: Use three external unseen models—
+  `HuggingFaceTB/SmolLM2-1.7B-Instruct`,
+  `allenai/OLMo-2-1124-7B-Instruct`, and `microsoft/phi-4`—and two
+  external unseen prompting strategies, `fewshot` and `self_consistency`.
+  The existing nine models and four prompts remain the seen training pool.
+- Justification: The models add distinct families and approximately 1.7B,
+  7B, and 14B scales; the prompts add demonstration-based and sampling-based
+  strategies that are not duplicates of direct, cot, decompose, or selfcheck.
+- Alternatives considered or discarded: Reducing the protocol to one unseen
+  model and one unseen prompt was discarded as insufficiently informative.
+  `plan_then_execute` and `critic_then_answer` were deferred because they
+  overlap strongly with existing strategies. Gemma was retained only as a
+  fallback pending license review.
+- Consequences: The inference candidate space becomes 12 models x 6 prompts
+  (72 actions). New descriptions, embeddings, integration checks, and held-out
+  outcomes are required; P0/P1 closed-pool artifacts remain unchanged.
+- Files affected: `configs/inductive_candidates.yaml`, description configs,
+  `data/router/inductive_embeddings/`, inductive datasets and validators,
+  `docs/inductive-evaluation-protocol.md`, and `docs/next-steps.md`.
 - Status: active
 - Replaced by: —
