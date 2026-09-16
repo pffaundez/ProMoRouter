@@ -438,3 +438,12 @@ SmolLM2-1.7B-Instruct loaded successfully with Transformers and generated the
 expected answer to a minimal arithmetic prompt (`2+2 equals 4`). OLMo-2 and
 Phi-4 generation tests remain pending; no router experiment has been run with
 unseen candidates.
+
+
+## Unseen generation smoke tests complete (2026-09-16)
+
+OLMo-2-1124-7B-Instruct and Phi-4 also loaded and generated successfully by
+changing only the `model_id` in the minimal Transformers test. All three
+unseen model candidates therefore pass configuration and basic generation
+checks. This does not yet validate the router's candidate integration,
+costs, or the fewshot/self_consistency execution contracts.
