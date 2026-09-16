@@ -43,7 +43,7 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: templates for `fewshot` and `self_consistency` added to `configs/prompt_templates.yaml`.
 - Completed: budgets fixed at 2 demonstrations for `fewshot` and 3 samples with majority aggregation for `self_consistency`.
 - Completed: deterministic execution config added at `configs/inductive_prompt_execution.yaml` (2 training shots; 3 samples, temperature 0.7, top-p 0.95, 256-token cap).
-- Blocker: Held-out interaction generation and realized cost collection remain pending.
+- Blocker: The qnorm log has no response/completion text; a separate benchmark demonstration source is required before held-out generation.
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
