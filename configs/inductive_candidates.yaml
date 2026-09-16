@@ -70,6 +70,7 @@ unseen_prompts:
       behavior from examples.
     expected_cost: medium_high
     execution_contract: fixed demonstrations selected before inference
+    num_shots: 2
     status: pending
 
   - id: self_consistency
@@ -78,7 +79,9 @@ unseen_prompts:
       Samples multiple independent reasoning traces and aggregates their final
       answers, targeting robustness when individual generations are uncertain.
     expected_cost: high
-    execution_contract: fixed number of samples and deterministic aggregation
+    execution_contract: 3 independent samples and deterministic majority aggregation
+    num_samples: 3
+    aggregation: majority of normalized final answers
     status: pending
 
 evaluation:
