@@ -40,7 +40,8 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: `analysis/validate_inductive_candidates.py` passed exact pool, non-overlap, and artifact checks.
 - Completed: `AutoConfig.from_pretrained` succeeded for all three unseen model IDs (`llama`, `olmo2`, `phi3`).
 - Completed: all three unseen models passed minimal Transformers generation smoke tests.
-- Blocker: Prompt-execution contracts, cost metadata, and held-out outcomes remain pending.
+- Completed: templates for `fewshot` and `self_consistency` added to `configs/prompt_templates.yaml`.
+- Blocker: Demonstration set, sample count, aggregation rule, cost metadata, and held-out outcomes remain pending.
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
