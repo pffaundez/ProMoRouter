@@ -526,3 +526,12 @@ records with `performance.metric = f1`. A join against
 `router_bipartite_qnorm_complete.jsonl` checked 7,200 Alpaca action edges with
 zero missing keys and zero performance mismatches. Alpaca may therefore be
 included in the inductive evaluation using automatic token-level F1.
+
+
+## Endpoint availability check (2026-09-16)
+
+The local Ollama-compatible endpoint at `localhost:11434/v1` is unavailable,
+and the active environment has no `vllm` executable. Since all three unseen
+models already pass direct Transformers generation, the inductive interaction
+generator should use a sequential Transformers backend rather than requiring a
+new vLLM installation. No held-out interactions have been generated yet.
