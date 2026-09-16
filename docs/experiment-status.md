@@ -406,3 +406,11 @@ respectively. The artifacts are isolated under
 `data/router/inductive_embeddings/`; closed-pool embeddings remain unchanged.
 Model loading, prompt execution, and held-out outcome generation are still
 unverified.
+
+
+## Inductive candidate validator added (2026-09-16)
+
+Added `analysis/validate_inductive_candidates.py` to verify the confirmed
+9/3 model split, 4/2 prompt split, non-overlap, and exact 3x384/2x384
+embedding artifacts. The validator has not yet been run in the user's local
+checkout.
