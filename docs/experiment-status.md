@@ -414,3 +414,11 @@ Added `analysis/validate_inductive_candidates.py` to verify the confirmed
 9/3 model split, 4/2 prompt split, non-overlap, and exact 3x384/2x384
 embedding artifacts. The validator has not yet been run in the user's local
 checkout.
+
+
+## Inductive candidate validation passed (2026-09-16)
+
+The local run of `analysis/validate_inductive_candidates.py` passed. It
+verified the 9 seen + 3 unseen model split, 4 seen + 2 unseen prompt split,
+non-overlap, and exact embedding shapes (3x384 and 2x384). Model loading and
+prompt execution remain unverified.
