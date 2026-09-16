@@ -1,18 +1,9 @@
 # Inductive prompt execution configuration
 # All choices are deterministic and use only the training split for calibration.
 
-fewshot:
-  id: fewshot
-  num_shots: 2
-  demonstration_source: training_split_only
-  selection:
-    policy: first_valid_by_sorted_qid
-    per_task: 2
-    require_distinct_qids: true
-    exclude_validation_and_test: true
-  fields:
-    input: query
-    output: response
+step_back:
+  id: step_back
+  instruction_contract: identify_general_principle_then_apply
   cost_accounting: realized_input_and_output_tokens
 
 self_consistency:
