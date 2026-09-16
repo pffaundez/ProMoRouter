@@ -70,3 +70,15 @@ The unseen strategies use the following fixed contracts:
 The templates are defined in `configs/prompt_templates.yaml`. Demonstration
 content, sample count, decoding parameters, and their input/output token costs
 must be recorded before evaluating the router.
+
+
+## Concrete execution configuration
+
+The reproducible settings are stored in
+`configs/inductive_prompt_execution.yaml`:
+
+- `fewshot` selects the first two valid training queries per task after
+  lexicographic `qid` sorting; validation and test queries are excluded.
+- `self_consistency` uses three samples with temperature 0.7, top-p 0.95,
+  and a 256-token generation cap. Final answers are normalized before majority
+  aggregation, with a deterministic lexicographic tie-break.
