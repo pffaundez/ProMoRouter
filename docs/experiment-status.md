@@ -395,3 +395,14 @@ and model-loading checks remain pending.
 The first embedding attempt failed because the active virtual environment does
 not provide `sentence-transformers`. The repository requirement was added to
 `requirements.txt`; no embeddings were generated and no P0 artifacts changed.
+
+
+## Inductive embeddings generated (2026-09-16)
+
+The inductive builder completed successfully with the
+`sentence-transformers/all-MiniLM-L6-v2` encoder. Metadata reports three
+unseen model IDs and two unseen prompt IDs, with shapes 3x384 and 2x384,
+respectively. The artifacts are isolated under
+`data/router/inductive_embeddings/`; closed-pool embeddings remain unchanged.
+Model loading, prompt execution, and held-out outcome generation are still
+unverified.
