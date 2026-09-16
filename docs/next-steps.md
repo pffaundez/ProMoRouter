@@ -41,7 +41,8 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: `AutoConfig.from_pretrained` succeeded for all three unseen model IDs (`llama`, `olmo2`, `phi3`).
 - Completed: all three unseen models passed minimal Transformers generation smoke tests.
 - Completed: templates for `fewshot` and `self_consistency` added to `configs/prompt_templates.yaml`.
-- Blocker: Demonstration set, sample count, aggregation rule, cost metadata, and held-out outcomes remain pending.
+- Completed: budgets fixed at 2 demonstrations for `fewshot` and 3 samples with majority aggregation for `self_consistency`.
+- Blocker: Demonstration content, decoding parameters, cost metadata, and held-out outcomes remain pending.
 
 ### T-010 — Generate canonical closed-pool result tables
 State: pending. Priority: P0. Dependency: existing five-seed outputs.
