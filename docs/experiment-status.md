@@ -482,3 +482,11 @@ the qnorm log cannot supply few-shot demonstrations. Demonstrations must come
 from a separate benchmark/training source, with IDs and answers recorded
 without using validation or test outcomes. No demonstrations have been
 fabricated and no held-out interactions have been generated.
+
+
+## Unseen prompt strategy revised (2026-09-16)
+
+Because the qnorm log lacks response text, the proposed two-shot `fewshot`
+strategy was replaced by `step_back`, which requires only a static instruction.
+`self_consistency` remains with three samples. The unseen prompt set is now
+`step_back` and `self_consistency`; no demonstration dataset is required.
