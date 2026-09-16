@@ -62,15 +62,13 @@ unseen_models:
       status: pending
 
 unseen_prompts:
-  - id: fewshot
-    name: Few-shot Demonstration
+  - id: step_back
+    name: Step-Back Reasoning
     description: >-
-      Prepends a fixed set of task-relevant input-output demonstrations before
-      the query, allowing the model to infer the desired answer format and
-      behavior from examples.
-    expected_cost: medium_high
-    execution_contract: fixed demonstrations selected before inference
-    num_shots: 2
+      First identify the general principle or reasoning pattern relevant to the
+      query, then apply it to produce the final answer.
+    expected_cost: medium
+    execution_contract: static instruction with no external demonstrations
     status: pending
 
   - id: self_consistency
