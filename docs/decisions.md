@@ -390,3 +390,24 @@ These are unresolved choices, not adopted decisions:
   `docs/inductive-evaluation-protocol.md`, and `docs/next-steps.md`.
 - Status: active
 - Replaced by: —
+
+
+### D-017 — Fix unseen prompt execution budgets
+
+- Date: 2026-09-16
+- Context: The unseen prompt strategies can dominate cost if their execution
+  budgets are left unspecified.
+- Decision: Execute `fewshot` with exactly two fixed demonstrations per task
+  and `self_consistency` with exactly three independent samples, aggregated
+  by majority over normalized final answers.
+- Justification: These budgets make the strategies operationally distinct while
+  keeping evaluation cost bounded and reproducible.
+- Alternatives considered or discarded: One demonstration was rejected as
+  semantically one-shot; five self-consistency samples were deferred as a
+  sensitivity analysis.
+- Consequences: Demonstration content, normalization, decoding parameters,
+  and realized token costs must be recorded for held-out evaluation.
+- Files affected: `configs/inductive_candidates.yaml`,
+  `configs/prompt_templates.yaml`, inductive evaluation harness and docs.
+- Status: active
+- Replaced by: —
