@@ -7,34 +7,25 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-018 — Complete the Flat 36-action MLP sweep (seeds 2--5)
+### T-010 — Generate canonical multi-seed result tables
 
-- Description: Run `train_router_flat_mlp_qnorm.py` for seeds 2, 3, 4, and 5
-  using the complete dataset, canonical embeddings, and persisted manifests.
-- Objective: Obtain multi-seed variance for the equal-action-space no-graph
-  baseline before comparing it with Edge-GNN.
-- Files involved: `train_router_flat_mlp_qnorm.py`,
-  `data/router/splits/qnorm_complete_seed{2..5}.json`, and
-  `outputs/p1_router_flat_mlp_qnorm/`.
-- Dependencies: Seed-1 run completed; local embeddings available.
-- Completion criterion: Four additional per-seed JSON files and 12 model files;
-  every test set has 121 queries; each reward satisfies `R=P-lambda*C`.
-- Command:
-  ```bash
-  python train_router_flat_mlp_qnorm.py \\
-    --data-path ~/repos/graph-router-2/data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl \\
-    --seeds 2 3 4 5 \\
-    --device cuda:0 \\
-    --output-dir outputs/p1_router_flat_mlp_qnorm
-  ```
-- State: in_progress
+- Description: Create a versioned summary artifact from the machine-readable
+  outputs for Edge-GNN, GraphRouter-direct, Flat-MLP, and static baselines,
+  reporting P, C, R, mean, standard deviation, and seed list.
+- Objective: Replace manually copied or legacy paper numbers with one
+  reproducible source and expose the near-tie between Flat-MLP and Edge-GNN.
+- Files involved: `outputs/p0_router_edgegnn_qnorm/`,
+  `outputs/p0_router_model_only_direct_qnorm/`,
+  `outputs/p0_router_flat_mlp_qnorm/`,
+  `outputs/p0_baselines_qnorm/`, summary script/output, paper tables.
+- Dependencies: All five-seed outputs are present.
+- Completion criterion: Every file is checked, rewards pass `R=P-lambda*C`, and
+  the generated table includes all methods and lambdas.
+- State: ready
 - Priority: P0
 - Blocker: none
 
 ## Next
-
-### T-010 — Generate canonical multi-seed result tables
-State: pending. Priority: P0. Dependency: T-018.
 
 ### T-011 — Recreate routing-configuration ablation
 State: pending. Priority: P1. Dependency: T-010.
@@ -60,8 +51,11 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
 
-- Five-seed outputs verified for Edge-GNN, GraphRouter-direct, and static
-  baselines.
-- Flat-MLP seed 1 completed with 121 test queries for all three lambdas.
+- Five-seed Edge-GNN, GraphRouter-direct, and static baseline outputs verified.
+- Flat-MLP five-seed sweep completed: 15 result rows and 15 model files, all
+  with 121 test queries.
+- Flat-MLP aggregates computed: R=0.5195, 0.3866, 0.3534 for lambdas 0.1,
+  0.5, and 0.9 respectively.
+- Fixed-pair identities stable across seeds.
 - Offline/online and closed-pool scope documented; D-013 active.
 - Flat 36-action no-graph baseline implemented; D-014 active.
