@@ -7,25 +7,34 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-010 — Generate canonical multi-seed result tables
+### T-019 — Prepare the inductive unseen-candidate protocol
 
-- Description: Create a versioned summary artifact from the machine-readable
-  outputs for Edge-GNN, GraphRouter-direct, Flat-MLP, and static baselines,
-  reporting P, C, R, mean, standard deviation, and seed list.
-- Objective: Replace manually copied or legacy paper numbers with one
-  reproducible source and expose the near-tie between Flat-MLP and Edge-GNN.
-- Files involved: `outputs/p0_router_edgegnn_qnorm/`,
-  `outputs/p0_router_model_only_direct_qnorm/`,
-  `outputs/p0_router_flat_mlp_qnorm/`,
-  `outputs/p0_baselines_qnorm/`, summary script/output, paper tables.
-- Dependencies: All five-seed outputs are present.
-- Completion criterion: Every file is checked, rewards pass `R=P-lambda*C`, and
-  the generated table includes all methods and lambdas.
-- State: ready
+- Description: Select and document one external model and one external prompt,
+  add their static descriptions, and define held-out interaction files for
+  unseen-model, unseen-prompt, and masked prompt-model-pair evaluation.
+- Objective: Make the intended GraphRouter-style generalization test
+  executable without confusing it with the existing closed-pool results.
+- Files involved: `configs/model_descriptions.json`,
+  `configs/prompt_strategies.yaml`,
+  `scripts/build_node_description_embeddings.py`, new held-out datasets,
+  `data/router/inductive_embeddings/`, and experiment docs.
+- Dependencies: Availability of external model/prompt descriptions and their
+  test interaction outcomes.
+- Completion criterion: A written protocol identifies the 10 models and 5
+  prompts, specifies train/test candidate visibility, and validates that unseen
+  candidates have no training interactions.
+- State: blocked
 - Priority: P0
-- Blocker: none
+- Blocker: The external tenth model and fifth prompt, plus evaluation outcomes,
+  have not yet been selected or supplied.
 
 ## Next
+
+### T-020 — Implement description-conditioned inductive Edge-GNN
+State: pending. Priority: P0. Dependency: T-019.
+
+### T-010 — Generate canonical closed-pool result tables
+State: pending. Priority: P0. Dependency: existing five-seed outputs.
 
 ### T-011 — Recreate routing-configuration ablation
 State: pending. Priority: P1. Dependency: T-010.
@@ -51,11 +60,7 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
 
-- Five-seed Edge-GNN, GraphRouter-direct, and static baseline outputs verified.
-- Flat-MLP five-seed sweep completed: 15 result rows and 15 model files, all
-  with 121 test queries.
-- Flat-MLP aggregates computed: R=0.5195, 0.3866, 0.3534 for lambdas 0.1,
-  0.5, and 0.9 respectively.
-- Fixed-pair identities stable across seeds.
-- Offline/online and closed-pool scope documented; D-013 active.
-- Flat 36-action no-graph baseline implemented; D-014 active.
+- Five-seed Edge-GNN, GraphRouter-direct, static-baseline, and Flat-MLP
+  outputs verified.
+- Flat-MLP added as equal-action-space no-graph baseline; D-014 active.
+- Inductive 10-model/5-prompt evaluation protocol adopted as D-015.
