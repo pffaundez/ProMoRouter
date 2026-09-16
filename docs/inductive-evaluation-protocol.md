@@ -60,13 +60,12 @@ This protocol does not establish unrestricted generalization to arbitrary models
 
 The unseen strategies use the following fixed contracts:
 
-- `fewshot`: prepend a fixed, task-specific demonstration block to the
+- `fewshot`: prepend exactly two fixed, task-specific demonstrations to the
   query. Demonstrations are selected before inference and are not drawn from
   the test query or its outcome.
-- `self_consistency`: issue a fixed number of independent samples with the
-  same strategy template and aggregate final answers using a deterministic
-  task-appropriate rule. The sample count and decoding parameters must be
-  reported.
+- `self_consistency`: issue exactly three independent samples with the same
+  strategy template and aggregate final answers by majority over normalized
+  answers. Decoding parameters must be reported.
 
 The templates are defined in `configs/prompt_templates.yaml`. Demonstration
 content, sample count, decoding parameters, and their input/output token costs
