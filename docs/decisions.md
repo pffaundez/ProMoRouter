@@ -335,8 +335,8 @@ These are unresolved choices, not adopted decisions:
 - Consequences: Run this baseline on seeds 1--5 before final table generation.
 - Files affected: `train_router_flat_mlp_qnorm.py`, baseline outputs, paper
   tables, and experiment documentation.
-- Status: active
-- Replaced by: —
+- Status: superseded
+- Replaced by: D-018
 
 
 ### D-015 — Evaluate description-based inductive generalization with external candidates
@@ -409,5 +409,27 @@ These are unresolved choices, not adopted decisions:
   and realized token costs must be recorded for held-out evaluation.
 - Files affected: `configs/inductive_candidates.yaml`,
   `configs/prompt_templates.yaml`, inductive evaluation harness and docs.
+- Status: active
+- Replaced by: —
+
+
+### D-018 — Replace fewshot with step-back reasoning
+
+- Date: 2026-09-16
+- Context: The qnorm interaction log contains no generated response text, so
+  two-shot demonstrations cannot be extracted without an additional dataset.
+- Decision: Use `step_back` as the second unseen prompt strategy and retain
+  `self_consistency` as the other unseen strategy with three samples.
+- Justification: `step_back` requires only a static instruction and is
+  distinct from direct, cot, decompose, and selfcheck, while avoiding
+  demonstration-data leakage and extra data dependencies.
+- Alternatives considered or discarded: `fewshot` with two shots was
+  discarded for this protocol; `structured_output`, `self_refine`, and
+  `least_to_most` were deferred due to incompatibility or overlap.
+- Consequences: The unseen prompt set is now `step_back` and
+  `self_consistency`; the two-shot configuration is no longer used.
+- Files affected: `configs/inductive_candidates.yaml`,
+  `configs/prompt_templates.yaml`, `configs/inductive_prompt_execution.yaml`,
+  and inductive protocol docs.
 - Status: active
 - Replaced by: —
