@@ -364,4 +364,5 @@ for an external tenth model or fifth prompt.
 
 - `docs/cost-information-contract.md` defines the separation between pre-routing estimated cost and post-execution realized cost.
 - `docs/inductive-evaluation-protocol.md` defines closed-pool, unseen-model, unseen-prompt, joint-unseen, masked-pair, zero-shot, and few-shot conditions.
+- D-016 confirms the concrete unseen set: three models and two prompt strategies.
 These documents are protocol specifications; no unseen-candidate result has been produced yet.
