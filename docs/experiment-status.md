@@ -555,3 +555,12 @@ tokens, latency, backend, and a token-count cost proxy. Hugging Face
 `datasets` was added to `requirements.txt`. The generator has not yet been
 run beyond smoke validation; monetary cost normalization remains a separate
 post-processing step.
+
+
+## Inductive generator smoke-test fix (2026-09-17)
+
+The first real smoke test reached dataset loading but failed because the
+generator loaded every configured task, including HumanEval whose cache exposed
+only a `test` split. The generator now loads only tasks represented in the
+selected qids and falls back to `test` only when the requested split is
+unavailable. No interaction output was produced by the failed run.
