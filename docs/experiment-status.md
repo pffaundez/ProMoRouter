@@ -535,3 +535,12 @@ and the active environment has no `vllm` executable. Since all three unseen
 models already pass direct Transformers generation, the inductive interaction
 generator should use a sequential Transformers backend rather than requiring a
 new vLLM installation. No held-out interactions have been generated yet.
+
+
+## Inductive protocol boundary confirmed (2026-09-17)
+
+D-020 fixes the evaluation boundary: P0 remains frozen with its vLLM-generated
+closed-pool results. The inductive protocol will use a separate test manifest
+and regenerate all 72 actions with one sequential Transformers backend, so seen
+and unseen candidates are comparable within that protocol. Results will not be
+numerically merged with P0.
