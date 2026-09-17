@@ -601,3 +601,8 @@ The rerun confirmed that transcript removal works, but exposed a second prefix f
 ## Inductive prefix extraction finalization (2026-09-17)
 
 Local verification showed that the form `The final answer is: ...` could retain a leading colon after stripping `is`. The extractor now removes the complete `is`, `is:`, or colon prefix before self-consistency voting. Commit: ae8832b.
+
+
+## Inductive smoke extraction validated; gold alignment pending (2026-09-17)
+
+The corrected smoke output now has the expected structure: `self_consistency.response` is `Allie Goertz`, the three raw samples are preserved, and no prompt transcript appears in the scored response. However, both smoke rows report `performance=0.0`. This is not evidence of model quality yet; it indicates that the generator's dataset index/gold extraction or metric normalization must be audited for the selected HotpotQA qid before the 72-action inductive run. Full inductive generation is paused until this alignment check passes.
