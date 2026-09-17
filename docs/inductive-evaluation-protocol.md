@@ -82,3 +82,12 @@ The reproducible settings are stored in
 - `self_consistency` uses three samples with temperature 0.7, top-p 0.95,
   and a 256-token generation cap. Final answers are normalized before majority
   aggregation, with a deterministic lexicographic tie-break.
+
+
+## Backend and dataset boundary
+
+P0 remains the primary closed-pool result and is not modified. The inductive
+evaluation uses a separate test manifest and regenerates every candidate action
+(12 models x 6 prompts) with one sequential Transformers backend. Seen and
+unseen actions are therefore comparable within the inductive table, while
+their absolute values are not merged with the vLLM-generated P0 table.
