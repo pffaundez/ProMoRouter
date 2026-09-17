@@ -571,3 +571,10 @@ unavailable. No interaction output was produced by the failed run.
 A literal escaped newline introduced during the task-loading patch caused a
 syntax error in the first rerun. The source line was corrected; no data or
 output artifacts were produced by the failed invocation.
+
+
+## Inductive generator escaped-newline fix verified (2026-09-17)
+
+A second correction removed the remaining literal `\\n` token from the task
+loading line. The repository source now contains a valid newline and is ready
+for the targeted smoke rerun.
