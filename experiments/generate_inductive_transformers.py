@@ -137,6 +137,8 @@ def main():
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--max-new-tokens", type=int, default=256)
     ap.add_argument("--max-queries", type=int, default=None)
+    ap.add_argument("--model-ids", nargs="*", default=None)
+    ap.add_argument("--prompt-ids", nargs="*", default=None)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
@@ -149,7 +151,11 @@ def main():
 
     candidates = yaml.safe_load(args.candidate_manifest.read_text(encoding="utf-8"))
     models = {**SEEN_MODELS, **{x["id"]: x["hf_id"] for x in candidates["unseen_models"]}}
+    if args.model_ids:
+        models = {k: v for k, v in models.items() if k in set(args.model_ids)}
     prompts = list(SEEN_PROMPTS) + list(UNSEEN_PROMPTS)
+    if args.prompt_ids:
+        prompts = [p for p in prompts if p in set(args.prompt_ids)]
     print(f"queries={len(queries)} models={len(models)} prompts={len(prompts)} actions={len(queries)*len(models)*len(prompts)}")
     if args.dry_run:
         return
