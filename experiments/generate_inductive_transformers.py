@@ -76,15 +76,24 @@ def prompt_text(strategy, query, context=""):
     raise ValueError(strategy)
 
 
-def load_examples(config_path):
+def load_examples(config_path, needed_tasks):
     cfg = yaml.safe_load(config_path.read_text(encoding="utf-8"))
-    specs = cfg["tasks"]
+    all_specs = cfg["tasks"]
+    specs = {task: all_specs[task] for task in needed_tasks}
     datasets = {}
     for task, spec in specs.items():
         split = spec.get("split", "train")
-        datasets[task] = load_dataset(
-            spec["hf_path"], name=spec.get("hf_name"), split=split
-        )
+        try:
+            datasets[task] = load_dataset(
+                spec["hf_path"], name=spec.get("hf_name"), split=split
+            )
+        except ValueError as exc:
+            # Cached datasets may expose only a different split (e.g. test).
+            if "Unknown split" not in str(exc):
+                raise
+            datasets[task] = load_dataset(
+                spec["hf_path"], name=spec.get("hf_name"), split="test"
+            )
     return specs, datasets
 
 
@@ -160,7 +169,7 @@ def main():
     if args.dry_run:
         return
 
-    specs, datasets = load_examples(args.task_config)
+    needed_tasks = {x["task"] for x in queries}\n    specs, datasets = load_examples(args.task_config, needed_tasks)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8") as out:
         for model_id, hf_id in models.items():
