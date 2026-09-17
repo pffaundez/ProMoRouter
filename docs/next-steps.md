@@ -7,15 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-021 — Rerun the corrected inductive smoke test
+### T-022 — Generate the complete inductive evaluation dataset
 
-- Description: Pull the answer-extraction fix and rerun the one-query SmolLM2 smoke test for `step_back` and `self_consistency`.
-- Objective: Verify that self-consistency votes over extracted final answers while raw generations remain auditable.
-- Files involved: `experiments/generate_inductive_transformers.py`, `outputs/inductive_smoke.jsonl`.
-- Dependencies: commit `e1cefe0`; active virtual environment with Transformers and the cached model.
-- Completion criterion: the output has exactly two rows; `self_consistency` has `num_samples=3), a concise extracted `response`, and a `samples` field containing raw generations; no prompt transcript appears in `response`.
-- Command: `git pull origin fix/p0-routing-integrity` followed by the targeted smoke command in the status document.
-- State: in_progress
+- Description: Evaluate the 12-model × 6-prompt pool on all persisted test qids using the unified Transformers backend.
+- Objective: Produce held-out outcomes for unseen models, unseen prompts, and masked prompt–model combinations under a single comparable protocol.
+- Files involved: `experiments/generate_inductive_transformers.py`, `configs/inductive_candidates.yaml`, `outputs/inductive_inductive.jsonl`.
+- Dependencies: corrected smoke test; cached model access; sufficient GPU/storage.
+- Completion criterion: 72 actions per query are written without schema or runtime errors, with response, raw samples, performance, token counts, and latency fields.
+- Command: `python experiments/generate_inductive_transformers.py --source-qnorm ... --split-manifest ... --output outputs/inductive_full.jsonl`
+- State: pending
 - Priority: P0
 - Blocker: None.
 
@@ -75,3 +75,6 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `docs/inductive-evaluation-protocol.md`. Candidate IDs are confirmed by D-016; held-out interaction outcomes and cost-estimation details remain to be produced.
 
 - Update: first smoke run exposed and fixed over-eager loading of unselected tasks.
+
+
+- T-021 completed: corrected smoke test validated final-answer extraction and normalized self-consistency voting; the zero score was confirmed as a genuine model error against the HotpotQA gold.
