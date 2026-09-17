@@ -454,3 +454,26 @@ These are unresolved choices, not adopted decisions:
   validation scripts, and paper metrics description.
 - Status: active
 - Replaced by: —
+
+
+### D-020 — Use a unified backend for the inductive test
+
+- Date: 2026-09-17
+- Context: P0 logs were generated with vLLM, while the available environment
+  currently supports Transformers but has no vLLM installation.
+- Decision: Keep P0 unchanged. Create a separate inductive test split and
+  regenerate all 72 prompt-model actions (12 models x 6 prompts) with the same
+  sequential Transformers backend, including seen and unseen candidates.
+- Justification: A unified backend avoids mixing generated outcomes from
+  different inference engines within the inductive comparison. The separate
+  split prevents the result from appearing as an ad hoc join with P0.
+- Alternatives considered or discarded: Mixing P0 vLLM outcomes with only
+  unseen Transformers outcomes was rejected as the primary inductive table.
+  Installing an unverified vLLM stack in the current environment was deferred.
+- Consequences: The inductive results are a separate protocol and are not
+  numerically merged with P0. Backend, model revisions, decoding parameters,
+  token counts, and costs must be recorded.
+- Files affected: inductive generation harness, held-out dataset manifests,
+  `docs/inductive-evaluation-protocol.md`, and experiment documentation.
+- Status: active
+- Replaced by: —
