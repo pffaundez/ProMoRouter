@@ -7,26 +7,17 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-019 — Create the confirmed inductive candidate manifest
+### T-021 — Rerun the corrected inductive smoke test
 
-- Description: Record the three unseen model IDs and two unseen prompt IDs in
-  `configs/inductive_candidates.yaml`, with descriptions, source links, and
-  integration metadata.
-- Objective: Turn D-016 into a reproducible input contract without changing
-  the closed-pool P0/P1 datasets.
-- Files involved: `configs/inductive_candidates.yaml`,
-  `configs/model_descriptions.json`, `configs/prompt_strategies.yaml`,
-  and `docs/inductive-evaluation-protocol.md`.
-- Dependencies: D-016; verify model loading and license metadata before
-  execution.
-- Completion criterion: The manifest validates exactly 12 total model IDs and
-  6 total prompt IDs, with 9/4 seen and 3/2 unseen, and no unseen ID appears
-  in the training population.
-- Command: `python analysis/validate_inductive_candidates.py`
-- State: completed
+- Description: Pull the answer-extraction fix and rerun the one-query SmolLM2 smoke test for `step_back` and `self_consistency`.
+- Objective: Verify that self-consistency votes over extracted final answers while raw generations remain auditable.
+- Files involved: `experiments/generate_inductive_transformers.py`, `outputs/inductive_smoke.jsonl`.
+- Dependencies: commit `e1cefe0`; active virtual environment with Transformers and the cached model.
+- Completion criterion: the output has exactly two rows; `self_consistency` has `num_samples=3), a concise extracted `response`, and a `samples` field containing raw generations; no prompt transcript appears in `response`.
+- Command: `git pull origin fix/p0-routing-integrity` followed by the targeted smoke command in the status document.
+- State: in_progress
 - Priority: P0
 - Blocker: None.
-- Completed: `configs/inductive_candidates.yaml` created with 12 models total (9 seen, 3 unseen) and 6 prompts total (4 seen, 2 unseen). License and backend checks remain pending.
 
 ## Next
 
