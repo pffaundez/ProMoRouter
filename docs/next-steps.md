@@ -82,3 +82,5 @@ State: blocked. Priority: P2. Blocker: separate research-scope decision.
 ## Protocol references
 
 Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `docs/inductive-evaluation-protocol.md`. Candidate IDs are confirmed by D-016; held-out interaction outcomes and cost-estimation details remain to be produced.
+
+- Update: first smoke run exposed and fixed over-eager loading of unselected tasks.
