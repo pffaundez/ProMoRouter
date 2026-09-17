@@ -578,3 +578,11 @@ output artifacts were produced by the failed invocation.
 A second correction removed the remaining literal `\\n` token from the task
 loading line. The repository source now contains a valid newline and is ready
 for the targeted smoke rerun.
+
+
+## Inductive smoke output audit (2026-09-17)
+
+The first smoke JSONL was structurally produced, but its `response` field
+included the serialized prompt and assistant transcript because the generator
+decoded the full sequence. This is a metric-invalid output. The generator was
+fixed to decode only newly generated tokens; the smoke test must be rerun.
