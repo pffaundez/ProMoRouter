@@ -40,6 +40,19 @@ def normalize(s):
     return re.sub(r"[^a-z0-9\s]", "", s)
 
 
+def extract_final_answer(text):
+    """Extract a concise answer for scoring and self-consistency voting."""
+    lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
+    answer = lines[-1] if lines else ""
+    answer = re.sub(
+        r"^(?:the )?(?:final answer|answer|final)\s*:\s*",
+        "",
+        answer,
+        flags=re.IGNORECASE,
+    )
+    return answer.strip(" \\t.\\n")
+
+
 def f1(pred, gold):
     p, g = normalize(pred).split(), normalize(gold).split()
     if not p and not g:
@@ -186,7 +199,7 @@ def main():
                 query, context, gold = get_example(row["task"], row["qid"], specs, datasets)
                 for strategy in prompts:
                     runs = 3 if strategy == "self_consistency" else 1
-                    answers, tin, tout, latency = [], 0, 0, 0.0
+                    raw_answers, answers, tin, tout, latency = [], [], 0, 0, 0.0
                     for sample_id in range(runs):
                         text = prompt_text(strategy, query, context)
                         t0 = time.time()
@@ -195,7 +208,8 @@ def main():
                             seed=sample_id, max_new_tokens=args.max_new_tokens
                         )
                         latency += time.time() - t0
-                        answers.append(answer)
+                        raw_answers.append(answer)
+                        answers.append(extract_final_answer(answer))
                         tin += n_in
                         tout += n_out
                     response = answers[0] if runs == 1 else max(
@@ -209,7 +223,9 @@ def main():
                         "task": row["task"], "qid": row["qid"], "query_text": query,
                         "prompt": strategy, "model": model_id,
                         "hf_id": hf_id, "backend": "transformers",
-                        "response": response, "samples": answers if runs > 1 else None,
+                        "response": response,
+                        "raw_response": raw_answers[0] if runs == 1 else None,
+                        "samples": raw_answers if runs > 1 else None,
                         "performance": performance, "gold_source": "huggingface_datasets",
                         "input_tokens": tin, "output_tokens": tout,
                         "tokens_total": tin + tout, "cost_proxy_tokens": tin + tout, "latency_s": latency,
