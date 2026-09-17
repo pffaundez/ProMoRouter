@@ -194,7 +194,7 @@ def main():
                         "response": response, "samples": answers if runs > 1 else None,
                         "performance": performance, "gold_source": "huggingface_datasets",
                         "input_tokens": tin, "output_tokens": tout,
-                        "tokens_total": tin + tout, "latency_s": latency,
+                        "tokens_total": tin + tout, "cost_proxy_tokens": tin + tout, "latency_s": latency,
                         "num_samples": runs,
                     }
                     out.write(json.dumps(record, ensure_ascii=False) + "\n")
