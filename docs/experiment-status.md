@@ -606,3 +606,8 @@ Local verification showed that the form `The final answer is: ...` could retain 
 ## Inductive smoke extraction validated; gold alignment pending (2026-09-17)
 
 The corrected smoke output now has the expected structure: `self_consistency.response` is `Allie Goertz`, the three raw samples are preserved, and no prompt transcript appears in the scored response. However, both smoke rows report `performance=0.0`. This is not evidence of model quality yet; it indicates that the generator's dataset index/gold extraction or metric normalization must be audited for the selected HotpotQA qid before the 72-action inductive run. Full inductive generation is paused until this alignment check passes.
+
+
+## Inductive smoke gold audit resolved (2026-09-17)
+
+The selected HotpotQA example was audited with the same loader used by the generator. Its gold answer is `President Richard Nixon`, while SmolLM2 generated `Allie Goertz` for `step_back` and did not reach the correct answer under self-consistency. Therefore `performance=0.0` is a genuine model error on this smoke query, not a qid, gold-field, extraction, or metric bug. The structural smoke validation passed; these two rows remain diagnostic and are not paper results.
