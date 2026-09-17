@@ -45,7 +45,7 @@ def extract_final_answer(text):
     lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
     answer = lines[-1] if lines else ""
     answer = re.sub(
-        r"^(?:the )?(?:final answer|answer|final)\s*:\s*",
+        r"^(?:the )?(?:final answer|answer|final)\s*(?::|is)\s*",
         "",
         answer,
         flags=re.IGNORECASE,
