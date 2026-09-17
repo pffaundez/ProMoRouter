@@ -544,3 +544,14 @@ closed-pool results. The inductive protocol will use a separate test manifest
 and regenerate all 72 actions with one sequential Transformers backend, so seen
 and unseen candidates are comparable within that protocol. Results will not be
 numerically merged with P0.
+
+
+## Unified inductive generator added (2026-09-17)
+
+Added `experiments/generate_inductive_transformers.py`. It loads one candidate
+model at a time, evaluates the 12x6 action space on the persisted test qids,
+supports `--max-queries` and `--dry-run`, and records response, performance,
+tokens, latency, backend, and a token-count cost proxy. Hugging Face
+`datasets` was added to `requirements.txt`. The generator has not yet been
+run beyond smoke validation; monetary cost normalization remains a separate
+post-processing step.
