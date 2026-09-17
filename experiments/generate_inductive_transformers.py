@@ -132,8 +132,10 @@ def generate(model, tokenizer, text, sample=False, seed=0, max_new_tokens=256):
             temperature=0.7 if sample else 1.0,
             top_p=0.95,
         )
-    answer = tokenizer.decode(out[0], skip_special_tokens=True)
-    return answer, int(inputs["input_ids"].shape[-1]), int(out.shape[-1] - inputs["input_ids"].shape[-1])
+    prompt_len = int(inputs["input_ids"].shape[-1])
+    generated_tokens = out[0][prompt_len:]
+    answer = tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
+    return answer, prompt_len, int(generated_tokens.shape[-1])
 
 
 def main():
