@@ -596,3 +596,8 @@ The targeted SmolLM2 smoke output exposed a second correctness issue: for self_c
 ## Inductive prefix-normalization correction (2026-09-17)
 
 The rerun confirmed that transcript removal works, but exposed a second prefix form: `The final answer is ...` was not matched by the extractor, so self-consistency still voted on three distinct strings. The extractor now accepts both colon and `is` forms. The smoke output shown in the conversation remains diagnostic only and must be regenerated after commit f77591f.
+
+
+## Inductive prefix extraction finalization (2026-09-17)
+
+Local verification showed that the form `The final answer is: ...` could retain a leading colon after stripping `is`. The extractor now removes the complete `is`, `is:`, or colon prefix before self-consistency voting. Commit: ae8832b.
