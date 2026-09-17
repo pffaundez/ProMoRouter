@@ -591,3 +591,8 @@ fixed to decode only newly generated tokens; the smoke test must be rerun.
 ## Inductive answer-extraction fix (2026-09-17)
 
 The targeted SmolLM2 smoke output exposed a second correctness issue: for self_consistency, majority voting compared complete generated strings, so equivalent answers with different wrappers (for example, “The final answer is: ...” versus the bare answer) were treated as different classes. The generator now extracts the final non-empty line, removes common answer prefixes, uses that normalized answer for voting and scoring, and preserves the raw generated samples in the audit field. The previous smoke output must not be used for metrics; the targeted smoke test must be rerun after pulling commit e1cefe0.
+
+
+## Inductive prefix-normalization correction (2026-09-17)
+
+The rerun confirmed that transcript removal works, but exposed a second prefix form: `The final answer is ...` was not matched by the extractor, so self-consistency still voted on three distinct strings. The extractor now accepts both colon and `is` forms. The smoke output shown in the conversation remains diagnostic only and must be regenerated after commit f77591f.
