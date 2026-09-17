@@ -50,7 +50,7 @@ def extract_final_answer(text):
         answer,
         flags=re.IGNORECASE,
     )
-    return answer.strip(" \\t.\\n")
+    return answer.strip(" \t.\n")
 
 
 def f1(pred, gold):
