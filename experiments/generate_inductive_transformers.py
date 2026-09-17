@@ -169,7 +169,8 @@ def main():
     if args.dry_run:
         return
 
-    needed_tasks = {x["task"] for x in queries}\n    specs, datasets = load_examples(args.task_config, needed_tasks)
+    needed_tasks = {x["task"] for x in queries}
+    specs, datasets = load_examples(args.task_config, needed_tasks)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8") as out:
         for model_id, hf_id in models.items():
