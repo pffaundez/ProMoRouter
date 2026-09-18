@@ -477,3 +477,16 @@ These are unresolved choices, not adopted decisions:
   `docs/inductive-evaluation-protocol.md`, and experiment documentation.
 - Status: active
 - Replaced by: —
+
+
+### D-021 — Repair truncated inductive generations instead of rerunning the full sweep
+
+- **Date:** 2026-09-18
+- **Context/problem:** The completed 8,712-row inductive generation contained two empty extracted responses because generations ended at the 256-token cap.
+- **Decision:** Regenerate only the affected qids/model/prompt pairs with `--qids` and a 512-token cap, then replace those rows in a corrected full artifact.
+- **Justification:** The raw outputs showed valid reasoning truncated exactly at `The final answer is`; targeted regeneration preserves the completed sweep and avoids unnecessary recomputation.
+- **Alternatives considered or discarded:** Rerunning all 8,712 actions was discarded as wasteful; treating empty responses as valid was discarded because it would bias metrics.
+- **Consequences:** The final inductive artifact must record the two repaired rows and pass a post-merge integrity validator.
+- **Files affected:** `experiments/generate_inductive_transformers.py`, `outputs/inductive_full.jsonl`, repair JSONL files, and validation/docs artifacts.
+- **Status:** active
+- **Replaced by:** —
