@@ -161,6 +161,7 @@ def main():
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--max-new-tokens", type=int, default=256)
     ap.add_argument("--max-queries", type=int, default=None)
+    ap.add_argument("--qids", nargs="*", default=None, help="Restrict generation to specific query IDs.")
     ap.add_argument("--model-ids", nargs="*", default=None)
     ap.add_argument("--prompt-ids", nargs="*", default=None)
     ap.add_argument("--dry-run", action="store_true")
@@ -170,6 +171,9 @@ def main():
     manifest = json.loads(args.split_manifest.read_text(encoding="utf-8"))
     test_qids = set(manifest["test_qids"])
     queries = [x for x in qrows if x["qid"] in test_qids]
+    if args.qids:
+        wanted = set(args.qids)
+        queries = [x for x in queries if x["qid"] in wanted]
     if args.max_queries:
         queries = queries[: args.max_queries]
 
