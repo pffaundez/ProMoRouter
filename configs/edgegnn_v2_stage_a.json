@@ -1,0 +1,114 @@
+{
+  "protocol": "edgegnn_v2_stage_a_closed_pool",
+  "status": "design_only_not_implemented_or_executed",
+  "research_question": "Does heterogeneous message passing improve routing when the joint action space and all non-architectural controls are fixed?",
+  "data": {
+    "path": "data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl",
+    "queries": 797,
+    "prompts": 4,
+    "models": 9,
+    "actions_per_query": 36,
+    "split_manifest_template": "data/router/splits/qnorm_complete_seed{seed}.json",
+    "seeds": [1, 2, 3, 4, 5]
+  },
+  "embeddings": {
+    "query": "data/router/query_embeddings.pt",
+    "task": "data/router/task_embeddings.pt",
+    "prompt": "data/router/prompt_embeddings.pt",
+    "model": "data/router/model_embeddings.pt"
+  },
+  "graph": {
+    "unit": "independent_per_query_ego_graph",
+    "node_types": ["task", "query", "prompt", "model"],
+    "bidirectional_relations": [
+      "query_task",
+      "query_prompt_complete",
+      "query_model_complete"
+    ],
+    "reward_selected_topology": false,
+    "prompt_model_lattice": false,
+    "cross_query_message_passing": false
+  },
+  "arms": [
+    {
+      "id": "edgegnn_v2_full_mp",
+      "message_passing": true,
+      "num_layers": 2,
+      "scorer": "shared_edge_aware_compositional"
+    },
+    {
+      "id": "edgegnn_v2_no_mp",
+      "message_passing": false,
+      "num_layers": 0,
+      "scorer": "shared_edge_aware_compositional"
+    },
+    {
+      "id": "flat_mlp_shared_objective",
+      "message_passing": false,
+      "num_layers": 0,
+      "scorer": "flat_query_prompt_model_concatenation"
+    }
+  ],
+  "edge_representation": {
+    "definition": "shared_projection([x_prompt, x_model, x_prompt * x_model])",
+    "pair_id_lookup_allowed": false,
+    "realized_outcomes_allowed": false
+  },
+  "training": {
+    "lambdas": [0.1, 0.5, 0.9],
+    "reward": "P - lambda * C",
+    "objective": "mse + 0.10*kl + 0.05*ce - 0.005*entropy",
+    "temperature": 0.1,
+    "hidden_dim": 256,
+    "dropout": 0.1,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "max_epochs": 80,
+    "patience": 18,
+    "early_stopping": "validation_reward",
+    "deterministic": true
+  },
+  "routing_feature_policy": {
+    "allowed": [
+      "query_embedding",
+      "task_identity_or_embedding",
+      "prompt_identity_and_description_embedding",
+      "model_identity_and_description_embedding",
+      "compositional_prompt_model_edge_representation"
+    ],
+    "prohibited": [
+      "realized_reward",
+      "realized_performance",
+      "realized_cost",
+      "realized_tokens",
+      "validation_or_test_outcome_selected_topology",
+      "cross_query_message_passing"
+    ]
+  },
+  "gates": [
+    "static_and_synthetic_integrity_tests",
+    "cpu_smoke_all_arms",
+    "two_identical_seed1_repetitions_per_arm",
+    "seed1_integrity_gate",
+    "five_seed_sweep",
+    "validated_aggregation"
+  ],
+  "expected_aggregation": {
+    "source_json_files": 15,
+    "seed_level_rows": 45,
+    "aggregate_rows": 9,
+    "test_queries_per_result": 121
+  },
+  "deferred": [
+    "regression_plus_ranking_objective",
+    "graph_density_variants",
+    "factorized_prompt_model_router",
+    "inductive_seen_unseen_evaluation"
+  ],
+  "non_claims": [
+    "This manifest is not an implementation or result.",
+    "Stage A does not establish inductive generalization.",
+    "Frozen P0 results are not overwritten or numerically merged."
+  ]
+}

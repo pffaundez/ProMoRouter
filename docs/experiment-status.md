@@ -885,3 +885,32 @@ density variants and a factorized router are conditional follow-ups rather
 than simultaneous changes. The existing corrected inductive artifact remains
 a separate Stage C evaluation and must not be mixed with P0. Edge-GNN v2 has
 not been implemented or executed; all expected advantages remain hypotheses.
+
+
+## Edge-GNN v2 Stage A contract completed (2026-09-18)
+
+T-025 is complete. The pre-implementation contract is frozen in
+`docs/edgegnn-v2-stage-a.md` and
+`configs/edgegnn_v2_stage_a.json`. It resolves two implementation-level
+confounds found during repository inspection:
+
+- Stage A uses an independent ego graph per query, preventing message passing
+  between train, validation, or test queries.
+- The primary comparison is full message passing versus an otherwise matched
+  no-message-passing arm with the same edge-aware scorer. The Flat-MLP
+  architecture is retrained under the shared Stage A objective in a new output
+  namespace rather than reusing historical results trained with a different
+  loss.
+
+Every ego graph contains one query, its task, all four prompts, and all nine
+models, with complete bidirectional query--task, query--prompt, and
+query--model relations. It has no reward-selected top-k topology and no
+prompt--model lattice. The edge representation is compositional from prompt
+and model description embeddings; pair-ID lookups and all realized outcomes
+are prohibited.
+
+The contract fixes the repaired 797-query population, 36 actions, seeds 1--5,
+shared manifests, three lambdas, current Edge-GNN objective, validation-reward
+early stopping, deterministic execution, and expected aggregation cardinality
+(15 sources, 45 seed-level rows, nine aggregates). Edge-GNN v2 remains a
+proposal: no implementation, checkpoint, or result has been produced.

@@ -7,21 +7,19 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-025 — Specify Edge-GNN v2 Stage A implementation contract
+### T-026 — Implement Edge-GNN v2 Stage A and integrity tests
 
-- Description: Convert D-026 into a code-level plan for exactly three
-  controlled arms: GraphRouter-style message passing, matched no-message-
-  passing, and the existing Flat-MLP.
-- Objective: Isolate graph architectural benefit while holding the 36-action
-  space and the complete repaired P0 protocol fixed.
-- Dependencies: T-011 completed; D-026 active.
-- Completion criterion: A reviewed machine-readable experiment manifest plus a
-  precise topology/scorer/data-flow specification, leakage audit, expected
-  outputs, seed-1 smoke gate, and five-seed aggregation contract. No training
-  run is part of this task.
-- Constraints: Preserve frozen P0; do not alter the current objective in Stage
-  A; do not use realized reward, performance, cost, or tokens as features; keep
-  inductive evaluation separate; do not implement Stage B or density variants.
+- Description: Implement only the three arms and validation gates frozen in
+  `docs/edgegnn-v2-stage-a.md` and `configs/edgegnn_v2_stage_a.json`.
+- Objective: Produce a testable, deterministic Stage A implementation without
+  changing the frozen protocol or running the five-seed experiment.
+- Dependencies: T-025 completed; D-026 and D-027 active.
+- Completion criterion: Static/synthetic topology and leakage tests pass; all
+  arms pass a CPU smoke test; runner and aggregator dry runs validate expected
+  paths and cardinalities. No GPU training sweep is part of this task.
+- Constraints: Independent per-query graphs; exact matched full/no-MP scorer;
+  shared objective; no reward-selected topology; no realized outcomes as
+  features; new output namespace; preserve P0 and inductive artifacts.
 - State: in_progress
 - Priority: P1
 - Blocker: None.
@@ -63,6 +61,10 @@ State: blocked. Priority: P1. Blocker: review and explicit user approval.
 State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
+
+- T-025 completed: froze the Edge-GNN v2 Stage A topology, three-arm control
+  matrix, feature contract, deterministic gates, result schema, and aggregation
+  requirements before implementation.
 
 - T-011 completed: deterministic seed-1 reproduction passed; the canonical
   five-seed 2x2 routing ablation validated 20 sources, 60 seed-level rows, and

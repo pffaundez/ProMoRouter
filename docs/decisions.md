@@ -644,3 +644,36 @@ These are unresolved choices, not adopted decisions:
   implementation file exists yet.
 - **Status:** active
 - **Replaced by:** —
+
+
+### D-027 — Use per-query ego graphs and a matched no-message-passing control in Stage A
+
+- **Date:** 2026-09-18
+- **Context/problem:** A global complete query--candidate graph could allow
+  transductive influence between queries, and the historical Flat-MLP uses a
+  different objective from the current Edge-GNN. Either issue would weaken the
+  architectural comparison.
+- **Decision:** Build each Stage A example as an independent query ego graph
+  containing its task, all four prompts, and all nine models, with complete
+  bidirectional query--task, query--prompt, and query--model relations. Compare
+  full message passing against an otherwise identical zero-message-passing arm
+  using the same compositional edge-aware scorer. Retrain the Flat-MLP
+  architecture under the shared Stage A objective as an additional control in
+  a new output namespace; preserve its canonical P0 results unchanged.
+- **Justification:** Per-query graphs eliminate cross-query message paths and
+  label-selected topology. The no-message-passing arm isolates message passing
+  while holding scorer capacity and inputs fixed. A newly matched Flat-MLP run
+  avoids substituting historical numbers trained with a different objective.
+- **Alternatives considered or discarded:** A global train-plus-evaluation
+  graph was rejected due to transductive coupling. Reward-selected top-k edges
+  were rejected for Stage A because they confound architecture with topology.
+  A learned 36-pair lookup was rejected because it cannot represent unseen
+  prompt--model pairs later.
+- **Consequences:** `docs/edgegnn-v2-stage-a.md` and
+  `configs/edgegnn_v2_stage_a.json` are the binding pre-implementation
+  contract. Stage A remains closed-pool; objective and density variants remain
+  gated. No v2 result exists yet.
+- **Files affected:** `docs/edgegnn-v2-stage-a.md`,
+  `configs/edgegnn_v2_stage_a.json`, and continuity documentation.
+- **Status:** active
+- **Replaced by:** —
