@@ -640,3 +640,8 @@ The repair files were received and inspected. They must be merged into a correct
 ## Repair merge tool added (2026-09-18)
 
 Because the full inductive JSONL remains on the experiment host and was not available in this workspace, the merge was not executed remotely. Added `analysis/merge_inductive_repairs.py`, which deterministically replaces the two repair keys and validates 8,712 rows, 121 queries, 12 models, 6 prompts, unique keys, non-empty responses, and repaired performance values. The host-side command is the required finalization step.
+
+
+## Corrected inductive artifact finalized (2026-09-18)
+
+The host-side merge script completed successfully and produced `outputs/inductive_full_corrected.jsonl` with exactly 8,712 rows. The merge script itself validated replacement of both truncated keys, 121 queries, 12 models, 6 prompts, unique action keys, non-empty responses, non-null performance, and repaired performances (GSM8K 1.0; Alpaca 0.5). This is now the canonical inductive artifact for downstream analysis; the original `inductive_full.jsonl` remains the pre-repair audit artifact.
