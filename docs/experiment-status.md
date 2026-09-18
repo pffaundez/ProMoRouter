@@ -693,3 +693,27 @@ aggregate `analysis/inductive_aggregates.json`. Its source artifact SHA-256 is
 - No inferential test or multi-seed generation was performed. Apparent mean
   differences are verified descriptive facts, but explanations and
   generalization claims remain hypotheses.
+
+
+## Canonical P0 aggregator prepared (2026-09-18)
+
+T-010 implementation is prepared but has not been executed. Added
+`analysis/aggregate_p0_closed_pool_results.py` for the five seed-level JSON
+files from each of Edge-GNN, GraphRouter-direct, static/oracle baselines, and
+Flat-MLP. The script:
+
+- requires exactly seeds 1--5 and all three qnorm lambda keys;
+- normalizes the four distinct output schemas;
+- requires 121 test queries per method, seed, and lambda;
+- checks finite P/C/R values and `R = P - lambda * C` within `1e-8`;
+- checks learned-method split-manifest basenames against
+  `qnorm_complete_seed<seed>.json`;
+- checks stored action-count distributions when present;
+- records SHA-256 for all 20 source JSON files; and
+- writes standalone P0 JSON, CSV, and LaTeX aggregates using sample standard
+  deviation across seeds.
+
+The static-baseline result schema does not serialize `split_manifest`. The
+aggregator therefore validates its 121-query coverage but records that exact
+manifest identity requires the original generation command or a separate
+provenance artifact. No inductive artifact is read by this script.

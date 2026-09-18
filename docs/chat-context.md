@@ -106,3 +106,15 @@ T-023 is complete. The canonical inductive artifact is now `outputs/inductive_fu
 ### Updated handoff prompt
 
 > Continue ProMoRouter on `fix/p0-routing-integrity`. Read `docs/chat-context.md`, `docs/experiment-status.md`, `docs/decisions.md`, and `docs/next-steps.md`. T-023 is complete: `outputs/inductive_full_corrected.jsonl` is the canonical 8,712-row inductive artifact, validated for 121 queries, 12 models, 6 prompts, unique action keys, non-empty responses, and repaired truncation cases. Execute only T-024 first: build a machine-readable aggregation of performance and token-cost proxy by seen/unseen model, seen/unseen prompt, and masked prompt–model conditions. Keep inductive results separate from P0, distinguish verified facts from hypotheses, and update the continuity documents after analysis.
+
+
+## Latest handoff update (2026-09-18)
+
+T-024 is complete and persisted in GitHub. T-010 is the sole active task. The
+reproducible P0 aggregator is
+`analysis/aggregate_p0_closed_pool_results.py`; it has passed syntax compilation
+and CLI parsing but has not been executed against the five-seed outputs. Those
+outputs remain on the `morel` experiment host under the four `outputs/p0_*` and
+`outputs/p1_router_flat_mlp_qnorm/` directories. Run the documented T-010
+command on `morel`, then inspect and share the generated JSON, CSV, and LaTeX
+artifacts. Do not mix these closed-pool results with the inductive aggregates.

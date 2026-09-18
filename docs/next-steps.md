@@ -13,7 +13,10 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 - Objective: Produce the repaired P0 result tables without mixing in the standalone inductive aggregates.
 - Dependencies: Existing five-seed outputs verified.
 - Completion criterion: Machine-readable and paper-ready closed-pool tables regenerated from the repaired outputs.
-- State: pending
+- Command: `python analysis/aggregate_p0_closed_pool_results.py`
+- Prepared: reproducible aggregator added and syntax/CLI checks passed; execution on `morel` is still pending.
+- Expected outputs: `analysis/p0_closed_pool_aggregates.json`, `analysis/p0_closed_pool_table.csv`, and `analysis/p0_closed_pool_table.tex`.
+- State: in_progress
 - Priority: P0
 - Blocker: None.
 
