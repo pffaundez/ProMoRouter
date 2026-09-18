@@ -1,20 +1,18 @@
 # P1 - Experiment Repair next steps
 
-_Last updated: 2026-09-16_
+_Last updated: 2026-09-18_
 
 Read `docs/experiment-status.md`, `docs/decisions.md`, and
 `docs/methodology-scope.md` before continuing. Keep exactly one task in **Now**.
 
 ## Now
 
-### T-024 — Analyze the validated inductive artifact
+### T-010 — Generate canonical closed-pool result tables
 
-- Description: Compute coverage, performance, cost-proxy, and reward summaries for seen/unseen models, seen/unseen prompts, and masked prompt–model combinations from `outputs/inductive_full_corrected.jsonl`.
-- Objective: Determine which inductive claims are supported before drafting paper text.
-- Files involved: `outputs/inductive_full_corrected.jsonl`, analysis scripts, and the three continuity documents.
-- Dependencies: T-023 completed; corrected artifact available on the experiment host.
-- Completion criterion: machine-readable aggregate tables and explicit separation of verified results from hypotheses.
-- Command: create or run a dedicated aggregation script against the corrected artifact; do not mix these values with P0 results.
+- Description: Generate the canonical closed-pool tables from the existing verified five-seed outputs.
+- Objective: Produce the repaired P0 result tables without mixing in the standalone inductive aggregates.
+- Dependencies: Existing five-seed outputs verified.
+- Completion criterion: Machine-readable and paper-ready closed-pool tables regenerated from the repaired outputs.
 - State: pending
 - Priority: P0
 - Blocker: None.
@@ -35,9 +33,6 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: budgets fixed at 2 demonstrations for `fewshot` and 3 samples with majority aggregation for `self_consistency`.
 - Completed: deterministic execution config added at `configs/inductive_prompt_execution.yaml` (2 training shots; 3 samples, temperature 0.7, top-p 0.95, 256-token cap).
 - Blocker: The qnorm log has no response/completion text; a separate benchmark demonstration source is required before held-out generation.
-
-### T-010 — Generate canonical closed-pool result tables
-State: pending. Priority: P0. Dependency: existing five-seed outputs.
 
 ### T-011 — Recreate routing-configuration ablation
 State: pending. Priority: P1. Dependency: T-010.
@@ -84,3 +79,8 @@ Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `do
 
 
 - T-023 completed: merged both targeted repair rows and produced `outputs/inductive_full_corrected.jsonl` with 8,712 validated rows.
+
+- T-024 completed: added a reproducible inductive aggregator and generated
+  `analysis/inductive_aggregates.json`, with seen/unseen model, prompt, novelty
+  quadrant, task, and prompt-model summaries. Confirmed that no separate
+  seen-seen masked-pair manifest is available; no such result was invented.

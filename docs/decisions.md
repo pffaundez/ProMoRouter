@@ -1,6 +1,6 @@
 # P1 - Experiment Repair decision log
 
-_Last updated: 2026-09-11_
+_Last updated: 2026-09-18_
 
 This file records only decisions confirmed in the working conversation or
 verified in the repository. General progress, measurements, and task tracking
@@ -488,5 +488,33 @@ These are unresolved choices, not adopted decisions:
 - **Alternatives considered or discarded:** Rerunning all 8,712 actions was discarded as wasteful; treating empty responses as valid was discarded because it would bias metrics.
 - **Consequences:** The final inductive artifact must record the two repaired rows and pass a post-merge integrity validator.
 - **Files affected:** `experiments/generate_inductive_transformers.py`, `outputs/inductive_full.jsonl`, repair JSONL files, and validation/docs artifacts.
+- **Status:** active
+- **Replaced by:** —
+
+
+### D-022 — Aggregate inductive outcomes separately with realized token cost
+
+- **Date:** 2026-09-18
+- **Context/problem:** The corrected 8,712-row inductive artifact required a
+  reproducible summary without mixing its unified-Transformers outcomes with
+  the P0 vLLM results or treating realized costs as router inputs.
+- **Decision:** Aggregate inductive action outcomes in a standalone artifact.
+  Report raw input, output, and total token counts; use
+  `cost_proxy_tokens = tokens_total`; and derive P/C/R summaries with token cost
+  min-max normalized within each query across its 72 actions.
+- **Justification:** This preserves the existing query-normalized reward form,
+  makes the cost proxy auditable, and respects D-003 and D-020. All token,
+  performance, normalized-cost, and reward values remain post-execution
+  evaluation outcomes only.
+- **Alternatives considered or discarded:** Mixing the aggregates with P0 was
+  rejected. A monetary proxy was not introduced because no frozen model price
+  table is part of the corrected artifact. A separate masked-pair aggregate was
+  not fabricated because no seen-seen mask manifest exists.
+- **Consequences:** `analysis/inductive_aggregates.json` is the machine-readable
+  descriptive summary. It distinguishes seen/unseen nodes and the four novelty
+  quadrants, and explicitly records that masked seen-seen pairs are unavailable.
+  These summaries do not constitute router-selection results.
+- **Files affected:** `analysis/aggregate_inductive_results.py`,
+  `analysis/inductive_aggregates.json`, and continuity documentation.
 - **Status:** active
 - **Replaced by:** —

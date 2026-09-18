@@ -1,6 +1,6 @@
 # ProMoRouter experiment status
 
-_Last updated: 2026-09-11_
+_Last updated: 2026-09-18_
 
 ## Experiment objective
 
@@ -645,3 +645,51 @@ Because the full inductive JSONL remains on the experiment host and was not avai
 ## Corrected inductive artifact finalized (2026-09-18)
 
 The host-side merge script completed successfully and produced `outputs/inductive_full_corrected.jsonl` with exactly 8,712 rows. The merge script itself validated replacement of both truncated keys, 121 queries, 12 models, 6 prompts, unique action keys, non-empty responses, non-null performance, and repaired performances (GSM8K 1.0; Alpaca 0.5). This is now the canonical inductive artifact for downstream analysis; the original `inductive_full.jsonl` remains the pre-repair audit artifact.
+
+
+## Inductive action aggregates completed (2026-09-18)
+
+T-024 is complete. Added `analysis/aggregate_inductive_results.py` and ran it
+against the corrected artifact. The script revalidates the exact 8,712-row,
+121-query, 12-model, 6-prompt Cartesian coverage and writes the machine-readable
+aggregate `analysis/inductive_aggregates.json`. Its source artifact SHA-256 is
+`a9235215fd7d4d7f38a087696fb316dbe5fa39efaa8509eef02dfa3349477273`.
+
+### Verified descriptive results
+
+- Across all 8,712 actions, mean performance is 0.341804 and mean realized
+  token cost proxy is 288.795 tokens (2,515,978 tokens total).
+- Seen models average 0.343011 performance and 289.631 tokens; unseen models
+  average 0.338185 performance and 286.284 tokens. This is a descriptive
+  performance difference of -0.004826 for the selected unseen model set.
+- Seen prompts average 0.335602 performance and 238.898 tokens; unseen prompts
+  average 0.354209 performance and 388.588 tokens. The +0.018607 performance
+  difference comes with +149.691 mean tokens.
+- The unseen-prompt aggregate is heterogeneous: `self_consistency` has the
+  highest prompt mean performance (0.418787) and the highest mean token cost
+  (507.337), whereas `step_back` averages 0.289631 performance and 269.840
+  tokens.
+- The joint unseen-model/unseen-prompt quadrant averages 0.337349 performance
+  and 391.003 tokens, versus 0.334602 performance and 240.555 tokens for the
+  seen-model/seen-prompt quadrant.
+- The 36 prompt-model pairs involving at least one unseen node were not present
+  in the training pool. They average 0.349007 performance and 337.034 tokens,
+  versus 0.334602 and 240.555 for the 36 seen-model/seen-prompt pairs.
+- Using per-query min-max normalized token cost across all 72 actions, the
+  unobserved-node pairs have mean rewards 0.313729, 0.172619, and 0.031508 for
+  lambda 0.1, 0.5, and 0.9. The observed pairs have 0.314724, 0.235215, and
+  0.155706 respectively. These reward values belong only to the standalone
+  inductive Transformers protocol and are not merged with P0.
+
+### Limits and open hypotheses
+
+- These are action-outcome aggregates, not router selections. They do not by
+  themselves demonstrate that a trained router can identify the best unseen
+  action, nor do they provide selection frequency or oracle regret.
+- No manifest declares seen-model/seen-prompt pairs deliberately masked during
+  training. Therefore the separate masked-pair condition in the protocol
+  cannot be evaluated from this artifact; only pairs unobserved because they
+  contain an unseen node are identified.
+- No inferential test or multi-seed generation was performed. Apparent mean
+  differences are verified descriptive facts, but explanations and
+  generalization claims remain hypotheses.
