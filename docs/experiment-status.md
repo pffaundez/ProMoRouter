@@ -616,3 +616,8 @@ The selected HotpotQA example was audited with the same loader used by the gener
 ## Complete inductive generation finished (2026-09-18)
 
 The unified Transformers generation completed with exactly 8,712 rows: 121 test queries, 12 models, and 6 prompt strategies (72 actions per query). All rows use the Transformers backend and have non-null performance. Two rows have empty responses and require inspection before the dataset is accepted as complete; no aggregate inductive result should be reported yet.
+
+
+## Inductive empty-response audit (2026-09-18)
+
+The two empty `response` fields are caused by max-token truncation, not silent model failures. Both raw responses end at `The final answer is` with `output_tokens=256`: GSM8K/lLaMA-3.1-8B under `cot`, and Alpaca/lLaMA-3.1-70B under `step_back`. The generator now supports `--qids` for targeted regeneration. These rows must be regenerated with a larger token cap before final validation.
