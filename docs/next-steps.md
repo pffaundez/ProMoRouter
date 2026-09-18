@@ -7,17 +7,14 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-010 — Generate canonical closed-pool result tables
+### T-011 — Recreate routing-configuration ablation
 
-- Description: Generate the canonical closed-pool tables from the existing verified five-seed outputs.
-- Objective: Produce the repaired P0 result tables without mixing in the standalone inductive aggregates.
-- Dependencies: Existing five-seed outputs verified.
-- Completion criterion: Machine-readable and paper-ready closed-pool tables regenerated from the repaired outputs.
-- Command: `python analysis/aggregate_p0_closed_pool_results.py`
-- Prepared: reproducible aggregator added and syntax/CLI checks passed; execution on `morel` is still pending.
-- Expected outputs: `analysis/p0_closed_pool_aggregates.json`, `analysis/p0_closed_pool_table.csv`, and `analysis/p0_closed_pool_table.tex`.
-- State: in_progress
-- Priority: P0
+- Description: Recreate the routing-configuration ablation with the repaired population, shared manifests, reward contract, and no post-execution routing features.
+- Objective: Isolate which graph/routing components contribute beyond the Flat-MLP baseline.
+- Dependencies: T-010 completed.
+- Completion criterion: A documented ablation matrix, validated commands, and machine-readable outputs using the repaired protocol.
+- State: pending
+- Priority: P1
 - Blocker: None.
 
 ## Next
@@ -36,9 +33,6 @@ State: in_progress. Priority: P0. Dependency: T-019.
 - Completed: budgets fixed at 2 demonstrations for `fewshot` and 3 samples with majority aggregation for `self_consistency`.
 - Completed: deterministic execution config added at `configs/inductive_prompt_execution.yaml` (2 training shots; 3 samples, temperature 0.7, top-p 0.95, 256-token cap).
 - Blocker: The qnorm log has no response/completion text; a separate benchmark demonstration source is required before held-out generation.
-
-### T-011 — Recreate routing-configuration ablation
-State: pending. Priority: P1. Dependency: T-010.
 
 ### T-012 — Rewrite methodology and algorithm text
 State: pending. Priority: P1. Dependency: T-010 and D-013.
@@ -87,3 +81,7 @@ Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `do
   `analysis/inductive_aggregates.json`, with seen/unseen model, prompt, novelty
   quadrant, task, and prompt-model summaries. Confirmed that no separate
   seen-seen masked-pair manifest is available; no such result was invented.
+
+- T-010 completed: ran the canonical P0 aggregator on `morel`; validated 20
+  source files and produced JSON, CSV, and LaTeX five-seed tables for nine
+  methods without mixing inductive results.

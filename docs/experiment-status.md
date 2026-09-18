@@ -717,3 +717,40 @@ The static-baseline result schema does not serialize `split_manifest`. The
 aggregator therefore validates its 121-query coverage but records that exact
 manifest identity requires the original generation command or a separate
 provenance artifact. No inductive artifact is read by this script.
+
+
+## Canonical P0 five-seed tables completed (2026-09-18)
+
+T-010 is complete. The aggregator ran on `morel` and reported 20 validated
+source JSON files, 135 normalized seed-level result rows, and 27 aggregate rows
+covering nine methods and three lambda settings. The returned JSON, CSV, and
+LaTeX artifacts were cross-checked for matching method sets and exact numeric
+agreement. Every normalized result records 121 test queries and satisfies
+`R = P - lambda * C` within the configured `1e-8` tolerance.
+
+Canonical files:
+
+- `analysis/p0_closed_pool_aggregates.json`;
+- `analysis/p0_closed_pool_table.csv`; and
+- `analysis/p0_closed_pool_table.tex`.
+
+### Verified aggregate results
+
+- Flat-MLP has the highest learned-method reward at lambda 0.1
+  (`0.5195 +/- 0.0429`) and lambda 0.5 (`0.3866 +/- 0.0500`).
+- Edge-GNN has reward `0.4815 +/- 0.0368`, `0.3830 +/- 0.0357`, and
+  `0.3557 +/- 0.0343` for lambda 0.1, 0.5, and 0.9 respectively.
+- At lambda 0.9, Edge-GNN and Flat-MLP remain close: `0.3557` versus `0.3534`
+  mean reward. This does not establish a broad graph advantage.
+- Best Fixed Pair exceeds Edge-GNN at lambda 0.1 (`0.4894` versus `0.4815`),
+  while Edge-GNN exceeds it at lambda 0.5 (`0.3830` versus `0.3709`) and
+  lambda 0.9 (`0.3557` versus `0.3239`).
+- GraphRouter-direct has lower mean reward than both joint learned methods at
+  all three lambda settings: `0.4245`, `0.2895`, and `0.2322`.
+
+These facts were reproduced by the host-side aggregator and verified from the
+returned aggregate artifacts. The continuation workspace did not receive the
+20 raw seed JSON files, so it did not independently recompute their hashes or
+metrics. Static-baseline JSON files still lack serialized split-manifest paths;
+their exact split provenance remains supported by the recorded generation
+procedure rather than by fields inside those JSON files.

@@ -346,7 +346,7 @@ def write_csv(path: Path, aggregates):
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for row in aggregates:
             writer.writerow({field: row[field] for field in fields})

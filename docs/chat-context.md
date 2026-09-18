@@ -118,3 +118,16 @@ outputs remain on the `morel` experiment host under the four `outputs/p0_*` and
 `outputs/p1_router_flat_mlp_qnorm/` directories. Run the documented T-010
 command on `morel`, then inspect and share the generated JSON, CSV, and LaTeX
 artifacts. Do not mix these closed-pool results with the inductive aggregates.
+
+
+## Latest handoff update after T-010 (2026-09-18)
+
+T-010 is complete. The aggregator ran successfully on `morel`, validating 20
+seed source files and producing 135 normalized seed-level rows and 27 aggregate
+rows for nine methods. The canonical artifacts are
+`analysis/p0_closed_pool_aggregates.json`,
+`analysis/p0_closed_pool_table.csv`, and
+`analysis/p0_closed_pool_table.tex`. Their internal consistency was verified in
+the continuation workspace, but the 20 source JSON files were not independently
+rerun there. P0 and inductive results remain separate. The sole active task is
+now T-011.

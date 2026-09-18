@@ -1,0 +1,3199 @@
+{
+  "protocol": "p0_closed_pool_five_seed_qnorm",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "lambdas": {
+    "reward_qnorm_lam_01": 0.1,
+    "reward_qnorm_lam_05": 0.5,
+    "reward_qnorm_lam_09": 0.9
+  },
+  "expected_test_queries_per_seed": 121,
+  "reward_definition": "R = P - lambda * C",
+  "standard_deviation": "sample standard deviation across five seeds",
+  "separation": "P0 only; no inductive artifacts are read or aggregated",
+  "validation": {
+    "source_files": 20,
+    "normalized_seed_rows": 135,
+    "learned_method_manifests_checked": 45,
+    "reward_tolerance": 1e-08,
+    "static_baseline_manifest_limitation": "Baseline JSON files do not serialize split_manifest; their 121-query coverage is checked, but manifest identity must be established by the generation command or a separate provenance record."
+  },
+  "sources": [
+    {
+      "path": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "sha256": "a5e6eefad428b33d1506aa2e7083b00c2243f9369d09f51aae92bf77f2840ce2"
+    },
+    {
+      "path": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "sha256": "369774156f392ff7ab82fb167e90e8583204551c30fb176d631aa3edce521f8a"
+    },
+    {
+      "path": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "sha256": "541277aa0543db01c48155442e257ac0b9726afd7ae2b1c0d79ef34b49f61561"
+    },
+    {
+      "path": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "sha256": "e38a6b4eb49efa553bbc6e4000e51214b2bf610ebd0bcf76b18e1da7a8789e8e"
+    },
+    {
+      "path": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "sha256": "8b60d7158727af9886bfe2e33a71e5f543d738a42fd40d3ee07b567eb40c8b98"
+    },
+    {
+      "path": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed1.json",
+      "sha256": "4a37024b8046b67858878bcab990155fb7d8f573f206fe5af39dd907481c181a"
+    },
+    {
+      "path": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed2.json",
+      "sha256": "d65b773b97af2845c57e6c314cb5343aa69e537729dc38809cfde4a155bc7f7b"
+    },
+    {
+      "path": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed3.json",
+      "sha256": "23ed9e6aa438ed42ec6dca1c0812487c3e2c6a2a400fcbe36a0417d653b8b478"
+    },
+    {
+      "path": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed4.json",
+      "sha256": "7da825d89a5cb9a765e8470005bb685ba498932d6455455541ca218f46bcf047"
+    },
+    {
+      "path": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed5.json",
+      "sha256": "547c9d5f9fe5208247d7b7f5ebae01116cfaa6b665f63a7f583f23ec09073a95"
+    },
+    {
+      "path": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed1.json",
+      "sha256": "d60957bec946d7a8c509fee5e7115fdb4a6d04e022a311e158d0dafb57a64be0"
+    },
+    {
+      "path": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed2.json",
+      "sha256": "986f17222dba1c6f79f031f5146cf2f28e46c0673f7d3af0322c5c648b68039c"
+    },
+    {
+      "path": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed3.json",
+      "sha256": "72f400fb50e3db37b340ad9f960dfc88b248cd2c16e5cac9d16ab6f867e14aa0"
+    },
+    {
+      "path": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed4.json",
+      "sha256": "5ddce808e78618d832f1a1d0c21110d61b5b0d2cf4f73362c84dfa5b5f9b30ef"
+    },
+    {
+      "path": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed5.json",
+      "sha256": "5610fa89366f21465a30deef2bdfa58838e254f93d1d0ca2ec0c686a579abaff"
+    },
+    {
+      "path": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed1.json",
+      "sha256": "4831a89cd0bd324f67d7d4030ee69026954d2d19bf829a5c8e54415c12b0a7be"
+    },
+    {
+      "path": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed2.json",
+      "sha256": "271efbb72fe3c1cc7d1bfbfda3d2a64fb32a2e8ff3c2b50782ec2d2f1bd01267"
+    },
+    {
+      "path": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed3.json",
+      "sha256": "b0fe349c7b9fa3ddf80d2b55eee4775574c2c420a78711f230bb80b5d7addc66"
+    },
+    {
+      "path": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed4.json",
+      "sha256": "9836e7c43d3019356723bf95e822d8d71a64c6ceef993d0dcef72fe2963399cd"
+    },
+    {
+      "path": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed5.json",
+      "sha256": "c4177b9bf597fea2f9002e76a6f40946c6f73f0fd6c06058acbeebfbae8799e0"
+    }
+  ],
+  "seed_results": [
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.498272659748874,
+      "C": 0.38958707031024054,
+      "R": 0.4593139527178499,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4172634334730539,
+      "C": 0.1169296745080105,
+      "R": 0.3587985962190486,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4106752610636374,
+      "C": 0.1072924741808525,
+      "R": 0.31411203430086987,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5316012136312419,
+      "C": 0.5709424893899133,
+      "R": 0.4745069646922508,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44032241035104425,
+      "C": 0.08746701539398388,
+      "R": 0.39658890265405244,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3808491664847466,
+      "C": 0.04775441579848471,
+      "R": 0.3378701922661105,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.48453952066022415,
+      "C": 0.3366144322407189,
+      "R": 0.45087807743615227,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.39297249935803025,
+      "C": 0.11889656608706267,
+      "R": 0.33352421631449886,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3833915382957554,
+      "C": 0.04206376907732505,
+      "R": 0.3455341461261629,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.514375201922117,
+      "C": 0.35702793590960125,
+      "R": 0.47867240833115704,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5046814751994609,
+      "C": 0.17256087980828583,
+      "R": 0.4184010352953179,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4631450347592041,
+      "C": 0.07104133851199051,
+      "R": 0.39920783009841293,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5996932046603711,
+      "C": 0.5542212748238293,
+      "R": 0.5442710771779881,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5111676397363387,
+      "C": 0.2065651618729259,
+      "R": 0.4078850587998762,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4346080613500092,
+      "C": 0.05880904973190137,
+      "R": 0.381679916591298,
+      "n": 121,
+      "source": "outputs/p0_router_edgegnn_qnorm/router_edgegnn_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.40665954529992804,
+      "C": 0.39034003646243826,
+      "R": 0.3676255416536842,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.36421002472235153,
+      "C": 0.2244172537245226,
+      "R": 0.25200139786009024,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.31568890951635425,
+      "C": 0.10070212526017923,
+      "R": 0.22505699678219293,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4221294930835893,
+      "C": 0.37211806225890587,
+      "R": 0.3849176868576987,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3433325250810089,
+      "C": 0.17196512055700675,
+      "R": 0.25734996480250555,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.2831794977157323,
+      "C": 0.07768984158640758,
+      "R": 0.21325864028796546,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4477863152596084,
+      "C": 0.3992455943587644,
+      "R": 0.4078617558237319,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3466229162309781,
+      "C": 0.23197736742536823,
+      "R": 0.23063423251829396,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.2627289778868522,
+      "C": 0.07474605569759736,
+      "R": 0.19545752775901454,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5123680783204796,
+      "C": 0.43678534018599297,
+      "R": 0.4686895443018803,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.46264210204817047,
+      "C": 0.23520045980333912,
+      "R": 0.3450418721465009,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3892961692465238,
+      "C": 0.14535070684438278,
+      "R": 0.2584805330865793,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5224932789309951,
+      "C": 0.2920538668235964,
+      "R": 0.49328789224863545,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.49353945073633154,
+      "C": 0.261643506178617,
+      "R": 0.36271769764702305,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.38144697310510745,
+      "C": 0.12520541341528912,
+      "R": 0.26876210103134723,
+      "n": 121,
+      "source": "outputs/p0_router_model_only_direct_qnorm/router_model_only_direct_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.45291844842114853,
+      "C": 0.5573938774210355,
+      "R": 0.39717906067904507,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_model": "llama3.1-70b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5125688195448989,
+      "C": 0.5549485212009246,
+      "R": 0.45707396742480666,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_pair": [
+          "llama3.1-70b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.3824227270208623,
+      "C": 0.7516587533667276,
+      "R": 0.3072568516841894,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.728988607101981,
+      "C": 0.153366326973729,
+      "R": 0.7136519744046081,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5902850205689735,
+      "C": 0.3097652123487221,
+      "R": 0.5593084993341013,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.24834782608962086,
+      "C": 0.03332693250553363,
+      "R": 0.24501513283906756,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3373962441743774,
+      "C": 0.1257851150919574,
+      "R": 0.27450368662839875,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_model": "qwen2.5-7b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4120679083235949,
+      "C": 0.1112298504952399,
+      "R": 0.356452983075975,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3824227270208623,
+      "C": 0.7516587533667276,
+      "R": 0.006593350337498304,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.7156060290271082,
+      "C": 0.10904627626597503,
+      "R": 0.6610828908941206,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5507206250308205,
+      "C": 0.17466240562080587,
+      "R": 0.46338942222041757,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.24834782608962086,
+      "C": 0.03332693250553363,
+      "R": 0.23168435983685406,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3013909113293371,
+      "C": 0.09304209848455527,
+      "R": 0.21765302269323733,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_model": "qwen2.5-14b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4120679083235949,
+      "C": 0.1112298504952399,
+      "R": 0.31196104287787907,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3824227270208623,
+      "C": 0.7516587533667276,
+      "R": -0.2940701510091928,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.6884884761918523,
+      "C": 0.06923409437988697,
+      "R": 0.6261777912499534,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.5162221156663737,
+      "C": 0.12480172585201105,
+      "R": 0.40390056239956384,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.24834782608962086,
+      "C": 0.03332693250553363,
+      "R": 0.21835358683464068,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.47416149138416425,
+      "C": 0.5690691705296187,
+      "R": 0.41725457433120244,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_model": "llama3.1-70b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5316012136312419,
+      "C": 0.5709424893899133,
+      "R": 0.4745069646922508,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_pair": [
+          "llama3.1-70b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.39982286033754444,
+      "C": 0.7625380968787117,
+      "R": 0.3235690506496734,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.759246321057244,
+      "C": 0.18525238838404984,
+      "R": 0.7407210822188388,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6008651418058801,
+      "C": 0.3131567763542266,
+      "R": 0.5695494641704572,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.2538069578132156,
+      "C": 0.03450946348951276,
+      "R": 0.25035601146426434,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.36175057612156747,
+      "C": 0.13171777164891968,
+      "R": 0.29589169029710766,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_model": "qwen2.5-7b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44516715444252336,
+      "C": 0.11879649841272961,
+      "R": 0.38576890523615864,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.39982286033754444,
+      "C": 0.7625380968787117,
+      "R": 0.018553811898188673,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.7428280430364091,
+      "C": 0.12627915855956126,
+      "R": 0.6796884637566287,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5613321456877769,
+      "C": 0.18067952625265538,
+      "R": 0.4709923825614491,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.2538069578132156,
+      "C": 0.03450946348951276,
+      "R": 0.23655222606845924,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.32654125913485993,
+      "C": 0.08721871449600381,
+      "R": 0.2480444160884566,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_model": "qwen2.5-14b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.44516715444252336,
+      "C": 0.11879649841272961,
+      "R": 0.33825030587106664,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.39982286033754444,
+      "C": 0.7625380968787117,
+      "R": -0.28646142685329595,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.7208360048438026,
+      "C": 0.09857323675078525,
+      "R": 0.6321200917680962,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.5252585184008595,
+      "C": 0.13209867764010283,
+      "R": 0.40636970852476695,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.2538069578132156,
+      "C": 0.03450946348951276,
+      "R": 0.2227484406726541,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.44275889746405517,
+      "C": 0.5584953344766848,
+      "R": 0.3869093640163869,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_model": "llama3.1-70b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5065748876834022,
+      "C": 0.555637120977924,
+      "R": 0.45101117558560994,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_pair": [
+          "llama3.1-70b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.36530651470940506,
+      "C": 0.766035930721146,
+      "R": 0.2887029216372901,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.7239258950949885,
+      "C": 0.19504699058615022,
+      "R": 0.7044211960363729,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5606363193955547,
+      "C": 0.3301136261387277,
+      "R": 0.5276249567816824,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.24461939377073708,
+      "C": 0.03357096563287805,
+      "R": 0.24126229720744924,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3198437737670258,
+      "C": 0.13073974426289353,
+      "R": 0.254473901635579,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_model": "qwen2.5-7b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3991029635787537,
+      "C": 0.11856436572700534,
+      "R": 0.339820780715251,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.36530651470940506,
+      "C": 0.766035930721146,
+      "R": -0.01771145065116807,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.7099689144221,
+      "C": 0.13518175315448547,
+      "R": 0.642378037844857,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5237532637667253,
+      "C": 0.19219514447253813,
+      "R": 0.4276556915304563,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.24461939377073708,
+      "C": 0.03357096563287805,
+      "R": 0.22783391095429795,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.2882103337105898,
+      "C": 0.08258852002671627,
+      "R": 0.21388066568654523,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_model": "qwen2.5-14b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3991029635787537,
+      "C": 0.11856436572700534,
+      "R": 0.29239503442444886,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.36530651470940506,
+      "C": 0.766035930721146,
+      "R": -0.32412582293962655,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.6924923804128842,
+      "C": 0.10891616056170511,
+      "R": 0.5944678359073495,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4719035318105199,
+      "C": 0.11189811267488939,
+      "R": 0.3711952304031196,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.24461939377073708,
+      "C": 0.03357096563287805,
+      "R": 0.21440552470114682,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.49742526863326664,
+      "C": 0.5693506754384694,
+      "R": 0.4404902010894198,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_model": "llama3.1-70b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5766262460166546,
+      "C": 0.5643517323465321,
+      "R": 0.5201910727820014,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_pair": [
+          "llama3.1-70b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.41682185872517696,
+      "C": 0.7431674034093948,
+      "R": 0.34250511838423736,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.8096949692617438,
+      "C": 0.19769280160784916,
+      "R": 0.7899256891009586,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6538456693106596,
+      "C": 0.3259904725299923,
+      "R": 0.62124662205766,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.25492499210818315,
+      "C": 0.03335842295037581,
+      "R": 0.25158914981314556,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.38447860956352936,
+      "C": 0.13373416243702352,
+      "R": 0.3176115283450176,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_model": "qwen2.5-7b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44248164795378897,
+      "C": 0.1229139237319087,
+      "R": 0.38102468608783463,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.41682185872517696,
+      "C": 0.7431674034093948,
+      "R": 0.04523815702047937,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.7931040685822244,
+      "C": 0.13397464725514804,
+      "R": 0.7261167449546503,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.6202478065981212,
+      "C": 0.2022123428739125,
+      "R": 0.5191416351611648,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.25492499210818315,
+      "C": 0.03335842295037581,
+      "R": 0.23824578063299534,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.35541611799749545,
+      "C": 0.09114837988425747,
+      "R": 0.27338257610166367,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_model": "qwen2.5-14b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.44248164795378897,
+      "C": 0.1229139237319087,
+      "R": 0.3318591165950711,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.41682185872517696,
+      "C": 0.7431674034093948,
+      "R": -0.2520288043432787,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.7652783929,
+      "C": 0.09154309661312636,
+      "R": 0.682889605948186,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.577563288917788,
+      "C": 0.13729825817494276,
+      "R": 0.4539948565603392,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.25492499210818315,
+      "C": 0.03335842295037581,
+      "R": 0.22490241145284479,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5364975391854968,
+      "C": 0.5599088362287771,
+      "R": 0.4805066555626194,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_model": "llama3.1-70b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5996932046603711,
+      "C": 0.5542212748238293,
+      "R": 0.5442710771779881,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_pair": [
+          "llama3.1-70b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4351739632012713,
+      "C": 0.7438077348986872,
+      "R": 0.3607931897114026,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.8103331226817513,
+      "C": 0.19540771956707903,
+      "R": 0.7907923507250432,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6584388921253633,
+      "C": 0.3354210133573016,
+      "R": 0.6248967907896334,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.256548364766658,
+      "C": 0.03310416288457505,
+      "R": 0.2532379484782004,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3952666604715019,
+      "C": 0.13110931506016013,
+      "R": 0.32971200294142156,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_model": "qwen2.5-7b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44920733363249155,
+      "C": 0.11585852056431772,
+      "R": 0.3912780733503326,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4351739632012713,
+      "C": 0.7438077348986872,
+      "R": 0.06327009575192777,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.7987850068905367,
+      "C": 0.14924647540037944,
+      "R": 0.7241617691903464,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.6102278743947152,
+      "C": 0.17213404739611196,
+      "R": 0.5241608506966591,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.256548364766658,
+      "C": 0.03310416288457505,
+      "R": 0.2399962833243704,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.36252996221665074,
+      "C": 0.08255845060067957,
+      "R": 0.288227356676039,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_model": "qwen2.5-14b"
+      }
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.44920733363249155,
+      "C": 0.11585852056431772,
+      "R": 0.3449346651246058,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {
+        "selected_pair": [
+          "qwen2.5-7b",
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4351739632012713,
+      "C": 0.7438077348986872,
+      "R": -0.2342529982075472,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.7665958412885894,
+      "C": 0.10416239367717409,
+      "R": 0.6728496869791325,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.5832736752816521,
+      "C": 0.12835222585664433,
+      "R": 0.4677566720106719,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.256548364766658,
+      "C": 0.03310416288457505,
+      "R": 0.22675461817054035,
+      "n": 121,
+      "source": "outputs/p0_baselines_qnorm/baselines_qnorm_test_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5519477998325244,
+      "C": 0.47612337647220104,
+      "R": 0.5043354621853043,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.47826054457797446,
+      "C": 0.16782672677411248,
+      "R": 0.3943471811909182,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.36637164184840454,
+      "C": 0.061859561243826584,
+      "R": 0.31069803672896057,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed1.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.532299248770507,
+      "C": 0.536028844595283,
+      "R": 0.47869636431097873,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3995733061412525,
+      "C": 0.054939651287897094,
+      "R": 0.37210348049730396,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.39615233067876476,
+      "C": 0.05436858970396742,
+      "R": 0.34722059994519405,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed2.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5524454581982267,
+      "C": 0.4952939271430984,
+      "R": 0.5029160654839168,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.371464373123602,
+      "C": 0.12528480790850813,
+      "R": 0.30882196916934795,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.40138359118112626,
+      "C": 0.0618068010871919,
+      "R": 0.3457574702026535,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed3.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5593737997546349,
+      "C": 0.3907210545926506,
+      "R": 0.5203016942953699,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5034662343949826,
+      "C": 0.13343142930991192,
+      "R": 0.43675051974002665,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4478487063871587,
+      "C": 0.07455885173999978,
+      "R": 0.3807457398211589,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed4.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6338328672901747,
+      "C": 0.4239630112563201,
+      "R": 0.5914365661645428,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.45168738630693944,
+      "C": 0.0618061221956995,
+      "R": 0.42078432520908965,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed5.json",
+      "extra": {}
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.44102835564906,
+      "C": 0.06470108270725823,
+      "R": 0.3827973812125276,
+      "n": 121,
+      "source": "outputs/p1_router_flat_mlp_qnorm/flat_mlp_qnorm_results_seed5.json",
+      "extra": {}
+    }
+  ],
+  "aggregates": [
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4807523290176263,
+      "P_std": 0.037573861470017886,
+      "P_by_seed": [
+        0.45291844842114853,
+        0.47416149138416425,
+        0.44275889746405517,
+        0.49742526863326664,
+        0.5364975391854968
+      ],
+      "C_mean": 0.562843578818917,
+      "C_std": 0.0058804652626462135,
+      "C_by_seed": [
+        0.5573938774210355,
+        0.5690691705296187,
+        0.5584953344766848,
+        0.5693506754384694,
+        0.5599088362287771
+      ],
+      "R_mean": 0.4244679711357347,
+      "R_std": 0.03743131276452616,
+      "R_by_seed": [
+        0.39717906067904507,
+        0.41725457433120244,
+        0.3869093640163869,
+        0.4404902010894198,
+        0.4805066555626194
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_model": "llama3.1-70b"
+        },
+        {
+          "selected_model": "llama3.1-70b"
+        },
+        {
+          "selected_model": "llama3.1-70b"
+        },
+        {
+          "selected_model": "llama3.1-70b"
+        },
+        {
+          "selected_model": "llama3.1-70b"
+        }
+      ]
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.35974717281960034,
+      "P_std": 0.031500543084666564,
+      "P_by_seed": [
+        0.3373962441743774,
+        0.36175057612156747,
+        0.3198437737670258,
+        0.38447860956352936,
+        0.3952666604715019
+      ],
+      "C_mean": 0.13061722170019086,
+      "C_std": 0.0029382372127350685,
+      "C_by_seed": [
+        0.1257851150919574,
+        0.13171777164891968,
+        0.13073974426289353,
+        0.13373416243702352,
+        0.13110931506016013
+      ],
+      "R_mean": 0.2944385619695049,
+      "R_std": 0.030732258788803365,
+      "R_by_seed": [
+        0.27450368662839875,
+        0.29589169029710766,
+        0.254473901635579,
+        0.3176115283450176,
+        0.32971200294142156
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_model": "qwen2.5-7b"
+        },
+        {
+          "selected_model": "qwen2.5-7b"
+        },
+        {
+          "selected_model": "qwen2.5-7b"
+        },
+        {
+          "selected_model": "qwen2.5-7b"
+        },
+        {
+          "selected_model": "qwen2.5-7b"
+        }
+      ]
+    },
+    {
+      "method": "Best Fixed Model",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.3268177168777866,
+      "P_std": 0.03252061622282097,
+      "P_by_seed": [
+        0.3013909113293371,
+        0.32654125913485993,
+        0.2882103337105898,
+        0.35541611799749545,
+        0.36252996221665074
+      ],
+      "C_mean": 0.08731123269844247,
+      "C_std": 0.004808015012724264,
+      "C_by_seed": [
+        0.09304209848455527,
+        0.08721871449600381,
+        0.08258852002671627,
+        0.09114837988425747,
+        0.08255845060067957
+      ],
+      "R_mean": 0.24823760744918838,
+      "R_std": 0.032967040687017356,
+      "R_by_seed": [
+        0.21765302269323733,
+        0.2480444160884566,
+        0.21388066568654523,
+        0.27338257610166367,
+        0.288227356676039
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_model": "qwen2.5-14b"
+        },
+        {
+          "selected_model": "qwen2.5-14b"
+        },
+        {
+          "selected_model": "qwen2.5-14b"
+        },
+        {
+          "selected_model": "qwen2.5-14b"
+        },
+        {
+          "selected_model": "qwen2.5-14b"
+        }
+      ]
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5454128743073137,
+      "P_std": 0.04092221873740814,
+      "P_by_seed": [
+        0.5125688195448989,
+        0.5316012136312419,
+        0.5065748876834022,
+        0.5766262460166546,
+        0.5996932046603711
+      ],
+      "C_mean": 0.5600202277478247,
+      "C_std": 0.007358998211981664,
+      "C_by_seed": [
+        0.5549485212009246,
+        0.5709424893899133,
+        0.555637120977924,
+        0.5643517323465321,
+        0.5542212748238293
+      ],
+      "R_mean": 0.4894108515325314,
+      "R_std": 0.040924935576032474,
+      "R_by_seed": [
+        0.45707396742480666,
+        0.4745069646922508,
+        0.45101117558560994,
+        0.5201910727820014,
+        0.5442710771779881
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_pair": [
+            "llama3.1-70b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "llama3.1-70b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "llama3.1-70b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "llama3.1-70b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "llama3.1-70b",
+            "selfcheck"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4296054015862305,
+      "P_std": 0.0225286706596372,
+      "P_by_seed": [
+        0.4120679083235949,
+        0.44516715444252336,
+        0.3991029635787537,
+        0.44248164795378897,
+        0.44920733363249155
+      ],
+      "C_mean": 0.11747263178624026,
+      "C_std": 0.004304934295786271,
+      "C_by_seed": [
+        0.1112298504952399,
+        0.11879649841272961,
+        0.11856436572700534,
+        0.1229139237319087,
+        0.11585852056431772
+      ],
+      "R_mean": 0.3708690856931104,
+      "R_std": 0.021871721900957635,
+      "R_by_seed": [
+        0.356452983075975,
+        0.38576890523615864,
+        0.339820780715251,
+        0.38102468608783463,
+        0.3912780733503326
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "Best Fixed Pair",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4296054015862305,
+      "P_std": 0.0225286706596372,
+      "P_by_seed": [
+        0.4120679083235949,
+        0.44516715444252336,
+        0.3991029635787537,
+        0.44248164795378897,
+        0.44920733363249155
+      ],
+      "C_mean": 0.11747263178624026,
+      "C_std": 0.004304934295786271,
+      "C_by_seed": [
+        0.1112298504952399,
+        0.11879649841272961,
+        0.11856436572700534,
+        0.1229139237319087,
+        0.11585852056431772
+      ],
+      "R_mean": 0.3238800329786143,
+      "R_std": 0.02148741208325355,
+      "R_by_seed": [
+        0.31196104287787907,
+        0.33825030587106664,
+        0.29239503442444886,
+        0.3318591165950711,
+        0.3449346651246058
+      ],
+      "selection_metadata_by_seed": [
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        },
+        {
+          "selected_pair": [
+            "qwen2.5-7b",
+            "selfcheck"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5256963601245657,
+      "P_std": 0.04495696190865667,
+      "P_by_seed": [
+        0.498272659748874,
+        0.5316012136312419,
+        0.48453952066022415,
+        0.514375201922117,
+        0.5996932046603711
+      ],
+      "C_mean": 0.4416786405348606,
+      "C_std": 0.11213022395859278,
+      "C_by_seed": [
+        0.38958707031024054,
+        0.5709424893899133,
+        0.3366144322407189,
+        0.35702793590960125,
+        0.5542212748238293
+      ],
+      "R_mean": 0.4815284960710796,
+      "R_std": 0.03683417137295144,
+      "R_by_seed": [
+        0.4593139527178499,
+        0.4745069646922508,
+        0.45087807743615227,
+        0.47867240833115704,
+        0.5442710771779881
+      ]
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4532814916235856,
+      "P_std": 0.052666823768341295,
+      "P_by_seed": [
+        0.4172634334730539,
+        0.44032241035104425,
+        0.39297249935803025,
+        0.5046814751994609,
+        0.5111676397363387
+      ],
+      "C_mean": 0.14048385953405376,
+      "C_std": 0.048029340984587145,
+      "C_by_seed": [
+        0.1169296745080105,
+        0.08746701539398388,
+        0.11889656608706267,
+        0.17256087980828583,
+        0.2065651618729259
+      ],
+      "R_mean": 0.3830395618565588,
+      "R_std": 0.035674609378925345,
+      "R_by_seed": [
+        0.3587985962190486,
+        0.39658890265405244,
+        0.33352421631449886,
+        0.4184010352953179,
+        0.4078850587998762
+      ]
+    },
+    {
+      "method": "Edge-GNN",
+      "family": "learned_joint",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4145338123906705,
+      "P_std": 0.03494785914544043,
+      "P_by_seed": [
+        0.4106752610636374,
+        0.3808491664847466,
+        0.3833915382957554,
+        0.4631450347592041,
+        0.4346080613500092
+      ],
+      "C_mean": 0.06539220946011083,
+      "C_std": 0.02591423706509333,
+      "C_by_seed": [
+        0.1072924741808525,
+        0.04775441579848471,
+        0.04206376907732505,
+        0.07104133851199051,
+        0.05880904973190137
+      ],
+      "R_mean": 0.35568082387657085,
+      "R_std": 0.03434636453523254,
+      "R_by_seed": [
+        0.31411203430086987,
+        0.3378701922661105,
+        0.3455341461261629,
+        0.39920783009841293,
+        0.381679916591298
+      ]
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5659798347692135,
+      "P_std": 0.039249627220364985,
+      "P_by_seed": [
+        0.5519477998325244,
+        0.532299248770507,
+        0.5524454581982267,
+        0.5593737997546349,
+        0.6338328672901747
+      ],
+      "C_mean": 0.46442604281191063,
+      "C_std": 0.057633101018734534,
+      "C_by_seed": [
+        0.47612337647220104,
+        0.536028844595283,
+        0.4952939271430984,
+        0.3907210545926506,
+        0.4239630112563201
+      ],
+      "R_mean": 0.5195372304880225,
+      "R_std": 0.042852748194696096,
+      "R_by_seed": [
+        0.5043354621853043,
+        0.47869636431097873,
+        0.5029160654839168,
+        0.5203016942953699,
+        0.5914365661645428
+      ]
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4408903689089502,
+      "P_std": 0.05467154909568892,
+      "P_by_seed": [
+        0.47826054457797446,
+        0.3995733061412525,
+        0.371464373123602,
+        0.5034662343949826,
+        0.45168738630693944
+      ],
+      "C_mean": 0.10865774749522583,
+      "C_std": 0.048661769416284605,
+      "C_by_seed": [
+        0.16782672677411248,
+        0.054939651287897094,
+        0.12528480790850813,
+        0.13343142930991192,
+        0.0618061221956995
+      ],
+      "R_mean": 0.3865614951613373,
+      "R_std": 0.05000806255263602,
+      "R_by_seed": [
+        0.3943471811909182,
+        0.37210348049730396,
+        0.30882196916934795,
+        0.43675051974002665,
+        0.42078432520908965
+      ]
+    },
+    {
+      "method": "Flat-MLP",
+      "family": "learned_no_graph",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.41055692514890285,
+      "P_std": 0.0337756076293478,
+      "P_by_seed": [
+        0.36637164184840454,
+        0.39615233067876476,
+        0.40138359118112626,
+        0.4478487063871587,
+        0.44102835564906
+      ],
+      "C_mean": 0.06345897729644878,
+      "C_std": 0.007291656242437615,
+      "C_by_seed": [
+        0.061859561243826584,
+        0.05436858970396742,
+        0.0618068010871919,
+        0.07455885173999978,
+        0.06470108270725823
+      ],
+      "R_mean": 0.3534438455820989,
+      "R_std": 0.029715470761405172,
+      "R_by_seed": [
+        0.31069803672896057,
+        0.34722059994519405,
+        0.3457574702026535,
+        0.3807457398211589,
+        0.3827973812125276
+      ]
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4622873421789201,
+      "P_std": 0.05256001180546793,
+      "P_by_seed": [
+        0.40665954529992804,
+        0.4221294930835893,
+        0.4477863152596084,
+        0.5123680783204796,
+        0.5224932789309951
+      ],
+      "C_mean": 0.37810858001793957,
+      "C_std": 0.05357388368365485,
+      "C_by_seed": [
+        0.39034003646243826,
+        0.37211806225890587,
+        0.3992455943587644,
+        0.43678534018599297,
+        0.2920538668235964
+      ],
+      "R_mean": 0.42447648417712613,
+      "R_std": 0.05422817965734979,
+      "R_by_seed": [
+        0.3676255416536842,
+        0.3849176868576987,
+        0.4078617558237319,
+        0.4686895443018803,
+        0.49328789224863545
+      ]
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4020694037637681,
+      "P_std": 0.07069916503950889,
+      "P_by_seed": [
+        0.36421002472235153,
+        0.3433325250810089,
+        0.3466229162309781,
+        0.46264210204817047,
+        0.49353945073633154
+      ],
+      "C_mean": 0.22504074153777073,
+      "C_std": 0.03281961803875991,
+      "C_by_seed": [
+        0.2244172537245226,
+        0.17196512055700675,
+        0.23197736742536823,
+        0.23520045980333912,
+        0.261643506178617
+      ],
+      "R_mean": 0.28954903299488277,
+      "R_std": 0.05989713535711424,
+      "R_by_seed": [
+        0.25200139786009024,
+        0.25734996480250555,
+        0.23063423251829396,
+        0.3450418721465009,
+        0.36271769764702305
+      ]
+    },
+    {
+      "method": "GraphRouter-direct",
+      "family": "learned_model_only",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.326468105494114,
+      "P_std": 0.05705876903709969,
+      "P_by_seed": [
+        0.31568890951635425,
+        0.2831794977157323,
+        0.2627289778868522,
+        0.3892961692465238,
+        0.38144697310510745
+      ],
+      "C_mean": 0.10473882856077121,
+      "C_std": 0.030478331840950154,
+      "C_by_seed": [
+        0.10070212526017923,
+        0.07768984158640758,
+        0.07474605569759736,
+        0.14535070684438278,
+        0.12520541341528912
+      ],
+      "R_mean": 0.2322031597894199,
+      "R_std": 0.030770361024489788,
+      "R_by_seed": [
+        0.22505699678219293,
+        0.21325864028796546,
+        0.19545752775901454,
+        0.2584805330865793,
+        0.26876210103134723
+      ]
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.39990958479885197,
+      "P_std": 0.027535302654787874,
+      "P_by_seed": [
+        0.3824227270208623,
+        0.39982286033754444,
+        0.36530651470940506,
+        0.41682185872517696,
+        0.4351739632012713
+      ],
+      "C_mean": 0.7534415838549334,
+      "C_std": 0.010522742468900094,
+      "C_by_seed": [
+        0.7516587533667276,
+        0.7625380968787117,
+        0.766035930721146,
+        0.7431674034093948,
+        0.7438077348986872
+      ],
+      "R_mean": 0.32456542641335856,
+      "R_std": 0.028376848636786405,
+      "R_by_seed": [
+        0.3072568516841894,
+        0.3235690506496734,
+        0.2887029216372901,
+        0.34250511838423736,
+        0.3607931897114026
+      ]
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.39990958479885197,
+      "P_std": 0.027535302654787874,
+      "P_by_seed": [
+        0.3824227270208623,
+        0.39982286033754444,
+        0.36530651470940506,
+        0.41682185872517696,
+        0.4351739632012713
+      ],
+      "C_mean": 0.7534415838549334,
+      "C_std": 0.010522742468900094,
+      "C_by_seed": [
+        0.7516587533667276,
+        0.7625380968787117,
+        0.766035930721146,
+        0.7431674034093948,
+        0.7438077348986872
+      ],
+      "R_mean": 0.023188792871385207,
+      "R_std": 0.031868507110087325,
+      "R_by_seed": [
+        0.006593350337498304,
+        0.018553811898188673,
+        -0.01771145065116807,
+        0.04523815702047937,
+        0.06327009575192777
+      ]
+    },
+    {
+      "method": "Largest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.39990958479885197,
+      "P_std": 0.027535302654787874,
+      "P_by_seed": [
+        0.3824227270208623,
+        0.39982286033754444,
+        0.36530651470940506,
+        0.41682185872517696,
+        0.4351739632012713
+      ],
+      "C_mean": 0.7534415838549334,
+      "C_std": 0.010522742468900094,
+      "C_by_seed": [
+        0.7516587533667276,
+        0.7625380968787117,
+        0.766035930721146,
+        0.7431674034093948,
+        0.7438077348986872
+      ],
+      "R_mean": -0.2781878406705882,
+      "R_std": 0.035516066043379056,
+      "R_by_seed": [
+        -0.2940701510091928,
+        -0.28646142685329595,
+        -0.32412582293962655,
+        -0.2520288043432787,
+        -0.2342529982075472
+      ]
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.7664377830395417,
+      "P_std": 0.04201012831039279,
+      "P_by_seed": [
+        0.728988607101981,
+        0.759246321057244,
+        0.7239258950949885,
+        0.8096949692617438,
+        0.8103331226817513
+      ],
+      "C_mean": 0.18535324542377146,
+      "C_std": 0.018510125043227826,
+      "C_by_seed": [
+        0.153366326973729,
+        0.18525238838404984,
+        0.19504699058615022,
+        0.19769280160784916,
+        0.19540771956707903
+      ],
+      "R_mean": 0.7479024584971643,
+      "R_std": 0.040990190218844764,
+      "R_by_seed": [
+        0.7136519744046081,
+        0.7407210822188388,
+        0.7044211960363729,
+        0.7899256891009586,
+        0.7907923507250432
+      ]
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.7520584123916757,
+      "P_std": 0.0419929230236973,
+      "P_by_seed": [
+        0.7156060290271082,
+        0.7428280430364091,
+        0.7099689144221,
+        0.7931040685822244,
+        0.7987850068905367
+      ],
+      "C_mean": 0.13074566212710986,
+      "C_std": 0.014690118627856486,
+      "C_by_seed": [
+        0.10904627626597503,
+        0.12627915855956126,
+        0.13518175315448547,
+        0.13397464725514804,
+        0.14924647540037944
+      ],
+      "R_mean": 0.6866855813281206,
+      "R_std": 0.037506323276604976,
+      "R_by_seed": [
+        0.6610828908941206,
+        0.6796884637566287,
+        0.642378037844857,
+        0.7261167449546503,
+        0.7241617691903464
+      ]
+    },
+    {
+      "method": "Oracle",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.7267382191274256,
+      "P_std": 0.03789667358790199,
+      "P_by_seed": [
+        0.6884884761918523,
+        0.7208360048438026,
+        0.6924923804128842,
+        0.7652783929,
+        0.7665958412885894
+      ],
+      "C_mean": 0.09448579639653557,
+      "C_std": 0.015531315545322541,
+      "C_by_seed": [
+        0.06923409437988697,
+        0.09857323675078525,
+        0.10891616056170511,
+        0.09154309661312636,
+        0.10416239367717409
+      ],
+      "R_mean": 0.6417010023705435,
+      "R_std": 0.036161020322744715,
+      "R_by_seed": [
+        0.6261777912499534,
+        0.6321200917680962,
+        0.5944678359073495,
+        0.682889605948186,
+        0.6728496869791325
+      ]
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.6128142086412862,
+      "P_std": 0.042243547280203096,
+      "P_by_seed": [
+        0.5902850205689735,
+        0.6008651418058801,
+        0.5606363193955547,
+        0.6538456693106596,
+        0.6584388921253633
+      ],
+      "C_mean": 0.322889420145794,
+      "C_std": 0.011020613549286202,
+      "C_by_seed": [
+        0.3097652123487221,
+        0.3131567763542266,
+        0.3301136261387277,
+        0.3259904725299923,
+        0.3354210133573016
+      ],
+      "R_mean": 0.5805252666267069,
+      "R_std": 0.04182141550773353,
+      "R_by_seed": [
+        0.5593084993341013,
+        0.5695494641704572,
+        0.5276249567816824,
+        0.62124662205766,
+        0.6248967907896334
+      ]
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5732563430956319,
+      "P_std": 0.040852453121774275,
+      "P_by_seed": [
+        0.5507206250308205,
+        0.5613321456877769,
+        0.5237532637667253,
+        0.6202478065981212,
+        0.6102278743947152
+      ],
+      "C_mean": 0.18437669332320478,
+      "C_std": 0.012620988298058002,
+      "C_by_seed": [
+        0.17466240562080587,
+        0.18067952625265538,
+        0.19219514447253813,
+        0.2022123428739125,
+        0.17213404739611196
+      ],
+      "R_mean": 0.4810679964340293,
+      "R_std": 0.04053862463957196,
+      "R_by_seed": [
+        0.46338942222041757,
+        0.4709923825614491,
+        0.4276556915304563,
+        0.5191416351611648,
+        0.5241608506966591
+      ]
+    },
+    {
+      "method": "Oracle Model-Only",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5348442260154387,
+      "P_std": 0.046288577594277146,
+      "P_by_seed": [
+        0.5162221156663737,
+        0.5252585184008595,
+        0.4719035318105199,
+        0.577563288917788,
+        0.5832736752816521
+      ],
+      "C_mean": 0.12688980003971806,
+      "C_std": 0.009574939160859715,
+      "C_by_seed": [
+        0.12480172585201105,
+        0.13209867764010283,
+        0.11189811267488939,
+        0.13729825817494276,
+        0.12835222585664433
+      ],
+      "R_mean": 0.4206434059796923,
+      "R_std": 0.03956375364514262,
+      "R_by_seed": [
+        0.40390056239956384,
+        0.40636970852476695,
+        0.3711952304031196,
+        0.4539948565603392,
+        0.4677566720106719
+      ]
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.25164950690968296,
+      "P_std": 0.004992639406504817,
+      "P_by_seed": [
+        0.24834782608962086,
+        0.2538069578132156,
+        0.24461939377073708,
+        0.25492499210818315,
+        0.256548364766658
+      ],
+      "C_mean": 0.03357398949257506,
+      "C_std": 0.0005484897157697187,
+      "C_by_seed": [
+        0.03332693250553363,
+        0.03450946348951276,
+        0.03357096563287805,
+        0.03335842295037581,
+        0.03310416288457505
+      ],
+      "R_mean": 0.2482921079604254,
+      "R_std": 0.004993704192472496,
+      "R_by_seed": [
+        0.24501513283906756,
+        0.25035601146426434,
+        0.24126229720744924,
+        0.25158914981314556,
+        0.2532379484782004
+      ]
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.25164950690968296,
+      "P_std": 0.004992639406504817,
+      "P_by_seed": [
+        0.24834782608962086,
+        0.2538069578132156,
+        0.24461939377073708,
+        0.25492499210818315,
+        0.256548364766658
+      ],
+      "C_mean": 0.03357398949257506,
+      "C_std": 0.0005484897157697187,
+      "C_by_seed": [
+        0.03332693250553363,
+        0.03450946348951276,
+        0.03357096563287805,
+        0.03335842295037581,
+        0.03310416288457505
+      ],
+      "R_mean": 0.23486251216339538,
+      "R_std": 0.005003976721539582,
+      "R_by_seed": [
+        0.23168435983685406,
+        0.23655222606845924,
+        0.22783391095429795,
+        0.23824578063299534,
+        0.2399962833243704
+      ]
+    },
+    {
+      "method": "Smallest LLM",
+      "family": "static_or_oracle",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.25164950690968296,
+      "P_std": 0.004992639406504817,
+      "P_by_seed": [
+        0.24834782608962086,
+        0.2538069578132156,
+        0.24461939377073708,
+        0.25492499210818315,
+        0.256548364766658
+      ],
+      "C_mean": 0.03357398949257506,
+      "C_std": 0.0005484897157697187,
+      "C_by_seed": [
+        0.03332693250553363,
+        0.03450946348951276,
+        0.03357096563287805,
+        0.03335842295037581,
+        0.03310416288457505
+      ],
+      "R_mean": 0.22143291636636536,
+      "R_std": 0.0050238186280317535,
+      "R_by_seed": [
+        0.21835358683464068,
+        0.2227484406726541,
+        0.21440552470114682,
+        0.22490241145284479,
+        0.22675461817054035
+      ]
+    }
+  ]
+}
