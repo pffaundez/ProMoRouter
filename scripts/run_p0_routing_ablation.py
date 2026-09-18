@@ -20,6 +20,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seeds", type=int, nargs="+", default=None)
     parser.add_argument("--config-ids", nargs="+", default=None)
     parser.add_argument("--device", default=None)
+    parser.add_argument(
+        "--artifact-root",
+        type=Path,
+        default=None,
+        help=(
+            "Optional root containing data/interaction_logs and data/router. "
+            "Use this when experiment artifacts live outside the repository."
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
@@ -27,6 +36,13 @@ def parse_args() -> argparse.Namespace:
 
 def result_path(output_dir: Path, seed: int) -> Path:
     return output_dir / f"router_edgegnn_qnorm_results_seed{seed}.json"
+
+
+def artifact_path(value: str, root: Path | None) -> str:
+    path = Path(value)
+    if root is not None and not path.is_absolute():
+        path = root / path
+    return str(path)
 
 
 def main() -> None:
@@ -56,12 +72,15 @@ def main() -> None:
             command = [
                 sys.executable,
                 common["trainer"],
-                "--data-path", common["data_path"],
-                "--query-emb-path", common["query_emb_path"],
-                "--task-emb-path", common["task_emb_path"],
-                "--prompt-emb-path", common["prompt_emb_path"],
-                "--model-emb-path", common["model_emb_path"],
-                "--split-manifest", common["split_manifest_template"].format(seed=seed),
+                "--data-path", artifact_path(common["data_path"], args.artifact_root),
+                "--query-emb-path", artifact_path(common["query_emb_path"], args.artifact_root),
+                "--task-emb-path", artifact_path(common["task_emb_path"], args.artifact_root),
+                "--prompt-emb-path", artifact_path(common["prompt_emb_path"], args.artifact_root),
+                "--model-emb-path", artifact_path(common["model_emb_path"], args.artifact_root),
+                "--split-manifest", artifact_path(
+                    common["split_manifest_template"].format(seed=seed),
+                    args.artifact_root,
+                ),
                 "--output-dir", str(output_dir),
                 "--seed", str(seed),
                 "--edge-top-k", str(config["edge_top_k"]),

@@ -14,9 +14,9 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 - Dependencies: T-010 completed.
 - Completion criterion: A documented ablation matrix, validated commands, and machine-readable outputs using the repaired protocol.
 - Configuration: D-023 fixes a 2x2 matrix over `edge_top_k={3,5}` and the prompt-model lattice `{off,on}` while holding the 36-action space and all other protocol elements fixed.
-- Gate command: `python scripts/run_p0_routing_ablation.py --seeds 1`.
+- Gate command on `morel`: `python scripts/run_p0_routing_ablation.py --seeds 1 --artifact-root ~/repos/graph-router-2 --device cuda:0`.
 - Gate aggregation: `python analysis/aggregate_p0_routing_ablation.py --seeds 1 --output-json analysis/p0_routing_ablation_seed1.json --output-csv analysis/p0_routing_ablation_seed1.csv`.
-- Full sweep command after the gate passes: `python scripts/run_p0_routing_ablation.py`.
+- Full sweep command after the gate passes: `python scripts/run_p0_routing_ablation.py --artifact-root ~/repos/graph-router-2 --device cuda:0`.
 - Full aggregation: `python analysis/aggregate_p0_routing_ablation.py`.
 - Prepared: manifest, runner, aggregator, compilation, and dry runs passed; experiment-host execution is pending.
 - State: in_progress

@@ -787,3 +787,11 @@ Syntax compilation and dry runs passed: four commands are planned for the seed-1
 gate and 20 commands for the complete five-seed sweep. No ablation training or
 result aggregation has run in the continuation workspace; T-011 results remain
 pending execution on `morel`.
+
+The first host-side gate attempt stopped before training because the initial
+runner resolved `data/` inside the ProMoRouter checkout, while the experiment
+artifacts on `morel` live under `~/repos/graph-router-2`. The runner now accepts
+`--artifact-root` and resolves only data, embedding, and split-manifest paths
+against that root; code and outputs remain in ProMoRouter. This is an execution
+path fix, not a protocol change. No ablation result was produced by the failed
+attempt.
