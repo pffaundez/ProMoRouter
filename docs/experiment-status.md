@@ -621,3 +621,17 @@ The unified Transformers generation completed with exactly 8,712 rows: 121 test 
 ## Inductive empty-response audit (2026-09-18)
 
 The two empty `response` fields are caused by max-token truncation, not silent model failures. Both raw responses end at `The final answer is` with `output_tokens=256`: GSM8K/lLaMA-3.1-8B under `cot`, and Alpaca/lLaMA-3.1-70B under `step_back`. The generator now supports `--qids` for targeted regeneration. These rows must be regenerated with a larger token cap before final validation.
+
+
+## Inductive dataset completed and repaired (2026-09-18)
+
+Verified on the experiment host:
+
+- `outputs/inductive_full.jsonl` initially contained exactly 8,712 rows (121 test qids × 12 models × 6 prompts).
+- All rows used the Transformers backend and had non-null performance.
+- Two rows were truncated at the 256-token cap and had empty extracted responses.
+- Targeted regeneration with `--qids` and `--max-new-tokens 512` repaired both rows:
+  - GSM8K `gsm8k-train-000072`, `llama3.1-8b` + `cot`: response `54`, performance 1.0.
+  - Alpaca `alpaca-train-000102`, `llama3.1-70b` + `step_back`: response with POS tags, performance 0.5.
+
+The repair files were received and inspected. They must be merged into a corrected full JSONL, followed by validation of exact population, uniqueness, non-empty responses, and metric fields. Until that merge/validation is run, the inductive dataset is not yet a final paper artifact.
