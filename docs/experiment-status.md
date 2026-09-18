@@ -22,7 +22,7 @@ routing is evaluated with:
 - Permanent decision history is maintained in `docs/decisions.md`; unresolved
   choices are kept separate from confirmed decisions.
 - The executable task queue is maintained in `docs/next-steps.md`, with exactly
-  one current action: T-009.
+  one current action: T-025.
 - The canonical Edge-GNN trainer is `train_router_edgegnn_qnorm.py`.
 - Its canonical input schema is the one in
   `router_bipartite_qnorm.jsonl`: one row per query with candidate actions in
@@ -813,3 +813,75 @@ D-024 adds an explicit deterministic mode using non-atomic one-hot matrix
 aggregation plus deterministic PyTorch/CUDA/cuDNN settings. Frozen P0 remains
 unchanged. T-011 must now pass two identical deterministic seed-1 repetitions
 before the 2x2 gate is rerun.
+
+
+## T-011 deterministic routing ablation completed (2026-09-18)
+
+T-011 is complete. Two independent deterministic `topk3_observed` seed-1
+runs were identical after excluding only the output-specific `model_path`.
+Each contained 121 test queries for all three lambda settings, all prompt,
+model, and task counts summed to 121, and every result satisfied
+`R = P - lambda * C`. The nondeterministic gate outputs remain diagnostic only.
+
+The deterministic 2x2 sweep then completed for seeds 1--5. The reproducible
+aggregator validated 20 exact source files, 60 seed-level rows, and 12
+configuration/lambda aggregates. All 20 source hashes are unique, every group
+contains seeds 1--5, every result contains 121 test queries, and reward algebra
+holds to a maximum observed absolute error of `4.44e-16`. The returned JSON and
+CSV agree exactly. Canonical artifacts:
+
+- `analysis/p0_routing_ablation_aggregates.json` (SHA-256
+  `b2c7a65eb766c75aab338f5adfc70e6c91caf94d5c744145d8dc53d72afdf6ce`);
+- `analysis/p0_routing_ablation_table.csv` (SHA-256
+  `c982825bab7908f9479b9ee8adbfe2c4bf258e29b5f3edc60f24768ad0cb2745`).
+
+### Verified aggregate results
+
+| Configuration | lambda | Performance | Cost | Reward |
+|---|---:|---:|---:|---:|
+| top-k 3, observed | 0.1 | 0.5037 | 0.3241 | 0.4713 +/- 0.0261 |
+| top-k 3, observed | 0.5 | 0.4514 | 0.1274 | 0.3877 +/- 0.0337 |
+| top-k 3, observed | 0.9 | 0.4159 | 0.0867 | 0.3378 +/- 0.0371 |
+| top-k 5, observed | 0.1 | 0.5221 | 0.3509 | 0.4870 +/- 0.0504 |
+| top-k 5, observed | 0.5 | 0.4423 | 0.1295 | 0.3776 +/- 0.0428 |
+| top-k 5, observed | 0.9 | 0.4151 | 0.0772 | 0.3456 +/- 0.0211 |
+| top-k 3, lattice | 0.1 | 0.5037 | 0.3241 | 0.4713 +/- 0.0261 |
+| top-k 3, lattice | 0.5 | 0.4515 | 0.1309 | 0.3861 +/- 0.0308 |
+| top-k 3, lattice | 0.9 | 0.4194 | 0.0939 | 0.3349 +/- 0.0312 |
+| top-k 5, lattice | 0.1 | 0.5221 | 0.3509 | 0.4870 +/- 0.0504 |
+| top-k 5, lattice | 0.5 | 0.4423 | 0.1295 | 0.3776 +/- 0.0428 |
+| top-k 5, lattice | 0.9 | 0.4151 | 0.0772 | 0.3456 +/- 0.0211 |
+
+Increasing top-k from 3 to 5 changes mean reward by `+0.0156`, `-0.0101`,
+and `+0.0078` without the lattice for lambda 0.1, 0.5, and 0.9. This is not a
+consistent benefit across cost regimes. Enabling the full prompt--model lattice
+changes mean reward by `0.0000`, `-0.0016`, and `-0.0029` at top-k 3 and by
+exactly `0.0000` at top-k 5 for all lambdas. Several lattice on/off results are
+identical for every seed, so this ablation provides no evidence of a general
+lattice benefit.
+
+These are descriptive five-seed results, not inferential significance claims.
+The lattice result does not evaluate GraphRouter-style test-query connectivity:
+the current flag only adds prompt--model edges. The exact equality in several
+cells is verified; whether it is caused by optimization convergence, graph
+symmetry, or limited influence of those relations is an open hypothesis.
+
+
+## Edge-GNN v2 minimal controlled design frozen (2026-09-18)
+
+D-026 defines the next experiment before implementation. Stage A will hold the
+36-action space, repaired population, embeddings, split manifests, reward,
+current objective, early stopping, seeds, and scorer capacity fixed while
+comparing: (1) GraphRouter-style full message passing with explicit
+query--task, query--prompt, and query--model connections; (2) an otherwise
+matched no-message-passing variant; and (3) the existing Flat-MLP. Prompt and
+model remain independent nodes and the scorer consumes only pre-routing
+representations, optionally including a static prompt--model edge embedding.
+
+Only after Stage A separates architectural message passing from the common
+action space may Stage B compare the current objective with
+`L_reg + beta * L_rank`, using validation reward for early stopping. Graph
+density variants and a factorized router are conditional follow-ups rather
+than simultaneous changes. The existing corrected inductive artifact remains
+a separate Stage C evaluation and must not be mixed with P0. Edge-GNN v2 has
+not been implemented or executed; all expected advantages remain hypotheses.

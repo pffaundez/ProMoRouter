@@ -143,3 +143,21 @@ passed compilation/dry-run checks. Execute the seed-1 gate on `morel`, validate
 its aggregate, and only then launch seeds 1--5. Do not call this matrix
 GraphRouter-style or Edge-GNN v2: the current lattice flag adds prompt-model
 edges only and does not connect evaluation queries to every prompt/model.
+
+
+## Latest handoff update after T-011 (2026-09-18)
+
+T-011 is complete. Two deterministic seed-1 repetitions matched exactly after
+excluding only `model_path`. The complete deterministic 2x2 sweep validated 20
+source JSON files, 60 seed-level rows, and 12 aggregates for seeds 1--5. The
+canonical artifacts are `analysis/p0_routing_ablation_aggregates.json` and
+`analysis/p0_routing_ablation_table.csv`. No consistent advantage was found for
+top-k 5 or for adding the prompt--model lattice; this historical ablation is
+not GraphRouter-style Edge-GNN v2 and remains separate from frozen P0.
+
+D-026 freezes a staged v2 design. The sole active task is T-025: specify and
+review the Stage A implementation contract for a GraphRouter-style full
+message-passing arm, a matched no-message-passing arm, and the existing
+Flat-MLP, all with the same 36 actions and current objective. Do not implement
+or run v2 until that contract and leakage audit are complete. Objective,
+density, factorized-router, and inductive variants remain later gated stages.

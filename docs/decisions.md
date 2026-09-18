@@ -579,3 +579,68 @@ These are unresolved choices, not adopted decisions:
   continuity documentation.
 - **Status:** active
 - **Replaced by:** —
+
+
+### D-025 — Accept the deterministic T-011 matrix as the canonical historical ablation
+
+- **Date:** 2026-09-18
+- **Context/problem:** The original T-011 seed-1 gate was nondeterministic, so
+  configuration differences could not be separated from CUDA accumulation
+  variance.
+- **Decision:** Accept only the deterministic five-seed 2x2 sweep produced
+  under D-024 as the canonical T-011 result. Retain all earlier nondeterministic
+  outputs as diagnostic evidence only.
+- **Justification:** Two independent deterministic seed-1 repetitions were
+  identical except for `model_path`; the complete aggregate validates 20
+  sources, 60 seed-level rows, 12 aggregate rows, shared seed identities, 121
+  queries per result, and exact reward algebra.
+- **Alternatives considered or discarded:** Mixing the original seed-1 gate
+  with deterministic seeds 2--5 was rejected. Replacing frozen P0 results with
+  the deterministic trainer was also rejected because T-011 is a separate
+  controlled ablation.
+- **Consequences:** T-011 can be closed. The results show no consistent top-k 5
+  benefit and no general prompt--model-lattice benefit. They do not evaluate a
+  GraphRouter-style query-to-candidate topology and must not be presented as
+  Edge-GNN v2.
+- **Files affected:** `analysis/p0_routing_ablation_aggregates.json`,
+  `analysis/p0_routing_ablation_table.csv`, and continuity documentation.
+- **Status:** active
+- **Replaced by:** —
+
+
+### D-026 — Stage Edge-GNN v2 to isolate architecture before objective and density
+
+- **Date:** 2026-09-18
+- **Context/problem:** Closed-pool P0 shows no broad Edge-GNN advantage over
+  Flat-MLP, while T-011 shows no consistent benefit from the historical
+  density/lattice controls. Changing topology, objective, scorer, and action
+  representation simultaneously would prevent causal interpretation.
+- **Decision:** Freeze a staged minimal design. Stage A compares three arms
+  under the same 36 actions and current training objective: GraphRouter-style
+  message passing with `task`, `query`, `prompt`, and `model` nodes and explicit
+  query--task/query--prompt/query--model edges; an otherwise matched no-message-
+  passing arm; and the existing Flat-MLP. Prompt and model are independent
+  entities. An edge-aware score may use a static learned or description-derived
+  prompt--model edge representation, but never realized reward, performance,
+  cost, or tokens. Stage B is permitted only after Stage A and changes only the
+  objective to compare the current loss against `L_reg + beta * L_rank`, with
+  validation reward for early stopping. Graph-density variants and a factorized
+  router are conditional follow-ups. Stage C evaluates the selected design on
+  the already validated inductive protocol as a separate result family.
+- **Justification:** Stage A directly separates the effect of graph message
+  passing from the effect of the joint action space. Staging avoids an
+  uninterpretable combinatorial sweep and follows the negative T-010/T-011
+  evidence.
+- **Alternatives considered or discarded:** Implementing every requested
+  topology, density, objective, and scorer variant simultaneously was rejected.
+  Starting with density was rejected because T-011 already shows weak and
+  inconsistent density effects. Presenting the proposed v2 as a result before
+  execution is prohibited.
+- **Consequences:** The next task is an implementation plan and integrity
+  review for Stage A only. P0 remains frozen; inductive results remain separate.
+  Any expansion to Stage B or factorized/density variants requires a recorded
+  gate decision based on Stage A evidence.
+- **Files affected:** Experiment design and continuity documentation; no v2
+  implementation file exists yet.
+- **Status:** active
+- **Replaced by:** —

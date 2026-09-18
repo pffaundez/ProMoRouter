@@ -1,0 +1,1135 @@
+{
+  "protocol": "p0_repaired_routing_configuration_ablation",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "source_files": 20,
+  "normalized_rows": 60,
+  "sources": [
+    {
+      "path": "outputs/p0_routing_ablation/topk3_observed/router_edgegnn_qnorm_results_seed1.json",
+      "sha256": "30cfd711de6920b526a105c6fa6be1d856424ebc0e4547d7d13e5bb0dd6ac449"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_observed/router_edgegnn_qnorm_results_seed2.json",
+      "sha256": "9408f6e74857c4a0276bd2290de0856eafa60a700c45cc71342e2558d1f088b6"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_observed/router_edgegnn_qnorm_results_seed3.json",
+      "sha256": "35d0551faa3499cfba233a86dd6595f14a4b373603b5697faca8fa25195603ae"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_observed/router_edgegnn_qnorm_results_seed4.json",
+      "sha256": "208d94ad0d1e38e6f1fc3c7897141411ea8ff12bde79d8c05c079c7fc9e05e2f"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_observed/router_edgegnn_qnorm_results_seed5.json",
+      "sha256": "1703c40feeeb40d5818ecec130c57e86368273988d390e4acc4c9be013d9de55"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_observed/router_edgegnn_qnorm_results_seed1.json",
+      "sha256": "c91fcbbe6dda036bc926c1adc42cc8e2e9a4a068522aa81331952ba60989b601"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_observed/router_edgegnn_qnorm_results_seed2.json",
+      "sha256": "789281cc26b35c7336910b299cac5e74aefe2c5ea4d7fee7df6d528b2147b269"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_observed/router_edgegnn_qnorm_results_seed3.json",
+      "sha256": "7adf8801ebd9d755a04def5cfdd933ebea76c5cfcb996a1e50ec394bca821525"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_observed/router_edgegnn_qnorm_results_seed4.json",
+      "sha256": "62caa1a861ef00613cfd8b1b0eda80d7d0042c68c9778dbd45cde078db4b1a62"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_observed/router_edgegnn_qnorm_results_seed5.json",
+      "sha256": "497660449c083a10261298ba7456395699a51f654ad8ef879581637489075b60"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_lattice/router_edgegnn_qnorm_results_seed1.json",
+      "sha256": "2853752bf0f04e63fe5279f850d7b1098502d603293897e6c405c74b97fd90fc"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_lattice/router_edgegnn_qnorm_results_seed2.json",
+      "sha256": "395efaa6093958cc3db8b375d34fd697d8656c42878daeccb4bff85e4f62a4ed"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_lattice/router_edgegnn_qnorm_results_seed3.json",
+      "sha256": "b6a5ecfa4c0d53193c8fa191d87398076ec5e38aa6d59f09b149e27f164fb800"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_lattice/router_edgegnn_qnorm_results_seed4.json",
+      "sha256": "2f9bf01c3bc581bd9e5a8ff0f8c7573c5af5ddb71c760d11cd5642912c59a63e"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk3_lattice/router_edgegnn_qnorm_results_seed5.json",
+      "sha256": "5d29b5e0e135bd918d1059931881c0089593506a77edfd40f0fee3e465583c86"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_lattice/router_edgegnn_qnorm_results_seed1.json",
+      "sha256": "4271856a2daaefe7a9f79f6e3d804852da7514e044e1f4c6d89c49566b2b0a32"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_lattice/router_edgegnn_qnorm_results_seed2.json",
+      "sha256": "a92b1027147f6d7a9aa9b8ae44c3dbc55529e2e6c7184354626694c10c2c9893"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_lattice/router_edgegnn_qnorm_results_seed3.json",
+      "sha256": "6bac2f7ffd32a8f81c2e23705248f36c51bd3657cfa7f33431815bb6fb6a8558"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_lattice/router_edgegnn_qnorm_results_seed4.json",
+      "sha256": "557e8e37a9ee8c980c5f1e711fed221f6c0e861d5ccd2a64b8073ac88c58009c"
+    },
+    {
+      "path": "outputs/p0_routing_ablation/topk5_lattice/router_edgegnn_qnorm_results_seed5.json",
+      "sha256": "c032f611343abcfc99bd6ef8263e0cc4c00ce90875ade1501df43650a59e38b0"
+    }
+  ],
+  "seed_results": [
+    {
+      "config_id": "topk3_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4681321834953875,
+      "C": 0.1886668099679994,
+      "R": 0.4492655024985876
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4169726171566784,
+      "C": 0.10968142819693971,
+      "R": 0.36213190305820847
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3824416726005491,
+      "C": 0.11073216327032605,
+      "R": 0.28278272565725576
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4922436066130384,
+      "C": 0.3234512775745093,
+      "R": 0.45989847885558766
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4368415407943757,
+      "C": 0.09220238046999492,
+      "R": 0.3907403505593784
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4178681430833049,
+      "C": 0.058759705224404164,
+      "R": 0.36498440838134133
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5065748876834022,
+      "C": 0.555637120977924,
+      "R": 0.45101117558560994
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.41124981580825054,
+      "C": 0.11890233482664357,
+      "R": 0.3517986483949288
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3891537219668456,
+      "C": 0.04220494577416799,
+      "R": 0.35116927077009435
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5192165614689591,
+      "C": 0.32159439624931907,
+      "R": 0.48705712184402755
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.47602197243270467,
+      "C": 0.16051322876572743,
+      "R": 0.3957653580498409
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4617041791738306,
+      "C": 0.15960881843189362,
+      "R": 0.31805624258512655
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5325163741803284,
+      "C": 0.23103964692479603,
+      "R": 0.5094124094878492
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5157567253276988,
+      "C": 0.15571727681722708,
+      "R": 0.43789808691908566
+    },
+    {
+      "config_id": "topk3_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.42814884101480505,
+      "C": 0.06243280338301036,
+      "R": 0.3719593179700959
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4833416569190971,
+      "C": 0.2661968829078184,
+      "R": 0.4567219686283152
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.41618514832148124,
+      "C": 0.10977896022097328,
+      "R": 0.3612956682109947
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3959020190089458,
+      "C": 0.07841421778280827,
+      "R": 0.32532922300441813
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4996212059188052,
+      "C": 0.33506866812193214,
+      "R": 0.4661143391066122
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44032241035104425,
+      "C": 0.08746701539398388,
+      "R": 0.39658890265405244
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.37851893722717034,
+      "C": 0.047767325496302956,
+      "R": 0.3355283442804977
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5085227523356805,
+      "C": 0.4798323438129298,
+      "R": 0.46053951795438763
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3991029635787537,
+      "C": 0.11856436572700534,
+      "R": 0.339820780715251
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3773982698450536,
+      "C": 0.04895463820059176,
+      "R": 0.3333390954645212
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5071245073059009,
+      "C": 0.3189594805843989,
+      "R": 0.47522855924746144
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4285617888410007,
+      "C": 0.16364976877998377,
+      "R": 0.34673690445100885
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4709324518857715,
+      "C": 0.12728730264955612,
+      "R": 0.356373879501171
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6116636777398826,
+      "C": 0.3544382613403352,
+      "R": 0.5762198516058493
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5273038495917338,
+      "C": 0.16782391028211804,
+      "R": 0.4433918944506751
+    },
+    {
+      "config_id": "topk5_observed",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.452505543272871,
+      "C": 0.08365810368702573,
+      "R": 0.3772132499545479
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4681321834953875,
+      "C": 0.1886668099679994,
+      "R": 0.4492655024985876
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4169726171566784,
+      "C": 0.10968142819693971,
+      "R": 0.36213190305820847
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.38122290021551103,
+      "C": 0.09682669502735133,
+      "R": 0.294078874690895
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4922436066130384,
+      "C": 0.3234512775745093,
+      "R": 0.45989847885558766
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4368415407943757,
+      "C": 0.09220238046999492,
+      "R": 0.3907403505593784
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4082900615992863,
+      "C": 0.05884702263897234,
+      "R": 0.35532774122421157
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5065748876834022,
+      "C": 0.555637120977924,
+      "R": 0.45101117558560994
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.41124981580825054,
+      "C": 0.11890233482664357,
+      "R": 0.3517986483949288
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3779086603886729,
+      "C": 0.07536566587362396,
+      "R": 0.31007956110241125
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5192165614689591,
+      "C": 0.32159439624931907,
+      "R": 0.48705712184402755
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.47602197243270467,
+      "C": 0.16051322876572743,
+      "R": 0.3957653580498409
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4633274967747166,
+      "C": 0.10770871076032035,
+      "R": 0.36638965709042814
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5325163741803284,
+      "C": 0.23103964692479603,
+      "R": 0.5094124094878492
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5166549250840569,
+      "C": 0.173330306399422,
+      "R": 0.42998977188434623
+    },
+    {
+      "config_id": "topk3_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4662918868606937,
+      "C": 0.13062132224492834,
+      "R": 0.3487326968402583
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4833416569190971,
+      "C": 0.2661968829078184,
+      "R": 0.4567219686283152
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.41618514832148124,
+      "C": 0.10977896022097328,
+      "R": 0.3612956682109947
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3959020190089458,
+      "C": 0.07841421778280827,
+      "R": 0.32532922300441813
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.4996212059188052,
+      "C": 0.33506866812193214,
+      "R": 0.4661143391066122
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.44032241035104425,
+      "C": 0.08746701539398388,
+      "R": 0.39658890265405244
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.37851893722717034,
+      "C": 0.047767325496302956,
+      "R": 0.3355283442804977
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5085227523356805,
+      "C": 0.4798323438129298,
+      "R": 0.46053951795438763
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3991029635787537,
+      "C": 0.11856436572700534,
+      "R": 0.339820780715251
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3773982698450536,
+      "C": 0.04895463820059176,
+      "R": 0.3333390954645212
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5071245073059009,
+      "C": 0.3189594805843989,
+      "R": 0.47522855924746144
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4285617888410007,
+      "C": 0.16364976877998377,
+      "R": 0.34673690445100885
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4709324518857715,
+      "C": 0.12728730264955612,
+      "R": 0.356373879501171
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6116636777398826,
+      "C": 0.3544382613403352,
+      "R": 0.5762198516058493
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5273038495917338,
+      "C": 0.16782391028211804,
+      "R": 0.4433918944506751
+    },
+    {
+      "config_id": "topk5_lattice",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.452505543272871,
+      "C": 0.08365810368702573,
+      "R": 0.3772132499545479
+    }
+  ],
+  "aggregates": [
+    {
+      "config_id": "topk3_observed",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5037367226882231,
+      "P_std": 0.02487832318242285,
+      "P_by_seed": [
+        0.4681321834953875,
+        0.4922436066130384,
+        0.5065748876834022,
+        0.5192165614689591,
+        0.5325163741803284
+      ],
+      "C_mean": 0.32407785033890957,
+      "C_std": 0.14196699713786892,
+      "C_by_seed": [
+        0.1886668099679994,
+        0.3234512775745093,
+        0.555637120977924,
+        0.32159439624931907,
+        0.23103964692479603
+      ],
+      "R_mean": 0.4713289376543324,
+      "R_std": 0.026115075241620572,
+      "R_by_seed": [
+        0.4492655024985876,
+        0.45989847885558766,
+        0.45101117558560994,
+        0.48705712184402755,
+        0.5094124094878492
+      ]
+    },
+    {
+      "config_id": "topk3_observed",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.45136853430394164,
+      "P_std": 0.044037641244296516,
+      "P_by_seed": [
+        0.4169726171566784,
+        0.4368415407943757,
+        0.41124981580825054,
+        0.47602197243270467,
+        0.5157567253276988
+      ],
+      "C_mean": 0.12740332981530655,
+      "C_std": 0.029679052170319506,
+      "C_by_seed": [
+        0.10968142819693971,
+        0.09220238046999492,
+        0.11890233482664357,
+        0.16051322876572743,
+        0.15571727681722708
+      ],
+      "R_mean": 0.38766686939628847,
+      "R_std": 0.03367777754856833,
+      "R_by_seed": [
+        0.36213190305820847,
+        0.3907403505593784,
+        0.3517986483949288,
+        0.3957653580498409,
+        0.43789808691908566
+      ]
+    },
+    {
+      "config_id": "topk3_observed",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.41586331156786704,
+      "P_std": 0.03196383446170488,
+      "P_by_seed": [
+        0.3824416726005491,
+        0.4178681430833049,
+        0.3891537219668456,
+        0.4617041791738306,
+        0.42814884101480505
+      ],
+      "C_mean": 0.08674768721676043,
+      "C_std": 0.04806921067738626,
+      "C_by_seed": [
+        0.11073216327032605,
+        0.058759705224404164,
+        0.04220494577416799,
+        0.15960881843189362,
+        0.06243280338301036
+      ],
+      "R_mean": 0.3377903930727828,
+      "R_std": 0.0370853894264529,
+      "R_by_seed": [
+        0.28278272565725576,
+        0.36498440838134133,
+        0.35116927077009435,
+        0.31805624258512655,
+        0.3719593179700959
+      ]
+    },
+    {
+      "config_id": "topk5_observed",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5220547600438732,
+      "P_std": 0.05108266465817052,
+      "P_by_seed": [
+        0.4833416569190971,
+        0.4996212059188052,
+        0.5085227523356805,
+        0.5071245073059009,
+        0.6116636777398826
+      ],
+      "C_mean": 0.35089912735348283,
+      "C_std": 0.07918572230096822,
+      "C_by_seed": [
+        0.2661968829078184,
+        0.33506866812193214,
+        0.4798323438129298,
+        0.3189594805843989,
+        0.3544382613403352
+      ],
+      "R_mean": 0.4869648473085252,
+      "R_std": 0.05037824352879475,
+      "R_by_seed": [
+        0.4567219686283152,
+        0.4661143391066122,
+        0.46053951795438763,
+        0.47522855924746144,
+        0.5762198516058493
+      ]
+    },
+    {
+      "config_id": "topk5_observed",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4422952321368028,
+      "P_std": 0.04991561146622851,
+      "P_by_seed": [
+        0.41618514832148124,
+        0.44032241035104425,
+        0.3991029635787537,
+        0.4285617888410007,
+        0.5273038495917338
+      ],
+      "C_mean": 0.12945680408081287,
+      "C_std": 0.03503640527868567,
+      "C_by_seed": [
+        0.10977896022097328,
+        0.08746701539398388,
+        0.11856436572700534,
+        0.16364976877998377,
+        0.16782391028211804
+      ],
+      "R_mean": 0.37756683009639647,
+      "R_std": 0.04282165810054127,
+      "R_by_seed": [
+        0.3612956682109947,
+        0.39658890265405244,
+        0.339820780715251,
+        0.34673690445100885,
+        0.4433918944506751
+      ]
+    },
+    {
+      "config_id": "topk5_observed",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": false,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4150514442479625,
+      "P_std": 0.04371665199672006,
+      "P_by_seed": [
+        0.3959020190089458,
+        0.37851893722717034,
+        0.3773982698450536,
+        0.4709324518857715,
+        0.452505543272871
+      ],
+      "C_mean": 0.07721631756325696,
+      "C_std": 0.03246536914571583,
+      "C_by_seed": [
+        0.07841421778280827,
+        0.047767325496302956,
+        0.04895463820059176,
+        0.12728730264955612,
+        0.08365810368702573
+      ],
+      "R_mean": 0.3455567584410312,
+      "R_std": 0.021083981668539777,
+      "R_by_seed": [
+        0.32532922300441813,
+        0.3355283442804977,
+        0.3333390954645212,
+        0.356373879501171,
+        0.3772132499545479
+      ]
+    },
+    {
+      "config_id": "topk3_lattice",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5037367226882231,
+      "P_std": 0.02487832318242285,
+      "P_by_seed": [
+        0.4681321834953875,
+        0.4922436066130384,
+        0.5065748876834022,
+        0.5192165614689591,
+        0.5325163741803284
+      ],
+      "C_mean": 0.32407785033890957,
+      "C_std": 0.14196699713786892,
+      "C_by_seed": [
+        0.1886668099679994,
+        0.3234512775745093,
+        0.555637120977924,
+        0.32159439624931907,
+        0.23103964692479603
+      ],
+      "R_mean": 0.4713289376543324,
+      "R_std": 0.026115075241620572,
+      "R_by_seed": [
+        0.4492655024985876,
+        0.45989847885558766,
+        0.45101117558560994,
+        0.48705712184402755,
+        0.5094124094878492
+      ]
+    },
+    {
+      "config_id": "topk3_lattice",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4515481742552132,
+      "P_std": 0.044366563171681084,
+      "P_by_seed": [
+        0.4169726171566784,
+        0.4368415407943757,
+        0.41124981580825054,
+        0.47602197243270467,
+        0.5166549250840569
+      ],
+      "C_mean": 0.13092593573174555,
+      "C_std": 0.03452878643983835,
+      "C_by_seed": [
+        0.10968142819693971,
+        0.09220238046999492,
+        0.11890233482664357,
+        0.16051322876572743,
+        0.173330306399422
+      ],
+      "R_mean": 0.3860852063893406,
+      "R_std": 0.030790888970183825,
+      "R_by_seed": [
+        0.36213190305820847,
+        0.3907403505593784,
+        0.3517986483949288,
+        0.3957653580498409,
+        0.42998977188434623
+      ]
+    },
+    {
+      "config_id": "topk3_lattice",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4194082011677761,
+      "P_std": 0.04310141132236285,
+      "P_by_seed": [
+        0.38122290021551103,
+        0.4082900615992863,
+        0.3779086603886729,
+        0.4633274967747166,
+        0.4662918868606937
+      ],
+      "C_mean": 0.09387388330903926,
+      "C_std": 0.027928170800440504,
+      "C_by_seed": [
+        0.09682669502735133,
+        0.05884702263897234,
+        0.07536566587362396,
+        0.10770871076032035,
+        0.13062132224492834
+      ],
+      "R_mean": 0.33492170618964084,
+      "R_std": 0.031155459874024658,
+      "R_by_seed": [
+        0.294078874690895,
+        0.35532774122421157,
+        0.31007956110241125,
+        0.36638965709042814,
+        0.3487326968402583
+      ]
+    },
+    {
+      "config_id": "topk5_lattice",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5220547600438732,
+      "P_std": 0.05108266465817052,
+      "P_by_seed": [
+        0.4833416569190971,
+        0.4996212059188052,
+        0.5085227523356805,
+        0.5071245073059009,
+        0.6116636777398826
+      ],
+      "C_mean": 0.35089912735348283,
+      "C_std": 0.07918572230096822,
+      "C_by_seed": [
+        0.2661968829078184,
+        0.33506866812193214,
+        0.4798323438129298,
+        0.3189594805843989,
+        0.3544382613403352
+      ],
+      "R_mean": 0.4869648473085252,
+      "R_std": 0.05037824352879475,
+      "R_by_seed": [
+        0.4567219686283152,
+        0.4661143391066122,
+        0.46053951795438763,
+        0.47522855924746144,
+        0.5762198516058493
+      ]
+    },
+    {
+      "config_id": "topk5_lattice",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4422952321368028,
+      "P_std": 0.04991561146622851,
+      "P_by_seed": [
+        0.41618514832148124,
+        0.44032241035104425,
+        0.3991029635787537,
+        0.4285617888410007,
+        0.5273038495917338
+      ],
+      "C_mean": 0.12945680408081287,
+      "C_std": 0.03503640527868567,
+      "C_by_seed": [
+        0.10977896022097328,
+        0.08746701539398388,
+        0.11856436572700534,
+        0.16364976877998377,
+        0.16782391028211804
+      ],
+      "R_mean": 0.37756683009639647,
+      "R_std": 0.04282165810054127,
+      "R_by_seed": [
+        0.3612956682109947,
+        0.39658890265405244,
+        0.339820780715251,
+        0.34673690445100885,
+        0.4433918944506751
+      ]
+    },
+    {
+      "config_id": "topk5_lattice",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": true,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4150514442479625,
+      "P_std": 0.04371665199672006,
+      "P_by_seed": [
+        0.3959020190089458,
+        0.37851893722717034,
+        0.3773982698450536,
+        0.4709324518857715,
+        0.452505543272871
+      ],
+      "C_mean": 0.07721631756325696,
+      "C_std": 0.03246536914571583,
+      "C_by_seed": [
+        0.07841421778280827,
+        0.047767325496302956,
+        0.04895463820059176,
+        0.12728730264955612,
+        0.08365810368702573
+      ],
+      "R_mean": 0.3455567584410312,
+      "R_std": 0.021083981668539777,
+      "R_by_seed": [
+        0.32532922300441813,
+        0.3355283442804977,
+        0.3333390954645212,
+        0.356373879501171,
+        0.3772132499545479
+      ]
+    }
+  ],
+  "non_claims": [
+    "The lattice flag adds prompt-model edges only; it does not connect validation or test queries to all prompts and models.",
+    "All configurations score the same 36 candidate actions.",
+    "This matrix does not implement GraphRouter-style Edge-GNN v2."
+  ]
+}

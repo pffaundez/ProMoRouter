@@ -7,19 +7,21 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-011 — Recreate routing-configuration ablation
+### T-025 — Specify Edge-GNN v2 Stage A implementation contract
 
-- Description: Recreate the routing-configuration ablation with the repaired population, shared manifests, reward contract, and no post-execution routing features.
-- Objective: Isolate which graph/routing components contribute beyond the Flat-MLP baseline.
-- Dependencies: T-010 completed.
-- Completion criterion: A documented ablation matrix, validated commands, and machine-readable outputs using the repaired protocol.
-- Configuration: D-023 fixes a 2x2 matrix over `edge_top_k={3,5}` and the prompt-model lattice `{off,on}` while holding the 36-action space and all other protocol elements fixed.
-- Current integrity gate: run `topk3_observed` twice with `--deterministic` into distinct output directories and require identical result JSON metrics before replacing the original nondeterministic gate.
-- Gate command after determinism passes: `python scripts/run_p0_routing_ablation.py --seeds 1 --artifact-root ~/repos/graph-router-2 --device cuda:0 --overwrite`.
-- Gate aggregation: `python analysis/aggregate_p0_routing_ablation.py --seeds 1 --output-json analysis/p0_routing_ablation_seed1.json --output-csv analysis/p0_routing_ablation_seed1.csv`.
-- Full sweep command after the gate passes: `python scripts/run_p0_routing_ablation.py --artifact-root ~/repos/graph-router-2 --device cuda:0`.
-- Full aggregation: `python analysis/aggregate_p0_routing_ablation.py`.
-- Prepared: manifest, runner, aggregator, compilation, and dry runs passed; experiment-host execution is pending.
+- Description: Convert D-026 into a code-level plan for exactly three
+  controlled arms: GraphRouter-style message passing, matched no-message-
+  passing, and the existing Flat-MLP.
+- Objective: Isolate graph architectural benefit while holding the 36-action
+  space and the complete repaired P0 protocol fixed.
+- Dependencies: T-011 completed; D-026 active.
+- Completion criterion: A reviewed machine-readable experiment manifest plus a
+  precise topology/scorer/data-flow specification, leakage audit, expected
+  outputs, seed-1 smoke gate, and five-seed aggregation contract. No training
+  run is part of this task.
+- Constraints: Preserve frozen P0; do not alter the current objective in Stage
+  A; do not use realized reward, performance, cost, or tokens as features; keep
+  inductive evaluation separate; do not implement Stage B or density variants.
 - State: in_progress
 - Priority: P1
 - Blocker: None.
@@ -27,7 +29,7 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 ## Next
 
 ### T-020 — Verify candidate integration and generate description embeddings
-State: in_progress. Priority: P0. Dependency: T-019.
+State: completed. Priority: P0. Dependency: T-019.
 
 - Description: Validate the three Hugging Face model identifiers and prompt execution contracts, then generate embeddings under `data/router/inductive_embeddings/` without overwriting P0 artifacts.
 - Completion criterion: All five unseen candidates pass metadata/integration checks and embedding files contain exactly the 3 unseen model IDs and 2 unseen prompt IDs.
@@ -61,6 +63,11 @@ State: blocked. Priority: P1. Blocker: review and explicit user approval.
 State: blocked. Priority: P2. Blocker: separate research-scope decision.
 
 ## Completed (recent)
+
+- T-011 completed: deterministic seed-1 reproduction passed; the canonical
+  five-seed 2x2 routing ablation validated 20 sources, 60 seed-level rows, and
+  12 aggregates. It found no consistent top-k 5 or prompt--model-lattice
+  advantage and remains separate from frozen P0.
 
 - Five-seed Edge-GNN, GraphRouter-direct, static-baseline, and Flat-MLP
   outputs verified.
