@@ -97,3 +97,12 @@ Los archivos de reparación fueron recibidos, pero todavía no se han fusionado 
 ## Prompt listo para el siguiente chat
 
 > Estamos continuando el proyecto ProMoRouter en la rama `fix/p0-routing-integrity`. Lee primero `docs/chat-context.md`, luego `docs/experiment-status.md`, `docs/decisions.md` y `docs/next-steps.md`. No reconstruyas el contexto desde la conversación. La generación inductiva completa ya produjo 8,712 filas en `outputs/inductive_full.jsonl`; dos filas fueron truncadas y ya fueron regeneradas en `repair_gsm8k_000072.jsonl` y `repair_alpaca_000102.jsonl`. Tu única tarea inicial es ejecutar T-023: fusionar esas dos filas en una copia corregida del JSONL y validar exactamente 8,712 claves únicas `(qid, model, prompt)`, 121 qids, 12 modelos, 6 prompts, cero respuestas vacías y presencia de las dos reparaciones con performance 1.0 y 0.5. No agregues nuevos experimentos ni cambies el protocolo hasta que esta validación pase. Después actualiza los tres documentos de continuidad y propone el siguiente paso basado solo en evidencia verificada.
+
+
+## Handoff update after repair merge (2026-09-18)
+
+T-023 is complete. The canonical inductive artifact is now `outputs/inductive_full_corrected.jsonl` with 8,712 validated rows. The original `outputs/inductive_full.jsonl` is retained as a pre-repair audit artifact. The next chat should begin with T-024: aggregate the corrected inductive artifact and analyze seen/unseen model and prompt conditions. Do not mix inductive values with P0 values or draft claims before producing machine-readable aggregates.
+
+### Updated handoff prompt
+
+> Continue ProMoRouter on `fix/p0-routing-integrity`. Read `docs/chat-context.md`, `docs/experiment-status.md`, `docs/decisions.md`, and `docs/next-steps.md`. T-023 is complete: `outputs/inductive_full_corrected.jsonl` is the canonical 8,712-row inductive artifact, validated for 121 queries, 12 models, 6 prompts, unique action keys, non-empty responses, and repaired truncation cases. Execute only T-024 first: build a machine-readable aggregation of performance and token-cost proxy by seen/unseen model, seen/unseen prompt, and masked prompt–model conditions. Keep inductive results separate from P0, distinguish verified facts from hypotheses, and update the continuity documents after analysis.
