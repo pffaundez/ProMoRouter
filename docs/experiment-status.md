@@ -635,3 +635,8 @@ Verified on the experiment host:
   - Alpaca `alpaca-train-000102`, `llama3.1-70b` + `step_back`: response with POS tags, performance 0.5.
 
 The repair files were received and inspected. They must be merged into a corrected full JSONL, followed by validation of exact population, uniqueness, non-empty responses, and metric fields. Until that merge/validation is run, the inductive dataset is not yet a final paper artifact.
+
+
+## Repair merge tool added (2026-09-18)
+
+Because the full inductive JSONL remains on the experiment host and was not available in this workspace, the merge was not executed remotely. Added `analysis/merge_inductive_repairs.py`, which deterministically replaces the two repair keys and validates 8,712 rows, 121 queries, 12 models, 6 prompts, unique keys, non-empty responses, and repaired performance values. The host-side command is the required finalization step.
