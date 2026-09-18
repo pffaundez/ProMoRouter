@@ -11,6 +11,7 @@
     "split_manifest_template": "data/router/splits/qnorm_complete_seed{seed}.json",
     "output_root": "outputs/p0_routing_ablation",
     "seeds": [1, 2, 3, 4, 5],
+    "deterministic": true,
     "action_space": "4 prompts x 9 models = 36 candidates",
     "loss": "mse + 0.10*KL + 0.05*CE - 0.005*entropy",
     "early_stopping": "validation reward"

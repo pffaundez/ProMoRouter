@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import random
 from collections import defaultdict
 from dataclasses import dataclass
@@ -76,10 +77,18 @@ RELATIONS = {
 }
 
 
-def set_seed(seed: int) -> None:
+def set_seed(seed: int, deterministic: bool = False) -> None:
+    if deterministic:
+        # Must be set before the first CUDA/cuBLAS operation in the process.
+        os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+    if deterministic:
+        torch.use_deterministic_algorithms(True)
+        if torch.backends.cudnn.is_available():
+            torch.backends.cudnn.benchmark = False
+            torch.backends.cudnn.deterministic = True
 
 
 def load_router_queries(path: Path) -> List[dict]:
@@ -166,6 +175,16 @@ def _edge_index(edges: Iterable[Tuple[int, int]]) -> torch.Tensor:
     if not edges:
         return torch.empty((2, 0), dtype=torch.long)
     return torch.tensor(edges, dtype=torch.long).t().contiguous()
+
+
+def aggregate_by_index(values: torch.Tensor, index: torch.Tensor, size: int) -> torch.Tensor:
+    """Sum values by index, avoiding CUDA atomic accumulation in deterministic mode."""
+    if torch.are_deterministic_algorithms_enabled():
+        selector = F.one_hot(index, num_classes=size).to(values.dtype).transpose(0, 1)
+        return selector @ values
+    output = values.new_zeros((size,) + values.shape[1:])
+    output.index_add_(0, index, values)
+    return output
 
 
 @dataclass
@@ -296,10 +315,12 @@ class HeteroSageLayer(nn.Module):
                 continue
             src, dst = edge_index[0], edge_index[1]
             msg = self.rel_lin[rel](h[src_type][src])
-            out = torch.zeros_like(h[dst_type])
-            out.index_add_(0, dst, msg)
-            deg = torch.zeros(h[dst_type].size(0), device=device, dtype=h[dst_type].dtype)
-            deg.index_add_(0, dst, torch.ones_like(dst, dtype=h[dst_type].dtype))
+            out = aggregate_by_index(msg, dst, h[dst_type].size(0))
+            deg = aggregate_by_index(
+                torch.ones((dst.numel(), 1), device=device, dtype=h[dst_type].dtype),
+                dst,
+                h[dst_type].size(0),
+            ).squeeze(-1)
             aggs[dst_type] = aggs[dst_type] + out / deg.clamp_min(1.0).unsqueeze(-1)
 
         new_h = {}
@@ -417,7 +438,9 @@ def compute_batch_loss(
 
         if entropy_beta > 0:
             probs = F.softmax(scores, dim=0)
-            action_probs_accum.index_add_(0, data["action_id"], probs.detach() if False else probs)
+            action_probs_accum = action_probs_accum + aggregate_by_index(
+                probs.unsqueeze(-1), data["action_id"], action_probs_accum.numel()
+            ).squeeze(-1)
 
     total = torch.stack(losses).mean()
     if entropy_beta > 0 and batch_qids:
@@ -677,12 +700,17 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--ce-alpha", type=float, default=0.05)
     p.add_argument("--entropy-beta", type=float, default=0.005)
     p.add_argument("--temperature", type=float, default=0.10)
+    p.add_argument(
+        "--deterministic",
+        action="store_true",
+        help="Enable deterministic CUDA/cuDNN behavior and non-atomic message aggregation.",
+    )
     return p.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    set_seed(args.seed)
+    set_seed(args.seed, deterministic=args.deterministic)
     device = torch.device(args.device)
     print("==== TRAIN GRAPHROUTER++ EDGE-GNN QNORM ====")
     print("Device:", device)
@@ -705,7 +733,7 @@ def main() -> None:
 
     all_results = []
     for lambda_key, lam in LAMBDA_CONFIGS:
-        set_seed(args.seed)
+        set_seed(args.seed, deterministic=args.deterministic)
         result = train_one_lambda(lambda_key, lam, router_queries, query_embs, task_embs, prompt_embs, model_embs, args, device)
         all_results.append(result)
 

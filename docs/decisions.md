@@ -549,3 +549,33 @@ These are unresolved choices, not adopted decisions:
   `analysis/aggregate_p0_routing_ablation.py`, and continuity documentation.
 - **Status:** active
 - **Replaced by:** —
+
+
+### D-024 — Require deterministic aggregation for the T-011 ablation
+
+- **Date:** 2026-09-18
+- **Context/problem:** Two new runs of `topk3_observed` with identical seed,
+  data, split, configuration, and current code produced materially different
+  P/C/R values. The trainer used CUDA `index_add_` for message, degree, and
+  entropy accumulation without enabling deterministic algorithms.
+- **Decision:** Preserve frozen P0 results unchanged, but require
+  `--deterministic` for every T-011 run. In this mode, configure deterministic
+  PyTorch/CUDA/cuDNN behavior and replace CUDA atomic index accumulation with
+  mathematically equivalent one-hot matrix aggregation. Verify two identical
+  seed-1 repetitions before rerunning the 2x2 gate.
+- **Justification:** Configuration effects cannot be distinguished from runtime
+  variance while identical runs diverge. Determinism is an integrity gate, not
+  a performance-oriented hyperparameter.
+- **Alternatives considered or discarded:** Continuing directly to five seeds
+  was rejected because seed would not uniquely identify an execution. Running
+  the full matrix on CPU was deferred because the deterministic GPU path can be
+  tested first. Replacing the frozen P0 table was rejected.
+- **Consequences:** The first nondeterministic T-011 gate is diagnostic only and
+  cannot be used as the ablation result. If two deterministic repetitions are
+  not identical, T-011 remains blocked. The deterministic ablation is a new
+  controlled evaluation and is not numerically merged into frozen P0.
+- **Files affected:** `train_router_edgegnn_qnorm.py`,
+  `configs/p0_routing_ablation.json`, `scripts/run_p0_routing_ablation.py`, and
+  continuity documentation.
+- **Status:** active
+- **Replaced by:** —

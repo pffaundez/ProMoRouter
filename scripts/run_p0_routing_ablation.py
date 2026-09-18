@@ -87,6 +87,8 @@ def main() -> None:
             ]
             if config["full_prompt_model_lattice"]:
                 command.append("--full-prompt-model-lattice")
+            if common.get("deterministic"):
+                command.append("--deterministic")
             if args.device:
                 command.extend(["--device", args.device])
             commands.append(command)

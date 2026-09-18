@@ -795,3 +795,21 @@ artifacts on `morel` live under `~/repos/graph-router-2`. The runner now accepts
 against that root; code and outputs remain in ProMoRouter. This is an execution
 path fix, not a protocol change. No ablation result was produced by the failed
 attempt.
+
+
+## T-011 nondeterminism gate failed (2026-09-18)
+
+The first 2x2 seed-1 gate completed with valid coverage, reward algebra, and
+non-collapsed action distributions. However, a direct repetition of
+`topk3_observed` with the same seed and stored configuration did not reproduce
+the first run. Reward differences between the two current-code runs were
+`+0.01348`, `-0.01847`, and `-0.00522` for lambda 0.1, 0.5, and 0.9. P and C
+also changed materially. Checkpoint metadata confirmed identical declared
+configuration, so the full sweep was not authorized.
+
+Inspection identified CUDA `index_add_` accumulation in message aggregation,
+degree counting, and the entropy term without deterministic-algorithm mode.
+D-024 adds an explicit deterministic mode using non-atomic one-hot matrix
+aggregation plus deterministic PyTorch/CUDA/cuDNN settings. Frozen P0 remains
+unchanged. T-011 must now pass two identical deterministic seed-1 repetitions
+before the 2x2 gate is rerun.
