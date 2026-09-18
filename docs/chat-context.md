@@ -83,3 +83,17 @@ No abrir otra variante metodológica sin actualizar `docs/decisions.md`.
 Después de cada cambio significativo actualiza también
 `docs/experiment-status.md` y `docs/next-steps.md`. Mantén una única
 tarea en la sección `Now` de `docs/next-steps.md`.
+
+
+## Estado al cierre de este chat (2026-09-18)
+
+La generación inductiva completa terminó en el host del experimento con 8,712 filas (121 test qids × 12 modelos × 6 prompts), usando Transformers para todos los candidatos. La auditoría encontró dos respuestas vacías causadas por truncación al límite de 256 tokens. Se regeneraron correctamente de forma dirigida con un límite de 512 tokens:
+
+- `gsm8k-train-000072`, `llama3.1-8b`, `cot`: response `54`, performance 1.0.
+- `alpaca-train-000102`, `llama3.1-70b`, `step_back`: response POS-tagged, performance 0.5.
+
+Los archivos de reparación fueron recibidos, pero todavía no se han fusionado en `outputs/inductive_full.jsonl` ni se ha ejecutado la validación final. La única tarea activa es T-023 en `docs/next-steps.md`.
+
+## Prompt listo para el siguiente chat
+
+> Estamos continuando el proyecto ProMoRouter en la rama `fix/p0-routing-integrity`. Lee primero `docs/chat-context.md`, luego `docs/experiment-status.md`, `docs/decisions.md` y `docs/next-steps.md`. No reconstruyas el contexto desde la conversación. La generación inductiva completa ya produjo 8,712 filas en `outputs/inductive_full.jsonl`; dos filas fueron truncadas y ya fueron regeneradas en `repair_gsm8k_000072.jsonl` y `repair_alpaca_000102.jsonl`. Tu única tarea inicial es ejecutar T-023: fusionar esas dos filas en una copia corregida del JSONL y validar exactamente 8,712 claves únicas `(qid, model, prompt)`, 121 qids, 12 modelos, 6 prompts, cero respuestas vacías y presencia de las dos reparaciones con performance 1.0 y 0.5. No agregues nuevos experimentos ni cambies el protocolo hasta que esta validación pase. Después actualiza los tres documentos de continuidad y propone el siguiente paso basado solo en evidencia verificada.
