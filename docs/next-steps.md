@@ -7,15 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-023 — Merge and validate the repaired inductive artifact
+### T-024 — Analyze the validated inductive artifact
 
-- Description: Replace the two truncated rows in `outputs/inductive_full.jsonl` with the targeted repair rows and run an integrity audit.
-- Objective: Establish one final 8,712-row inductive artifact before computing aggregates or writing paper claims.
-- Files involved: `outputs/inductive_full.jsonl`, `outputs/repair_gsm8k_000072.jsonl`, `outputs/repair_alpaca_000102.jsonl`, and a validation script or one-off validator.
-- Dependencies: repaired files received; commit `ac596bc` or later for `--qids`.
-- Completion criterion: exactly 8,712 unique (qid, model, prompt) rows; 121 qids; 12 models; 6 prompts; no empty responses; two repaired rows present with performance 1.0 and 0.5; no duplicate keys.
-- Command: validate with a JSONL audit that checks population, uniqueness, response presence, and repaired-row values.
-- State: in_progress
+- Description: Compute coverage, performance, cost-proxy, and reward summaries for seen/unseen models, seen/unseen prompts, and masked prompt–model combinations from `outputs/inductive_full_corrected.jsonl`.
+- Objective: Determine which inductive claims are supported before drafting paper text.
+- Files involved: `outputs/inductive_full_corrected.jsonl`, analysis scripts, and the three continuity documents.
+- Dependencies: T-023 completed; corrected artifact available on the experiment host.
+- Completion criterion: machine-readable aggregate tables and explicit separation of verified results from hypotheses.
+- Command: create or run a dedicated aggregation script against the corrected artifact; do not mix these values with P0 results.
+- State: pending
 - Priority: P0
 - Blocker: None.
 
@@ -81,3 +81,6 @@ Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `do
 
 
 - T-022 completed: full inductive generation produced 8,712 rows; two truncations were identified and regenerated successfully.
+
+
+- T-023 completed: merged both targeted repair rows and produced `outputs/inductive_full_corrected.jsonl` with 8,712 validated rows.
