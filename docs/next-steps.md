@@ -7,15 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-022 — Generate the complete inductive evaluation dataset
+### T-023 — Merge and validate the repaired inductive artifact
 
-- Description: Evaluate the 12-model × 6-prompt pool on all persisted test qids using the unified Transformers backend.
-- Objective: Produce held-out outcomes for unseen models, unseen prompts, and masked prompt–model combinations under a single comparable protocol.
-- Files involved: `experiments/generate_inductive_transformers.py`, `configs/inductive_candidates.yaml`, `outputs/inductive_inductive.jsonl`.
-- Dependencies: corrected smoke test; cached model access; sufficient GPU/storage.
-- Completion criterion: 72 actions per query are written without schema or runtime errors, with response, raw samples, performance, token counts, and latency fields.
-- Command: `python experiments/generate_inductive_transformers.py --source-qnorm ... --split-manifest ... --output outputs/inductive_full.jsonl`
-- State: pending
+- Description: Replace the two truncated rows in `outputs/inductive_full.jsonl` with the targeted repair rows and run an integrity audit.
+- Objective: Establish one final 8,712-row inductive artifact before computing aggregates or writing paper claims.
+- Files involved: `outputs/inductive_full.jsonl`, `outputs/repair_gsm8k_000072.jsonl`, `outputs/repair_alpaca_000102.jsonl`, and a validation script or one-off validator.
+- Dependencies: repaired files received; commit `ac596bc` or later for `--qids`.
+- Completion criterion: exactly 8,712 unique (qid, model, prompt) rows; 121 qids; 12 models; 6 prompts; no empty responses; two repaired rows present with performance 1.0 and 0.5; no duplicate keys.
+- Command: validate with a JSONL audit that checks population, uniqueness, response presence, and repaired-row values.
+- State: in_progress
 - Priority: P0
 - Blocker: None.
 
@@ -78,3 +78,6 @@ Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `do
 
 
 - T-021 completed: corrected smoke test validated final-answer extraction and normalized self-consistency voting; the zero score was confirmed as a genuine model error against the HotpotQA gold.
+
+
+- T-022 completed: full inductive generation produced 8,712 rows; two truncations were identified and regenerated successfully.
