@@ -611,3 +611,8 @@ The corrected smoke output now has the expected structure: `self_consistency.res
 ## Inductive smoke gold audit resolved (2026-09-17)
 
 The selected HotpotQA example was audited with the same loader used by the generator. Its gold answer is `President Richard Nixon`, while SmolLM2 generated `Allie Goertz` for `step_back` and did not reach the correct answer under self-consistency. Therefore `performance=0.0` is a genuine model error on this smoke query, not a qid, gold-field, extraction, or metric bug. The structural smoke validation passed; these two rows remain diagnostic and are not paper results.
+
+
+## Complete inductive generation finished (2026-09-18)
+
+The unified Transformers generation completed with exactly 8,712 rows: 121 test queries, 12 models, and 6 prompt strategies (72 actions per query). All rows use the Transformers backend and have non-null performance. Two rows have empty responses and require inspection before the dataset is accepted as complete; no aggregate inductive result should be reported yet.
