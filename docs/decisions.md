@@ -518,3 +518,34 @@ These are unresolved choices, not adopted decisions:
   `analysis/inductive_aggregates.json`, and continuity documentation.
 - **Status:** active
 - **Replaced by:** —
+
+
+### D-023 — Recreate the historical routing ablation as a controlled 2x2 matrix
+
+- **Date:** 2026-09-18
+- **Context/problem:** The canonical P0 table does not show a general Edge-GNN
+  advantage over Flat-MLP, and the README references four ablation scripts that
+  are absent. The existing trainer exposes the intended topology controls as
+  flags rather than separate scripts.
+- **Decision:** Recreate T-011 with a 2x2 matrix over observed reward-selected
+  edge density (`top-k` 3 versus 5) and the complete prompt-model lattice
+  (disabled versus enabled). Hold the repaired 797-query population, 36-action
+  candidate space, embeddings, split manifests, loss, early stopping, lambdas,
+  and seeds fixed. Run seed 1 as an integrity gate before seeds 1--5.
+- **Justification:** This is the smallest faithful reconstruction of the
+  historical configuration ablation and changes one graph-density factor at a
+  time. It does not conflate candidate-space size with graph topology.
+- **Alternatives considered or discarded:** Implementing GraphRouter-style
+  query-to-candidate connectivity, a new edge-aware scorer, a factorized router,
+  or a new regression-plus-ranking objective inside T-011 was rejected because
+  those changes belong to the subsequent Edge-GNN v2 experiment. Treating
+  `--full-prompt-model-lattice` as a complete query-action graph was also
+  rejected: the flag adds prompt-model edges only.
+- **Consequences:** T-011 remains a P0 closed-pool ablation and must not be
+  presented as Edge-GNN v2. All four configurations score the same 36 actions.
+  Results are pending execution on the experiment host.
+- **Files affected:** `configs/p0_routing_ablation.json`,
+  `scripts/run_p0_routing_ablation.py`,
+  `analysis/aggregate_p0_routing_ablation.py`, and continuity documentation.
+- **Status:** active
+- **Replaced by:** —

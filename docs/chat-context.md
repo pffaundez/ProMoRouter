@@ -131,3 +131,15 @@ rows for nine methods. The canonical artifacts are
 the continuation workspace, but the 20 source JSON files were not independently
 rerun there. P0 and inductive results remain separate. The sole active task is
 now T-011.
+
+
+## Latest handoff update for T-011 (2026-09-18)
+
+T-011 is prepared but not yet complete. D-023 defines the historical routing
+ablation as a controlled 2x2 matrix over observed top-k `{3,5}` and the complete
+prompt-model lattice `{off,on}`. The action space remains 36 candidates for
+every configuration. The manifest, runner, and aggregator are implemented and
+passed compilation/dry-run checks. Execute the seed-1 gate on `morel`, validate
+its aggregate, and only then launch seeds 1--5. Do not call this matrix
+GraphRouter-style or Edge-GNN v2: the current lattice flag adds prompt-model
+edges only and does not connect evaluation queries to every prompt/model.

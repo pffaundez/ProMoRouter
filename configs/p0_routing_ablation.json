@@ -1,0 +1,49 @@
+{
+  "protocol": "p0_repaired_routing_configuration_ablation",
+  "description": "Historical Edge-GNN topology ablation; not Edge-GNN v2.",
+  "common": {
+    "trainer": "train_router_edgegnn_qnorm.py",
+    "data_path": "data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl",
+    "query_emb_path": "data/router/query_embeddings.pt",
+    "task_emb_path": "data/router/task_embeddings.pt",
+    "prompt_emb_path": "data/router/prompt_embeddings.pt",
+    "model_emb_path": "data/router/model_embeddings.pt",
+    "split_manifest_template": "data/router/splits/qnorm_complete_seed{seed}.json",
+    "output_root": "outputs/p0_routing_ablation",
+    "seeds": [1, 2, 3, 4, 5],
+    "action_space": "4 prompts x 9 models = 36 candidates",
+    "loss": "mse + 0.10*KL + 0.05*CE - 0.005*entropy",
+    "early_stopping": "validation reward"
+  },
+  "configurations": [
+    {
+      "id": "topk3_observed",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": false,
+      "interpretation": "Current observed reward-selected top-3 graph."
+    },
+    {
+      "id": "topk5_observed",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": false,
+      "interpretation": "Higher observed-edge density with no full prompt-model lattice."
+    },
+    {
+      "id": "topk3_lattice",
+      "edge_top_k": 3,
+      "full_prompt_model_lattice": true,
+      "interpretation": "Top-3 observed query edges plus the complete 4x9 prompt-model lattice."
+    },
+    {
+      "id": "topk5_lattice",
+      "edge_top_k": 5,
+      "full_prompt_model_lattice": true,
+      "interpretation": "Top-5 observed query edges plus the complete 4x9 prompt-model lattice."
+    }
+  ],
+  "non_claims": [
+    "The lattice flag adds prompt-model edges only; it does not connect validation or test queries to all prompts and models.",
+    "All configurations score the same 36 candidate actions.",
+    "This matrix does not implement GraphRouter-style Edge-GNN v2."
+  ]
+}

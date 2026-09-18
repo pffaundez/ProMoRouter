@@ -754,3 +754,36 @@ returned aggregate artifacts. The continuation workspace did not receive the
 metrics. Static-baseline JSON files still lack serialized split-manifest paths;
 their exact split provenance remains supported by the recorded generation
 procedure rather than by fields inside those JSON files.
+
+
+## T-011 routing ablation prepared (2026-09-18)
+
+Repository inspection confirmed that the four optional ablation scripts named
+in the README do not exist. The canonical Edge-GNN trainer already exposes the
+underlying controls through `--edge-top-k` and
+`--full-prompt-model-lattice`. D-023 therefore defines a controlled 2x2 matrix:
+
+| Configuration | Observed top-k | Full prompt-model lattice |
+|---|---:|---:|
+| `topk3_observed` | 3 | no |
+| `topk5_observed` | 5 | no |
+| `topk3_lattice` | 3 | yes |
+| `topk5_lattice` | 5 | yes |
+
+All four configurations retain the repaired 797-query population, the same 36
+candidate actions, shared seed manifests, current loss, and validation-reward
+early stopping. The lattice flag adds prompt-model edges; it does not connect
+validation/test queries to all prompts and models.
+
+Added:
+
+- `configs/p0_routing_ablation.json` as the machine-readable contract;
+- `scripts/run_p0_routing_ablation.py` with seed/config selection, dry-run,
+  resume-by-default, and explicit overwrite support; and
+- `analysis/aggregate_p0_routing_ablation.py` with coverage, split, count,
+  reward-algebra, source-hash, mean, and sample-standard-deviation checks.
+
+Syntax compilation and dry runs passed: four commands are planned for the seed-1
+gate and 20 commands for the complete five-seed sweep. No ablation training or
+result aggregation has run in the continuation workspace; T-011 results remain
+pending execution on `morel`.
