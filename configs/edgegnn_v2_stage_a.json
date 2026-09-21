@@ -37,9 +37,10 @@
       "scorer": "shared_edge_aware_compositional"
     },
     {
-      "id": "edgegnn_v2_no_mp",
+      "id": "edgegnn_v2_self_only",
       "message_passing": false,
-      "num_layers": 0,
+      "num_layers": 2,
+      "layer_mode": "self_transform_only",
       "scorer": "shared_edge_aware_compositional"
     },
     {

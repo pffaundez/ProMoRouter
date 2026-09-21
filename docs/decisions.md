@@ -618,8 +618,8 @@ These are unresolved choices, not adopted decisions:
 - **Decision:** Freeze a staged minimal design. Stage A compares three arms
   under the same 36 actions and current training objective: GraphRouter-style
   message passing with `task`, `query`, `prompt`, and `model` nodes and explicit
-  query--task/query--prompt/query--model edges; an otherwise matched no-message-
-  passing arm; and the existing Flat-MLP. Prompt and model are independent
+  query--task/query--prompt/query--model edges; an otherwise matched two-layer
+  self-only arm; and the existing Flat-MLP. Prompt and model are independent
   entities. An edge-aware score may use a static learned or description-derived
   prompt--model edge representation, but never realized reward, performance,
   cost, or tokens. Stage B is permitted only after Stage A and changes only the
@@ -646,7 +646,7 @@ These are unresolved choices, not adopted decisions:
 - **Replaced by:** —
 
 
-### D-027 — Use per-query ego graphs and a matched no-message-passing control in Stage A
+### D-027 — Use per-query ego graphs and a matched self-only control in Stage A
 
 - **Date:** 2026-09-18
 - **Context/problem:** A global complete query--candidate graph could allow
@@ -656,13 +656,15 @@ These are unresolved choices, not adopted decisions:
 - **Decision:** Build each Stage A example as an independent query ego graph
   containing its task, all four prompts, and all nine models, with complete
   bidirectional query--task, query--prompt, and query--model relations. Compare
-  full message passing against an otherwise identical zero-message-passing arm
-  using the same compositional edge-aware scorer. Retrain the Flat-MLP
+  full message passing against a two-layer self-only arm with the same self
+  transforms, activation, LayerNorm, dropout, and compositional edge-aware
+  scorer. Retrain the Flat-MLP
   architecture under the shared Stage A objective as an additional control in
   a new output namespace; preserve its canonical P0 results unchanged.
 - **Justification:** Per-query graphs eliminate cross-query message paths and
-  label-selected topology. The no-message-passing arm isolates message passing
-  while holding scorer capacity and inputs fixed. A newly matched Flat-MLP run
+  label-selected topology. The self-only arm controls processing depth while
+  disabling neighbor exchange; relation parameters remain inactive and their
+  count must be reported. A newly matched Flat-MLP run
   avoids substituting historical numbers trained with a different objective.
 - **Alternatives considered or discarded:** A global train-plus-evaluation
   graph was rejected due to transductive coupling. Reward-selected top-k edges

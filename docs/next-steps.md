@@ -17,7 +17,8 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 - Completion criterion: Static/synthetic topology and leakage tests pass; all
   arms pass a CPU smoke test; runner and aggregator dry runs validate expected
   paths and cardinalities. No GPU training sweep is part of this task.
-- Constraints: Independent per-query graphs; exact matched full/no-MP scorer;
+- Constraints: Independent per-query graphs; matched full-MP/self-only scorer
+  with equal depth, activation and normalization;
   shared objective; no reward-selected topology; no realized outcomes as
   features; new output namespace; preserve P0 and inductive artifacts.
 - State: in_progress

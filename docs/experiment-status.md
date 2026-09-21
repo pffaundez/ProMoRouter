@@ -874,7 +874,7 @@ D-026 defines the next experiment before implementation. Stage A will hold the
 current objective, early stopping, seeds, and scorer capacity fixed while
 comparing: (1) GraphRouter-style full message passing with explicit
 query--task, query--prompt, and query--model connections; (2) an otherwise
-matched no-message-passing variant; and (3) the existing Flat-MLP. Prompt and
+matched two-layer self-only variant; and (3) the existing Flat-MLP. Prompt and
 model remain independent nodes and the scorer consumes only pre-routing
 representations, optionally including a static prompt--model edge embedding.
 
@@ -897,7 +897,7 @@ confounds found during repository inspection:
 - Stage A uses an independent ego graph per query, preventing message passing
   between train, validation, or test queries.
 - The primary comparison is full message passing versus an otherwise matched
-  no-message-passing arm with the same edge-aware scorer. The Flat-MLP
+  self-only arm with the same edge-aware scorer and processing depth. The Flat-MLP
   architecture is retrained under the shared Stage A objective in a new output
   namespace rather than reusing historical results trained with a different
   loss.

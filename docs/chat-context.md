@@ -157,7 +157,7 @@ not GraphRouter-style Edge-GNN v2 and remains separate from frozen P0.
 
 D-026 freezes a staged v2 design. The sole active task is T-025: specify and
 review the Stage A implementation contract for a GraphRouter-style full
-message-passing arm, a matched no-message-passing arm, and the existing
+message-passing arm, a matched two-layer self-only arm, and the existing
 Flat-MLP, all with the same 36 actions and current objective. Do not implement
 or run v2 until that contract and leakage audit are complete. Objective,
 density, factorized-router, and inductive variants remain later gated stages.
@@ -169,7 +169,7 @@ T-025 is complete. The binding pre-implementation contract is
 `docs/edgegnn-v2-stage-a.md`, mirrored by the machine-readable manifest
 `configs/edgegnn_v2_stage_a.json`. D-027 requires independent per-query ego
 graphs to prevent cross-query transductive coupling and makes full message
-passing versus a matched no-message-passing arm the primary causal comparison.
+passing versus a matched self-only arm the primary causal comparison.
 The Flat-MLP architecture must be retrained under the shared Stage A objective;
 its frozen P0 outputs are not reused as a matched run.
 

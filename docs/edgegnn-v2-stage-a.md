@@ -16,7 +16,7 @@ generalization and it does not modify frozen P0 artifacts.
 | Arm | Message passing | Scorer | Role |
 |---|---|---|---|
 | `edgegnn_v2_full_mp` | Two heterogeneous layers | Shared edge-aware scorer | Treatment |
-| `edgegnn_v2_no_mp` | Disabled; projected node states only | Same scorer and parameter dimensions | Primary matched control |
+| `edgegnn_v2_self_only` | Disabled; two self-transform-only layers | Same scorer, depth, activation and normalization | Primary matched control |
 | `flat_mlp_shared_objective` | None | Existing flat concatenation architecture | External architecture control |
 
 The first two arms are the causal comparison. The Flat-MLP arm is retrained
@@ -55,11 +55,15 @@ For the two matched arms, each candidate action is scored as
 `s(q,p,m) = f_theta(h_q, h_p, h_m, e_pm)`.
 
 `edgegnn_v2_full_mp` obtains `h_q`, `h_p`, and `h_m` after two message-passing
-layers. `edgegnn_v2_no_mp` uses the corresponding projected initial states.
+layers. `edgegnn_v2_self_only` applies two layers containing the same per-node
+self transform, LayerNorm, ReLU and dropout, but receives no neighbor messages.
+Relation matrices are inactive in this control, so total and gradient-active
+parameter counts are reported separately.
 The scorer, hidden sizes, dropout, and parameterization are otherwise shared.
 
-`e_pm` must be compositional and candidate-description based, for example a
-shared projection of `[x_p, x_m, x_p * x_m]`. A learned lookup table indexed by
+`e_pm` is computed before message passing using the identical shared projection
+`g([x_p, x_m, x_p * x_m])` in both matched arms. It is constant per candidate
+pair and independent of the query and all realized outcomes. A learned lookup table indexed by
 the 36 closed-pool pair IDs is prohibited because it cannot represent an
 unseen prompt--model pair in the later inductive evaluation.
 
@@ -93,7 +97,12 @@ A introduces no pre-routing cost predictor.
 - Lambdas: 0.1, 0.5, and 0.9.
 - Reward: `R = P - lambda * C`.
 - Hidden dimension: 256.
-- Message-passing layers: two for `edgegnn_v2_full_mp`.
+- Processing layers: two in both matched arms; only `edgegnn_v2_full_mp`
+  receives neighbor messages.
+- Aggregation: a degree-normalized mean computed separately per directed
+  relation, followed by a sum across relation types.
+- Each direction and each layer has independent relation parameters.
+- Normalization: per-node LayerNorm; no batch-level node statistics.
 - Dropout: 0.10.
 - Optimizer: AdamW, learning rate `5e-4`, weight decay `1e-4`.
 - Maximum epochs: 80; patience: 18.
@@ -117,7 +126,9 @@ Each arm/seed JSON must contain three lambda results and record:
 - deterministic flag and relevant runtime versions;
 - 121 test queries;
 - P, C, R, prompt counts, model counts, and task counts;
-- checkpoint path and a serialized configuration snapshot.
+- checkpoint path and a serialized configuration snapshot;
+- total trainable, gradient-active, and inactive parameter counts;
+- per-query selections and outcomes for paired comparisons and bootstrap.
 
 The aggregator must require 15 source JSON files, 45 seed-level results, and
 nine arm/lambda aggregates. It must verify unique arm/seed/lambda keys, seeds
@@ -127,7 +138,7 @@ hashes, and mean/sample-standard-deviation recomputation.
 ## Execution gates
 
 1. Static and synthetic tests: graph membership, exact relation counts,
-   split isolation, no forbidden features, all 36 scores, and no-MP bypass.
+   split isolation, no forbidden features, all 36 scores, and self-only behavior.
 2. CPU smoke: one small synthetic batch for all three arms; finite loss and
    gradients; output schema validation.
 3. Determinism gate: two independent seed-1 repetitions per arm must match
@@ -140,7 +151,7 @@ hashes, and mean/sample-standard-deviation recomputation.
 ## Interpretation gate
 
 Stage A may support an architectural message-passing claim only if the matched
-`edgegnn_v2_full_mp` arm improves over `edgegnn_v2_no_mp` consistently enough
+`edgegnn_v2_full_mp` arm improves over `edgegnn_v2_self_only` consistently enough
 to justify the claim. Flat-MLP provides a broader external control but is not a
 substitute for the matched comparison. No significance, v2 advantage, or
 inductive-generalization claim exists before execution and analysis.
