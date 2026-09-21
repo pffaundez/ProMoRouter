@@ -52,14 +52,17 @@ density variants belong to a later gated experiment.
 
 For the two matched arms, each candidate action is scored as
 
-`s(q,p,m) = f_theta(h_q, h_p, h_m, e_pm)`.
+`s(q,p,m) = f_theta(h_q, h_t, h_p, h_m, e_pm)`.
 
 `edgegnn_v2_full_mp` obtains `h_q`, `h_p`, and `h_m` after two message-passing
 layers. `edgegnn_v2_self_only` applies two layers containing the same per-node
 self transform, LayerNorm, ReLU and dropout, but receives no neighbor messages.
 Relation matrices are inactive in this control, so total and gradient-active
 parameter counts are reported separately.
-The scorer, hidden sizes, dropout, and parameterization are otherwise shared.
+The task state is an explicit scorer input in both matched arms so the
+self-only control does not lose task information merely by disabling neighbor
+messages. Flat-MLP receives the same task embedding. The scorer, hidden sizes,
+dropout, and parameterization are otherwise shared.
 
 `e_pm` is computed before message passing using the identical shared projection
 `g([x_p, x_m, x_p * x_m])` in both matched arms. It is constant per candidate

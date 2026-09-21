@@ -116,7 +116,7 @@ def batches(rows, size, shuffle):
 
 def make_model(arm, dims, args, device):
     if arm == "flat_mlp_shared_objective":
-        model = FlatSharedObjectiveRouter(dims["query"], dims["prompt"], dims["model"], args.hidden_dim, args.dropout)
+        model = FlatSharedObjectiveRouter(dims["query"], dims["task"], dims["prompt"], dims["model"], args.hidden_dim, args.dropout)
     else:
         model = MatchedEdgeRouter(dims, args.hidden_dim, args.dropout, arm == "edgegnn_v2_full_mp")
     return model.to(device)

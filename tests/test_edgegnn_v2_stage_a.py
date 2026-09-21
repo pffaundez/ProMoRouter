@@ -65,11 +65,10 @@ class StageATest(unittest.TestCase):
         full.eval(); self_only.eval()
         self.assertEqual(full(self.graph).shape, (2, 36))
         before = self_only(self.graph)
-        changed = build_ego_graph_batch(
-            ["q1", "q2"], self.graph.x_dict["query"],
-            self.graph.x_dict["task"] * 100,
-            self.graph.x_dict["prompt"][:4], self.graph.x_dict["model"][:9],
-        )
+        changed_edges = {name: value.clone() for name, value in self.graph.edge_index_dict.items()}
+        changed_edges["task_to_query"] = torch.tensor([[1, 0], [0, 1]])
+        changed = type(self.graph)(self.graph.x_dict, changed_edges, self.graph.query_ids,
+                                   self.graph.prompt_count, self.graph.model_count)
         self.assertTrue(torch.equal(before, self_only(changed)))
         self.assertFalse(torch.equal(full(self.graph), full(changed)))
 
@@ -112,7 +111,7 @@ class StageATest(unittest.TestCase):
         arms = [
             MatchedEdgeRouter(dims, hidden_dim=16, dropout=0.0, message_passing=True),
             MatchedEdgeRouter(dims, hidden_dim=16, dropout=0.0, message_passing=False),
-            FlatSharedObjectiveRouter(5, 7, 11, hidden_dim=16, dropout=0.0),
+            FlatSharedObjectiveRouter(5, 3, 7, 11, hidden_dim=16, dropout=0.0),
         ]
         rewards = torch.randn(2, 36)
         for model in arms:

@@ -145,7 +145,7 @@ class MatchedEdgeRouter(nn.Module):
             nn.Linear(hidden_dim * 3, hidden_dim), nn.GELU(), nn.LayerNorm(hidden_dim)
         )
         self.scorer = nn.Sequential(
-            nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.GELU(), nn.Dropout(dropout),
+            nn.Linear(hidden_dim * 5, hidden_dim * 2), nn.GELU(), nn.Dropout(dropout),
             nn.Linear(hidden_dim * 2, hidden_dim), nn.GELU(), nn.Dropout(dropout), nn.Linear(hidden_dim, 1),
         )
 
@@ -161,23 +161,26 @@ class MatchedEdgeRouter(nn.Module):
         for layer in self.layers:
             states = layer(states, graph.edge_index_dict, include_messages=self.message_passing)
         q_idx, p_idx, m_idx = (x.to(states["query"].device) for x in graph.action_indices)
-        q, p, m = states["query"][q_idx], states["prompt"][p_idx], states["model"][m_idx]
+        q = states["query"][q_idx]
+        task = states["task"][q_idx]
+        p, m = states["prompt"][p_idx], states["model"][m_idx]
         edge = self.compose_edges(initial, graph)
-        return self.scorer(torch.cat((q, p, m, edge), dim=-1)).view(len(graph.query_ids), -1)
+        return self.scorer(torch.cat((q, task, p, m, edge), dim=-1)).view(len(graph.query_ids), -1)
 
 
 class FlatSharedObjectiveRouter(nn.Module):
-    def __init__(self, query_dim, prompt_dim, model_dim, hidden_dim=256, dropout=0.1):
+    def __init__(self, query_dim, task_dim, prompt_dim, model_dim, hidden_dim=256, dropout=0.1):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(query_dim + prompt_dim + model_dim, hidden_dim), nn.LayerNorm(hidden_dim),
+            nn.Linear(query_dim + task_dim + prompt_dim + model_dim, hidden_dim), nn.LayerNorm(hidden_dim),
             nn.GELU(), nn.Dropout(dropout), nn.Linear(hidden_dim, hidden_dim),
             nn.LayerNorm(hidden_dim), nn.GELU(), nn.Dropout(dropout), nn.Linear(hidden_dim, 1),
         )
 
     def forward(self, graph: EgoGraphBatch) -> torch.Tensor:
         q_idx, p_idx, m_idx = (x.to(graph.x_dict["query"].device) for x in graph.action_indices)
-        features = torch.cat((graph.x_dict["query"][q_idx], graph.x_dict["prompt"][p_idx], graph.x_dict["model"][m_idx]), -1)
+        features = torch.cat((graph.x_dict["query"][q_idx], graph.x_dict["task"][q_idx],
+                              graph.x_dict["prompt"][p_idx], graph.x_dict["model"][m_idx]), -1)
         return self.net(features).view(len(graph.query_ids), -1)
 
 
