@@ -1,0 +1,1234 @@
+{
+  "protocol": "edgegnn_v2_stage_a_closed_pool",
+  "source_files": 15,
+  "normalized_rows": 45,
+  "sources": [
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_full_mp/stage_a_results_seed1.json",
+      "sha256": "ee13694a5508b93c9dc8a69aa6bdafc9eaba56df05ebaba1ecfa51f5ec83a7d3"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_full_mp/stage_a_results_seed2.json",
+      "sha256": "97e5e237c26aeba1ff93323a31ec241c932a5d33cea34e8856f04f657c469b74"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_full_mp/stage_a_results_seed3.json",
+      "sha256": "173f92597b82a5ce84086b8c2c3aef1644c89047d33eb3aee068776402b08325"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_full_mp/stage_a_results_seed4.json",
+      "sha256": "5fd72c642ec51bea48f1b54f25cc91e69c1a39de2d21e78ffc3e16e0ae7113a3"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_full_mp/stage_a_results_seed5.json",
+      "sha256": "4c4f2aab509ce7972114b3e8630891858e7f44a10ab08aa829d11db3c3c82a39"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_self_only/stage_a_results_seed1.json",
+      "sha256": "89f0d1585b9365ba028771c3dc51985e92903625bb2cbdd01d7af3f249505150"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_self_only/stage_a_results_seed2.json",
+      "sha256": "084f3178b29fdbc76b9d1cbee9756996ff46e263319aa5ebdf228568c54d9cc3"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_self_only/stage_a_results_seed3.json",
+      "sha256": "6422da849a4f94cd5607bee8f0941872de4bb5dcb09917afaef9308833330eca"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_self_only/stage_a_results_seed4.json",
+      "sha256": "5577fca586d695ac7a9484f010f4b04d5d8a343c617d3dda89bc1abef9f6ea7d"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/edgegnn_v2_self_only/stage_a_results_seed5.json",
+      "sha256": "871fcaf0d8eb11acacf07e8405b77b0a04377e3305ab43be765677ef947dc24c"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/flat_mlp_shared_objective/stage_a_results_seed1.json",
+      "sha256": "a08bca261e4ec983d2f1718335cab638dd1401579577610ab57ac16733e9170e"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/flat_mlp_shared_objective/stage_a_results_seed2.json",
+      "sha256": "d1929d43d7a8005408afa720f83d4c982656f4c9192e417203ae0e23fd557e9a"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/flat_mlp_shared_objective/stage_a_results_seed3.json",
+      "sha256": "67ed9c3f1a5a04d68a1b9b47c2fff8a662fc2d34d79e6dd8b1da9835b624030b"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/flat_mlp_shared_objective/stage_a_results_seed4.json",
+      "sha256": "0d18bb0013b7395ac31bb42f2c064d64a3c07216515a6f00026fbb84375eec1d"
+    },
+    {
+      "path": "outputs/edgegnn_v2_stage_a_deterministic_a/flat_mlp_shared_objective/stage_a_results_seed5.json",
+      "sha256": "abf617accb02800943c401ba5a1fa41749744817ecbb4ef478e5dfea91ef2817"
+    }
+  ],
+  "seed_results": [
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5311696713497817,
+      "C": 0.38638876437802205,
+      "R": 0.49253079491197943,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4118880756384085,
+      "C": 0.09447818093794622,
+      "R": 0.3646489851694354,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.36899845948642934,
+      "C": 0.05297318564762538,
+      "R": 0.3213225924035665,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5204602370023235,
+      "C": 0.42451794502471596,
+      "R": 0.47800844249985186,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4451671581376683,
+      "C": 0.11879649878602691,
+      "R": 0.3857689087446548,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3755635934119875,
+      "C": 0.04981754951406085,
+      "R": 0.3307277988493327,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5459020773241342,
+      "C": 0.4911770991488429,
+      "R": 0.4967843674092499,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.42461845642032703,
+      "C": 0.19020342880721428,
+      "R": 0.3295167420167199,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.3988957812717138,
+      "C": 0.049617435786996254,
+      "R": 0.3542400890634172,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5445537641028727,
+      "C": 0.38718231813597287,
+      "R": 0.5058355322892754,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.36768113261412,
+      "C": 0.15860527616440634,
+      "R": 0.28837849453191683,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4215925891752824,
+      "C": 0.0836945918522398,
+      "R": 0.3462674565082666,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6124906478341946,
+      "C": 0.37713357294363176,
+      "R": 0.5747772905398314,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.49545425957084194,
+      "C": 0.08082041635528238,
+      "R": 0.45504405139320075,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4416377833497918,
+      "C": 0.05908842078767994,
+      "R": 0.3884582046408799,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2859777,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5347496367190495,
+      "C": 0.39916695801402663,
+      "R": 0.49483294091764685,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4407007132679963,
+      "C": 0.1362264829626199,
+      "R": 0.3725874717866864,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.35266543478389417,
+      "C": 0.06323893607809586,
+      "R": 0.2957503923136079,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5833187808305764,
+      "C": 0.4999101650160314,
+      "R": 0.5333277643289733,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.42031564966829355,
+      "C": 0.07220389215421887,
+      "R": 0.3842137035911841,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.38991935951404333,
+      "C": 0.04905252798060186,
+      "R": 0.34577208433150164,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.48929381915483594,
+      "C": 0.43755797302150284,
+      "R": 0.44553802185268565,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.39110695188942035,
+      "C": 0.12451412648439777,
+      "R": 0.3288498886472215,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.40549929335343937,
+      "C": 0.05166944242197989,
+      "R": 0.35899679517365746,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5561943755077183,
+      "C": 0.40714007141915237,
+      "R": 0.5154803683658031,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3885154939479818,
+      "C": 0.14452681170626397,
+      "R": 0.31625208809484984,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4602477183519316,
+      "C": 0.09621948751424678,
+      "R": 0.3736501795891095,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6200882634840721,
+      "C": 0.37276971275525644,
+      "R": 0.5828112922085464,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4714543867148151,
+      "C": 0.06818017407468605,
+      "R": 0.4373642996774721,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.4626139159475969,
+      "C": 0.06612530348231739,
+      "R": 0.4031011428135112,
+      "parameter_counts": {
+        "total_trainable": 2859777,
+        "active_with_gradient": 2073345,
+        "inactive_trainable": 786432
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5370887681102949,
+      "C": 0.4270500423278937,
+      "R": 0.49438376387750554,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4029082625119154,
+      "C": 0.09324959691994908,
+      "R": 0.3562834640519409,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.37691922615136,
+      "C": 0.050737841848538,
+      "R": 0.3312551684876758,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5072277198460969,
+      "C": 0.49311068866494273,
+      "R": 0.45791665097960266,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.47355016191636234,
+      "C": 0.11723941407735991,
+      "R": 0.4149304548776824,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.40802547387963484,
+      "C": 0.0470954583103197,
+      "R": 0.3656395614003471,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5138185459597051,
+      "C": 0.36385291416490495,
+      "R": 0.4774332545432146,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.3795428308696786,
+      "C": 0.08597074959942809,
+      "R": 0.33655745606996457,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.39374528437360257,
+      "C": 0.041605002750942775,
+      "R": 0.35630078189775405,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.5565380188059216,
+      "C": 0.3752685985104604,
+      "R": 0.5190111589548755,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.4669778853470136,
+      "C": 0.16605776918653692,
+      "R": 0.38394900075374516,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.46838625933020567,
+      "C": 0.07420803548158185,
+      "R": 0.401599027396782,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "P": 0.6197210430544763,
+      "C": 0.37836227629118224,
+      "R": 0.5818848154253581,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "P": 0.5476561005512053,
+      "C": 0.17887132459518323,
+      "R": 0.4582204382536137,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "P": 0.45606189304270034,
+      "C": 0.06900825410694546,
+      "R": 0.39395446434644943,
+      "parameter_counts": {
+        "total_trainable": 624385,
+        "active_with_gradient": 624385,
+        "inactive_trainable": 0
+      }
+    }
+  ],
+  "aggregates": [
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5509152795226614,
+      "P_std": 0.03596708813086271,
+      "P_by_seed": [
+        0.5311696713497817,
+        0.5204602370023235,
+        0.5459020773241342,
+        0.5445537641028727,
+        0.6124906478341946
+      ],
+      "C_mean": 0.4132799399262371,
+      "C_std": 0.04718326293575723,
+      "C_by_seed": [
+        0.38638876437802205,
+        0.42451794502471596,
+        0.4911770991488429,
+        0.38718231813597287,
+        0.37713357294363176
+      ],
+      "R_mean": 0.5095872855300376,
+      "R_std": 0.037801700746438384,
+      "R_by_seed": [
+        0.49253079491197943,
+        0.47800844249985186,
+        0.4967843674092499,
+        0.5058355322892754,
+        0.5747772905398314
+      ]
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.42896181647627313,
+      "P_std": 0.04676953523511413,
+      "P_by_seed": [
+        0.4118880756384085,
+        0.4451671581376683,
+        0.42461845642032703,
+        0.36768113261412,
+        0.49545425957084194
+      ],
+      "C_mean": 0.12858076021017523,
+      "C_std": 0.045383347642826886,
+      "C_by_seed": [
+        0.09447818093794622,
+        0.11879649878602691,
+        0.19020342880721428,
+        0.15860527616440634,
+        0.08082041635528238
+      ],
+      "R_mean": 0.36467143637118554,
+      "R_std": 0.06258749655516081,
+      "R_by_seed": [
+        0.3646489851694354,
+        0.3857689087446548,
+        0.3295167420167199,
+        0.28837849453191683,
+        0.45504405139320075
+      ]
+    },
+    {
+      "arm_id": "edgegnn_v2_full_mp",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.401337641339041,
+      "P_std": 0.030620464023126306,
+      "P_by_seed": [
+        0.36899845948642934,
+        0.3755635934119875,
+        0.3988957812717138,
+        0.4215925891752824,
+        0.4416377833497918
+      ],
+      "C_mean": 0.059038236717720446,
+      "C_std": 0.014304682573613297,
+      "C_by_seed": [
+        0.05297318564762538,
+        0.04981754951406085,
+        0.049617435786996254,
+        0.0836945918522398,
+        0.05908842078767994
+      ],
+      "R_mean": 0.3482032282930926,
+      "R_std": 0.025925919661572455,
+      "R_by_seed": [
+        0.3213225924035665,
+        0.3307277988493327,
+        0.3542400890634172,
+        0.3462674565082666,
+        0.3884582046408799
+      ]
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5567289751392505,
+      "P_std": 0.049376853289428015,
+      "P_by_seed": [
+        0.5347496367190495,
+        0.5833187808305764,
+        0.48929381915483594,
+        0.5561943755077183,
+        0.6200882634840721
+      ],
+      "C_mean": 0.4233089760451939,
+      "C_std": 0.048655070937903465,
+      "C_by_seed": [
+        0.39916695801402663,
+        0.4999101650160314,
+        0.43755797302150284,
+        0.40714007141915237,
+        0.37276971275525644
+      ],
+      "R_mean": 0.5143980775347311,
+      "R_std": 0.05040926050081534,
+      "R_by_seed": [
+        0.49483294091764685,
+        0.5333277643289733,
+        0.44553802185268565,
+        0.5154803683658031,
+        0.5828112922085464
+      ]
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4224186390977014,
+      "P_std": 0.03490346097362633,
+      "P_by_seed": [
+        0.4407007132679963,
+        0.42031564966829355,
+        0.39110695188942035,
+        0.3885154939479818,
+        0.4714543867148151
+      ],
+      "C_mean": 0.10913029747643732,
+      "C_std": 0.036277578127231425,
+      "C_by_seed": [
+        0.1362264829626199,
+        0.07220389215421887,
+        0.12451412648439777,
+        0.14452681170626397,
+        0.06818017407468605
+      ],
+      "R_mean": 0.3678534903594828,
+      "R_std": 0.048233301336801766,
+      "R_by_seed": [
+        0.3725874717866864,
+        0.3842137035911841,
+        0.3288498886472215,
+        0.31625208809484984,
+        0.4373642996774721
+      ]
+    },
+    {
+      "arm_id": "edgegnn_v2_self_only",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.41418914439018106,
+      "P_std": 0.04721242831202245,
+      "P_by_seed": [
+        0.35266543478389417,
+        0.38991935951404333,
+        0.40549929335343937,
+        0.4602477183519316,
+        0.4626139159475969
+      ],
+      "C_mean": 0.06526113949544836,
+      "C_std": 0.01877970124021239,
+      "C_by_seed": [
+        0.06323893607809586,
+        0.04905252798060186,
+        0.05166944242197989,
+        0.09621948751424678,
+        0.06612530348231739
+      ],
+      "R_mean": 0.3554541188442776,
+      "R_std": 0.03959849375066135,
+      "R_by_seed": [
+        0.2957503923136079,
+        0.34577208433150164,
+        0.35899679517365746,
+        0.3736501795891095,
+        0.4031011428135112
+      ]
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.5468788191552989,
+      "P_std": 0.0451672618168507,
+      "P_by_seed": [
+        0.5370887681102949,
+        0.5072277198460969,
+        0.5138185459597051,
+        0.5565380188059216,
+        0.6197210430544763
+      ],
+      "C_mean": 0.40752890399187686,
+      "C_std": 0.053629115875408355,
+      "C_by_seed": [
+        0.4270500423278937,
+        0.49311068866494273,
+        0.36385291416490495,
+        0.3752685985104604,
+        0.37836227629118224
+      ],
+      "R_mean": 0.5061259287561113,
+      "R_std": 0.04793412281427314,
+      "R_by_seed": [
+        0.49438376387750554,
+        0.45791665097960266,
+        0.4774332545432146,
+        0.5190111589548755,
+        0.5818848154253581
+      ]
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4541270482392351,
+      "P_std": 0.06609889272459649,
+      "P_by_seed": [
+        0.4029082625119154,
+        0.47355016191636234,
+        0.3795428308696786,
+        0.4669778853470136,
+        0.5476561005512053
+      ],
+      "C_mean": 0.12827777087569145,
+      "C_std": 0.04220704411317443,
+      "C_by_seed": [
+        0.09324959691994908,
+        0.11723941407735991,
+        0.08597074959942809,
+        0.16605776918653692,
+        0.17887132459518323
+      ],
+      "R_mean": 0.38998816280138937,
+      "R_std": 0.04823142120354641,
+      "R_by_seed": [
+        0.3562834640519409,
+        0.4149304548776824,
+        0.33655745606996457,
+        0.38394900075374516,
+        0.4582204382536137
+      ]
+    },
+    {
+      "arm_id": "flat_mlp_shared_objective",
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "P_mean": 0.4206276273555007,
+      "P_std": 0.03977553609046075,
+      "P_by_seed": [
+        0.37691922615136,
+        0.40802547387963484,
+        0.39374528437360257,
+        0.46838625933020567,
+        0.45606189304270034
+      ],
+      "C_mean": 0.05653091849966556,
+      "C_std": 0.01426126726186692,
+      "C_by_seed": [
+        0.050737841848538,
+        0.0470954583103197,
+        0.041605002750942775,
+        0.07420803548158185,
+        0.06900825410694546
+      ],
+      "R_mean": 0.36974980070580166,
+      "R_std": 0.028634969296414688,
+      "R_by_seed": [
+        0.3312551684876758,
+        0.3656395614003471,
+        0.35630078189775405,
+        0.401599027396782,
+        0.39395446434644943
+      ]
+    }
+  ],
+  "paired_query_comparisons": [
+    {
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.0023021460056674367,
+      "R_bootstrap_95_ci": [
+        -0.021142808331007304,
+        0.014188734304221457
+      ]
+    },
+    {
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.007938486617250938,
+      "R_bootstrap_95_ci": [
+        -0.0590738603568151,
+        0.04474335626606668
+      ]
+    },
+    {
+      "seed": 1,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": 0.025572200089958613,
+      "R_bootstrap_95_ci": [
+        -0.02297091613261968,
+        0.07359982969225884
+      ]
+    },
+    {
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.05531932182912137,
+      "R_bootstrap_95_ci": [
+        -0.1050039909819472,
+        -0.01053331512890464
+      ]
+    },
+    {
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": 0.0015552051534706895,
+      "R_bootstrap_95_ci": [
+        -0.06629463939635037,
+        0.06892374269702772
+      ]
+    },
+    {
+      "seed": 2,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.015044285482168967,
+      "R_bootstrap_95_ci": [
+        -0.03952814203942933,
+        0.004605876069616005
+      ]
+    },
+    {
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": 0.05124634555656432,
+      "R_bootstrap_95_ci": [
+        0.013901439650861687,
+        0.09333059492036085
+      ]
+    },
+    {
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": 0.0006668533694984253,
+      "R_bootstrap_95_ci": [
+        -0.06266375684683512,
+        0.06134567504233011
+      ]
+    },
+    {
+      "seed": 3,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.004756706110240261,
+      "R_bootstrap_95_ci": [
+        -0.03813200447600613,
+        0.03107770922178141
+      ]
+    },
+    {
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.009644836076527592,
+      "R_bootstrap_95_ci": [
+        -0.06594444649132385,
+        0.04403199751145583
+      ]
+    },
+    {
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.027873593562933008,
+      "R_bootstrap_95_ci": [
+        -0.09458044646567595,
+        0.03852299783015162
+      ]
+    },
+    {
+      "seed": 4,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.027382723080842896,
+      "R_bootstrap_95_ci": [
+        -0.09107189126012553,
+        0.036516110179128036
+      ]
+    },
+    {
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_01",
+      "lambda": 0.1,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.008034001668715035,
+      "R_bootstrap_95_ci": [
+        -0.037988714219171035,
+        0.019649707860013178
+      ]
+    },
+    {
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_05",
+      "lambda": 0.5,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": 0.017679751715728675,
+      "R_bootstrap_95_ci": [
+        -0.004405659283338161,
+        0.04512270663726367
+      ]
+    },
+    {
+      "seed": 5,
+      "lambda_key": "reward_qnorm_lam_09",
+      "lambda": 0.9,
+      "comparison": "edgegnn_v2_full_mp-minus-edgegnn_v2_self_only",
+      "queries": 121,
+      "R_mean_difference": -0.01464293817263135,
+      "R_bootstrap_95_ci": [
+        -0.04064073607937456,
+        0.006824881561708536
+      ]
+    }
+  ]
+}
