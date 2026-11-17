@@ -10,6 +10,7 @@ import json
 import math
 from pathlib import Path
 from statistics import mean
+from collections import Counter
 
 
 def support_weights(similarities, temperature, method):
@@ -27,7 +28,19 @@ def support_weights(similarities, temperature, method):
 def summarize(records):
     wins = sum(record["oracle_win"] for record in records)
     recovered = sum(record["oracle_win"] and record["held_selected"] for record in records)
+    selected = [record for record in records if record["held_selected"]]
+    deltas = [record["R"] - record["seen_R"] for record in selected]
     return {
+        "beneficial_selections": sum(delta > 1e-8 for delta in deltas),
+        "harmful_selections": sum(delta < -1e-8 for delta in deltas),
+        "tied_selections": sum(abs(delta) <= 1e-8 for delta in deltas),
+        "held_out_exact_optimal_pair": sum(
+            record["oracle_win"] and record["held_selected"]
+            and record["optimal_pair"] for record in records),
+        "positive_gain_contribution": sum(max(0, delta) for delta in deltas) / len(records),
+        "negative_gain_contribution": sum(min(0, delta) for delta in deltas) / len(records),
+        "prompt_counts": dict(Counter(record["prompt"] for record in records)),
+        "held_out_prompt_counts": dict(Counter(record["prompt"] for record in selected)),
         "queries": len(records),
         "P": mean(record["P"] for record in records),
         "C": mean(record["C"] for record in records),
@@ -100,6 +113,36 @@ def main():
     if not held_indices or not seen_indices:
         raise ValueError("Both seen and held-out candidates are required.")
 
+    # Post-hoc summaries never feed the selection procedure.
+    def pool_summary(query_ids, penalty):
+        observed_rows = [outcomes(qid) for qid in query_ids]
+        action_means = [
+            mean(values[i][0] - penalty * values[i][1] for values in observed_rows)
+            for i in range(len(actions))
+        ]
+        best_held = max(held_indices, key=action_means.__getitem__)
+        best_seen = max(seen_indices, key=action_means.__getitem__)
+        return {
+            "queries": len(query_ids),
+            "best_held_fixed_pair": actions[best_held],
+            "best_held_fixed_reward": action_means[best_held],
+            "best_seen_fixed_pair": actions[best_seen],
+            "best_seen_fixed_reward": action_means[best_seen],
+            "held_prompt_means": {
+                actions[i][0]: {
+                    "P": mean(values[i][0] for values in observed_rows),
+                    "C": mean(values[i][1] for values in observed_rows),
+                    "R": action_means[i],
+                } for i in held_indices
+            },
+        }
+
+    calibration_diagnostic = {
+        str(weight): {
+            "support": pool_summary(support_ids, weight),
+            "test_posthoc": pool_summary(test_ids, weight),
+        } for _, weight in LAMBDA_CONFIGS
+    }
     results = []
     for method in ("uniform", "cosine"):
         all_records = {weight: [] for _, weight in LAMBDA_CONFIGS}
@@ -131,6 +174,9 @@ def main():
                     "seen_R": rewards[seen_selected],
                     "oracle_win": delta > 1e-8, "oracle_gain": max(0.0, delta),
                     "held_selected": selected in held_indices,
+                    "optimal_pair": rewards[selected] >= max(rewards) - 1e-8,
+                    "seen_prompt": actions[seen_selected][0],
+                    "seen_model": actions[seen_selected][1],
                 })
         for penalty, records in all_records.items():
             results.append({"method": method, "lambda": penalty,
@@ -142,6 +188,12 @@ def main():
         "temperature": args.temperature,
         "support_cost": "original full-pool query-normalized observed support cost",
         "information_budget": "same support for all candidates; no other training outcomes used",
+        "calibration_diagnostic": calibration_diagnostic,
+        "metric_notes": {
+            "recovered": "Legacy model-only hit count; does not require the optimal prompt.",
+            "beneficial_selections": "Held-out selection beats the seen-only policy on that query.",
+            "test_posthoc": "Diagnostic means only; never used for fitting or selection.",
+        },
         "results": results,
     }
     args.json_out.parent.mkdir(parents=True, exist_ok=True)
@@ -151,9 +203,24 @@ def main():
             f"{result['method']:7s} lambda={result['lambda']:.1f} "
             f"R={result['R']:.4f} gain={result['incorporation_gain']:+.4f} "
             f"oracle_gain={result['oracle_gain']:.4f} "
-            f"recovered={result['recovered']}/{result['oracle_wins']} "
+            f"model_hits={result['recovered']}/{result['oracle_wins']} "
+            f"optimal_pairs={result['held_out_exact_optimal_pair']}/{result['oracle_wins']} "
+            f"beneficial={result['beneficial_selections']} harmful={result['harmful_selections']} "
+            f"tied={result['tied_selections']} "
             f"selected={result['held_out_selections']}/{result['queries']}"
         )
+
+    for penalty, diagnostic in calibration_diagnostic.items():
+        support = diagnostic["support"]
+        test = diagnostic["test_posthoc"]
+        print(
+            f"calibration lambda={penalty} "
+            f"support held={support['best_held_fixed_reward']:.4f} "
+            f"seen={support['best_seen_fixed_reward']:.4f}; "
+            f"test held={test['best_held_fixed_reward']:.4f} "
+            f"seen={test['best_seen_fixed_reward']:.4f}"
+        )
+    print("Prompt counts and per-prompt calibration/test means are saved in the JSON.")
 
 
 if __name__ == "__main__":
