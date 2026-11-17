@@ -96,17 +96,20 @@ class FlatActionMLP(nn.Module):
 
 
 def make_examples(row, query_table, prompt_table, model_table,
-                  prompt_order, model_order, reward_key, device):
+                  prompt_order, model_order, reward_key, device, profiles=None):
     q = vector_for(query_table, row["qid"]).to(device)
     features, rewards, performances, costs, actions = [], [], [], [], []
     for cand in row["action_edges"]:
         p = cand["prompt"]
         m = cand["model"]
-        features.append(torch.cat([
+        parts = [
             q,
             vector_for(prompt_table, p, prompt_order).to(device),
             vector_for(model_table, m, model_order).to(device),
-        ]))
+        ]
+        if profiles is not None:
+            parts.append(q.new_tensor(profiles[(m, p)]))
+        features.append(torch.cat(parts))
         rewards.append(float(cand[reward_key]))
         performances.append(float(cand["performance"]))
         costs.append(float(cand["cost_norm_query"]))
@@ -122,12 +125,12 @@ def make_examples(row, query_table, prompt_table, model_table,
 
 @torch.no_grad()
 def evaluate(model, rows, query_table, prompt_table, model_table,
-             prompt_order, model_order, reward_key, device):
+             prompt_order, model_order, reward_key, device, profiles=None):
     model.eval()
     selected = []
     for row in rows:
         batch = make_examples(row, query_table, prompt_table, model_table,
-                              prompt_order, model_order, reward_key, device)
+                              prompt_order, model_order, reward_key, device, profiles)
         index = int(torch.argmax(model(batch["x"])).item())
         selected.append((batch["performance"][index],
                          batch["cost"][index],
@@ -145,7 +148,7 @@ def evaluate(model, rows, query_table, prompt_table, model_table,
 
 def train_lambda(args, rows, train_qids, val_qids, test_qids,
                  query_table, prompt_table, model_table,
-                 prompt_order, model_order, reward_key, device):
+                 prompt_order, model_order, reward_key, device, profiles=None):
     train_rows = [r for r in rows if r["qid"] in train_qids]
     val_rows = [r for r in rows if r["qid"] in val_qids]
     test_rows = [r for r in rows if r["qid"] in test_qids]
@@ -154,6 +157,8 @@ def train_lambda(args, rows, train_qids, val_qids, test_qids,
         + vector_for(prompt_table, prompt_order[0], prompt_order).numel()
         + vector_for(model_table, model_order[0], model_order).numel()
     )
+    if profiles is not None:
+        input_dim += len(next(iter(profiles.values())))
     model = FlatActionMLP(input_dim, args.hidden_dim, args.dropout).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
                                   weight_decay=args.weight_decay)
@@ -167,7 +172,7 @@ def train_lambda(args, rows, train_qids, val_qids, test_qids,
         losses = []
         for row in shuffled:
             batch = make_examples(row, query_table, prompt_table, model_table,
-                                  prompt_order, model_order, reward_key, device)
+                                  prompt_order, model_order, reward_key, device, profiles)
             scores = model(batch["x"])
             rewards = batch["reward"]
             mse = F.mse_loss(scores, rewards)
@@ -180,7 +185,7 @@ def train_lambda(args, rows, train_qids, val_qids, test_qids,
             optimizer.step()
             losses.append(float(loss.detach().cpu()))
         val = evaluate(model, val_rows, query_table, prompt_table, model_table,
-                       prompt_order, model_order, reward_key, device)
+                       prompt_order, model_order, reward_key, device, profiles)
         if val["R"] > best_reward + args.min_delta:
             best_reward = val["R"]
             best_state = {k: v.detach().cpu().clone()
@@ -198,13 +203,13 @@ def train_lambda(args, rows, train_qids, val_qids, test_qids,
         raise RuntimeError("No checkpoint captured")
     model.load_state_dict(best_state)
     result = evaluate(model, test_rows, query_table, prompt_table, model_table,
-                      prompt_order, model_order, reward_key, device)
+                      prompt_order, model_order, reward_key, device, profiles)
     result.update({"lambda": lam, "lambda_key": reward_key,
                    "split_manifest": str(args.split_manifest)})
     return model, result
 
 
-def parse_args():
+def parse_args(configure=None):
     p = argparse.ArgumentParser()
     p.add_argument("--data-path", type=Path,
                    default=Path("data/interaction_logs/grpp_il_v1/router_bipartite_qnorm_complete.jsonl"))
@@ -226,6 +231,8 @@ def parse_args():
     p.add_argument("--grad-clip", type=float, default=5.0)
     p.add_argument("--min-delta", type=float, default=1e-6)
     p.add_argument("--verbose", action="store_true")
+    if configure is not None:
+        configure(p)
     return p.parse_args()
 
 
