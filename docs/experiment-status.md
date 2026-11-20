@@ -914,3 +914,35 @@ shared manifests, three lambdas, current Edge-GNN objective, validation-reward
 early stopping, deterministic execution, and expected aggregation cardinality
 (15 sources, 45 seed-level rows, nine aggregates). Edge-GNN v2 remains a
 proposal: no implementation, checkpoint, or result has been produced.
+
+
+## Current methodological direction — 2026-11-20
+
+D-028 is the current research policy on branch `v2-behavior-profiles`.
+The focus is joint prompt--model routing with a completely held-out LLM,
+incorporated through historical/calibration evidence with frozen router weights.
+
+The four stages are: (1) define a GraphRouter-inspired support graph extended to
+prompts; (2) train excluding the held-out model and evaluate seen-only,
+description-only and calibrated incorporation using R/P/C and marginal utility;
+(3) diagnose model/prompt/pair/task selection and concentration; (4) investigate
+graph, training or external interventions only in response to observed flags.
+
+The first representation to investigate is prompt-conditioned query--model
+interaction edges. Pair nodes, interaction nodes and hyperedges remain options;
+none is a finalized implementation. The next deliverable is the explicit design
+and evaluation contract, not a new training run.
+
+Repository review identified Stage A implementation and stored five-seed
+aggregates (`router/edgegnn_v2_stage_a.py`,
+`analysis/edgegnn_v2_stage_a_table.csv`) despite historical text above declaring
+it unimplemented. Those statements are dated historical snapshots. No fresh
+runtime validation or reproduction was performed in this documentation update.
+Stage A was designed to isolate message passing and cross-query coupling, not
+because over-densification was experimentally established.
+
+Existing P0, Stage A, behavior-profile and external inductive artifacts remain
+unchanged and are not merged into the new result family. Support outcomes are
+legitimate context in the new protocol; target outcomes and target-to-target
+coupling remain forbidden. Novelty, improved incorporation and net savings are
+hypotheses, not reported results. No code, data or checkpoints were changed.
