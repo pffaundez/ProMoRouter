@@ -7,14 +7,13 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-028 — Run and interpret the single support-graph development pilot
+### T-029 — Audit the existing support-graph checkpoint and interpret flags
 
-- State: pending real-data execution on Morel.
-- Command and contract: docs/support-graph-pilot.md; D-028 and D-029.
-- Scope: qwen2.5-14b, seed 1, k=8, lambda=0.9; one graph architecture.
-- Completion: inspect R/P/C for the three conditions, calibration gain,
-  incorporation gain, beneficial/harmful selections and pair/task concentration.
-- Do not launch more variants or folds before interpreting this result.
+- State: pending execution on Morel; audit code and synthetic checks ready.
+- Run audit_support_graph.py on the existing Qwen k8/seed1/lambda0.9 directory.
+- Read score_audit.json: before/after Qwen scores, margins, ranks on oracle
+  opportunities, and validation-selected fixed-pair-by-task test R/P/C.
+- No retraining, new folds, seeds or architecture variants before this audit.
 
 ## Next
 
@@ -127,3 +126,6 @@ must be reconciled with D-028 before execution.
 
 
 T-027 completed by the implementation contract in docs/support-graph-pilot.md.
+
+T-028 development pilot completed and inspected: no incorporation gain and
+selfcheck selected throughout test. T-029 is the sole next action.

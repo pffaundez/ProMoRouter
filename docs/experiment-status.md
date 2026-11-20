@@ -959,3 +959,22 @@ exercised training, checkpoint selection and all three frozen conditions.
 These synthetic outputs are engineering validation, not research results.
 Real-data execution remains pending on Morel; see docs/support-graph-pilot.md.
 No prior code, datasets, checkpoints or result files were overwritten.
+
+
+## Real support-graph pilot inspected — 2026-11-20
+
+User-provided results.json: qwen2.5-14b, seed 1, k=8, lambda=0.9, cuda:0.
+Partitions are 549 fitting, 8 support, 119 validation and 121 test qids, disjoint.
+Best epoch 5; patience stopped at epoch 23. All three conditions select exactly
+the same pairs: P=0.4210760494, C=0.07948213465, R=0.3495421282. No Qwen
+selections, incorporation gain zero, calibration gain zero. Observed oracle
+opportunities: 54, mean oracle incorporation gain 0.0344571993.
+All 121 selections use selfcheck: Mistral 62 and Qwen-7B 59. Choices are nearly
+fixed within task (Alpaca/HotpotQA Mistral, GSM8K Qwen-7B, SQuAD 29/30 Qwen-7B).
+These are descriptive development results, not a general failure claim.
+
+Added audit_support_graph.py to inspect the existing checkpoint before any
+retraining or architecture change. Two synthetic tests and an end-to-end
+synthetic replay passed. The audit reports score deltas/ranks/margins and a
+validation-selected fixed-pair-by-task baseline. Real-checkpoint audit execution
+is pending on Morel; no real score-change or baseline conclusion is available.

@@ -71,3 +71,29 @@ not overwritten. Read this pilot before launching more folds or changing the
 method. Conclude on calibration gain, incorporation gain, P/C tradeoff and
 selection concentration. The next action is interpreting that result, not
 opening another architecture branch.
+
+
+## Audit the existing checkpoint (no training)
+
+After the first real pilot, run:
+
+```bash
+python audit_support_graph.py \
+  outputs/support_graph/qwen2.5-14b/k8_seed1_lam0.9 \
+  --device cuda:0
+```
+
+The audit verifies the dataset fingerprint, disjoint partitions, support
+outcomes, checkpoint configuration, and reproduction of the original choices.
+It writes score_audit.json without modifying the checkpoint or results.json.
+For Qwen it reports changes in each prompt's scores, best-pair ranks among 36
+candidates, margins relative to the best seen score, and summaries restricted
+to observed oracle opportunities. Ranks use strictly-greater scores (ties share
+a rank). A positive margin means Qwen strictly beats the best seen candidate.
+A score change alone is not evidence of useful incorporation.
+
+A best fixed seen pair per task is selected from validation using seen-only
+normalized costs, matching checkpoint selection. It is then evaluated on test
+with the same fixed full-pool evaluation costs as the router. Missing validation
+tasks use the validation-global best pair and are explicitly flagged. No test
+outcome is used to select or tune this policy.
