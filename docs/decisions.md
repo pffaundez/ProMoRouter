@@ -1,6 +1,6 @@
 # P1 - Experiment Repair decision log
 
-_Last updated: 2026-09-18_
+_Last updated: 2026-11-20_
 
 This file records only decisions confirmed in the working conversation or
 verified in the repository. General progress, measurements, and task tracking
@@ -642,8 +642,8 @@ These are unresolved choices, not adopted decisions:
   gate decision based on Stage A evidence.
 - **Files affected:** Experiment design and continuity documentation; no v2
   implementation file exists yet.
-- **Status:** active
-- **Replaced by:** —
+- **Status:** superseded for the new research phase; historical contract preserved
+- **Replaced by:** D-028 (new research phase only)
 
 
 ### D-027 — Use per-query ego graphs and a matched self-only control in Stage A
@@ -677,5 +677,86 @@ These are unresolved choices, not adopted decisions:
   gated. No v2 result exists yet.
 - **Files affected:** `docs/edgegnn-v2-stage-a.md`,
   `configs/edgegnn_v2_stage_a.json`, and continuity documentation.
+- **Status:** active
+- **Replaced by:** —
+
+
+### D-028 — Prioritize GraphRouter-style support graphs for joint routing to unseen LLMs
+
+- **Date:** 2026-11-20
+- **Context/problem:** The adopted research focus is joint prompt--model
+  selection when an LLM is completely excluded from router training. Merely
+  producing scores for a new candidate does not demonstrate useful incorporation.
+  Stage A isolates message passing in a closed pool but supplies no behavioral
+  support at inference. Its per-query topology is not the mandatory architecture
+  for this new research phase.
+- **Decision:** Adopt the following four-step methodological policy:
+  1. Use GraphRouter's inductive support principle as the methodological starting
+     point, extended to known prompts and a new LLM. Construct a support graph
+     from permitted historical and calibration interactions rather than merely
+     candidate availability. This is not a wholesale restoration of historical
+     code. Retain Stage A as historical evidence and a separately labelled
+     control; preserve its artifacts and all frozen P0 results.
+  2. Train the GNN while excluding an external held-out LLM from training labels,
+     outcome-derived topology, and hyperparameter/checkpoint selection. Freeze
+     every learned router parameter before incorporation. Compare seen-only,
+     unseen-description-only, and unseen-with-calibration conditions on the same
+     target queries. Report R, P, C and incorporation behavior. Run a pilot before
+     expanding to multiple held-out models, seeds and support samples.
+  3. Diagnose selection profiles by model, prompt, pair, task and lambda. Record
+     concentration, opportunity capture, optimal-pair hits, and beneficial,
+     harmful and tied switches relative to the seen-only policy. A fixed-pair
+     policy is a diagnostic flag, not automatically a failure; compare it with a
+     validation-selected best fixed pair and observed oracle headroom.
+  4. Choose subsequent interventions from the flags. Alternatives may change
+     graph representation or training, or operate outside the graph, such as an
+     incorporation decision rule, uncertainty estimate or complementary estimator.
+     Evaluate changes separately rather than bundling them into the initial pilot.
+- **Representation policy:** The primary method remains graph-based. The first
+  design option to evaluate is query--model interaction edges conditioned on the
+  prompt, with historical quality/cost attributes and an explicit multiedge
+  contract. Prompt identity/embedding must affect message construction; separate
+  binary links alone do not preserve the full query--prompt--model observation.
+  Pair nodes, interaction nodes and hyperedges are alternatives, not adopted
+  architecture. The definitive representation, message directions, loss and
+  support budget must be specified before implementation.
+- **Information boundary:** Outcomes of historical/support executions may be
+  inputs in this new protocol; outcomes of target queries may not. Support and
+  target qids must be disjoint. Training must mask target interaction outcomes
+  and any topology derived from them when predicting those interactions.
+  Target queries must not exchange information or modify the support used by
+  other targets. Calibration updates input evidence and node representations,
+  never learned weights. Candidate descriptions/embeddings must not encode
+  held-out evaluation outcomes. Preserve identifier alignment, deterministic
+  controls, shared manifests and reward algebra.
+- **Metrics and fairness:** Retain R = P - lambda*C for comparable diagnostic
+  results. Use one fixed normalization reference across pool conditions so that
+  incorporation gain is not an artifact of renormalization. Separate
+  post-execution normalized C from deployable pre-routing information; report
+  support execution counts and calibration cost separately from target inference
+  cost. Specify amortization before claiming net savings. No support size,
+  held-out pilot model, statistical success threshold or cost predictor is
+  finalized by this decision.
+- **Justification:** This tests whether a frozen graph router can exploit
+  prompt-conditioned evidence of a new LLM, rather than assuming that adding a
+  node or selecting the candidate more often improves utility. GraphRouter
+  already uses few-shot evidence without retraining; calibration itself is not
+  claimed as novelty. Exact novelty and effectiveness remain to be established.
+- **Scope:** Known prompts and tasks are the initial controlled setting.
+  Simultaneously unseen prompts/tasks and the external 12-model/6-prompt
+  generation protocol remain separate historical/optional evaluations.
+- **Alternatives considered or discarded:** Treating Stage A as proof of unseen
+  generalization, attributing its design to demonstrated over-densification,
+  imposing interaction nodes as already chosen, or immediately launching a new
+  training sweep were not adopted.
+- **Consequences:** Supersede D-026's execution-order restriction for this phase.
+  D-027 remains the contract for historical Stage A, not for the new support
+  graph. Refine D-003 only for this new protocol: legitimate support outcomes
+  are permitted, target outcomes remain prohibited; P0 rules are unchanged.
+  D-005's full 4x9 requirement remains historical; the new held-out protocol must
+  validate its own explicit seen/support/test pools. Prepare the design and
+  evaluation contract before changing trainers or running experiments.
+- **Files affected:** docs/decisions.md, docs/experiment-status.md,
+  docs/next-steps.md; future protocol and implementation files not yet created.
 - **Status:** active
 - **Replaced by:** —
