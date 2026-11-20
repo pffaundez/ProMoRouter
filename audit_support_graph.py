@@ -104,7 +104,7 @@ def main():
     x = lambda rs: torch.stack([torch.cat((vector(qt,r['qid'],()),vector(tt,r['task'],TASKS))) for r in rs]).to(device)
     px = torch.stack([vector(pt,p,PROMPTS) for p in PROMPTS]).to(device)
     mx = torch.stack([vector(mt,m,MODELS) for m in MODELS]).to(device)
-    model = SupportGraphRouter(vector(qt,rows[0]['qid'],()).numel(),vector(tt,rows[0]['task'],TASKS).numel(),px.shape[1],mx.shape[1],cfg['hidden_dim']).to(device)
+    model = SupportGraphRouter(vector(qt,rows[0]['qid'],()).numel(),vector(tt,rows[0]['task'],TASKS).numel(),px.shape[1],mx.shape[1],cfg['hidden_dim'],cfg.get('support_weighting','uniform')).to(device)
     checkpoint = torch.load(args.run_dir/'router.pt',map_location='cpu',weights_only=True)
     if checkpoint['config']!=cfg or sorted(checkpoint['support_qids'])!=sorted(original['support_qids']):
         raise ValueError('checkpoint/results identity mismatch')
@@ -124,7 +124,7 @@ def main():
         for condition in ('description_only','calibrated'):
             visible=mask.clone()
             if condition=='description_only': visible[:,:,hi]=False
-            encoded=model.encode_support(x(support),px,mx,obs,visible)
+            encoded=model.encode_support(x(support),px,mx,obs,visible,target_x=x(targets))
             scores[condition]=model.score(x(targets),encoded).cpu()
     truth=outcomes(targets,MODELS)
     replay={}

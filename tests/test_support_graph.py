@@ -64,4 +64,44 @@ class SupportGraphTest(unittest.TestCase):
         self.assertTrue(torch.allclose(first, second, atol=1e-6))
 
 
+class QueryConditionedTest(SupportGraphTest):
+    def setUp(self):
+        super().setUp()
+        self.net.support_weighting = 'query_cosine'
+
+    def score(self, obs=None, mask=None, models=None):
+        return self.net.score(self.q, self.net.encode_support(
+            self.s, self.p, self.m if models is None else models,
+            self.o if obs is None else obs, self.mask if mask is None else mask,
+            target_x=self.q))
+
+    def test_target_isolation_and_gradients(self):
+        encoded = self.net.encode_support(self.s, self.p, self.m, self.o, self.mask, self.q)
+        together = self.net.score(self.q, encoded)
+        one = self.net.encode_support(self.s, self.p, self.m, self.o, self.mask, self.q[1:])
+        self.assertTrue(torch.allclose(together[1:], self.net.score(self.q[1:], one), atol=1e-6))
+        together.square().mean().backward()
+        self.assertTrue(all(p.grad is not None and torch.isfinite(p.grad).all()
+                            for p in self.net.parameters()))
+
+    def test_prompt_specific_outcomes_and_pool_permutation(self):
+        changed = self.o.clone(); changed[:, 0, 2, 0] += 3
+        base = self.net.encode_support(self.s, self.p, self.m, self.o, self.mask, self.q)[1]
+        after = self.net.encode_support(self.s, self.p, self.m, changed, self.mask, self.q)[1]
+        self.assertTrue(torch.equal(base[:, 1:], after[:, 1:]))
+        self.assertFalse(torch.equal(base[:, 0, 2], after[:, 0, 2]))
+        order = torch.tensor([2, 0, 1])
+        permuted = self.score(self.o[:, :, order], self.mask[:, :, order], self.m[order])
+        self.assertTrue(torch.allclose(permuted, self.score()[:, :, order], atol=1e-6))
+
+    def test_query_changes_support_and_equal_similarity_matches_uniform(self):
+        states = self.net.encode_support(self.s, self.p, self.m, self.o, self.mask, self.q)[1]
+        self.assertFalse(torch.allclose(states[0], states[1]))
+        support = self.s.clone(); support[:, :3] = support[0, :3].clone()
+        weighted = self.net.encode_support(support, self.p, self.m, self.o, self.mask, self.q)[1]
+        self.net.support_weighting = 'uniform'
+        uniform = self.net.encode_support(support, self.p, self.m, self.o, self.mask)[1]
+        self.assertTrue(torch.allclose(weighted, uniform[None].expand_as(weighted), atol=1e-6))
+
+
 if __name__ == '__main__': unittest.main()

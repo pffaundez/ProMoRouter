@@ -132,12 +132,15 @@ def main():
     ap.add_argument('--hidden-dim', type=int, default=128)
     ap.add_argument('--lr', type=float, default=5e-4)
     ap.add_argument('--device', default='cpu')
+    ap.add_argument('--support-weighting', choices=('uniform', 'query_cosine'), default='uniform')
     ap.add_argument('--split-manifest', type=Path)
     ap.add_argument('--output-dir', type=Path, default=Path('outputs/support_graph'))
     args = ap.parse_args()
     if min(args.epochs, args.patience, args.batch_size, args.hidden_dim) < 1:
         ap.error('epochs/patience/batch-size/hidden-dim must be positive')
     out = args.output_dir / args.held_out_model / f'k{args.calibration_queries}_seed{args.seed}_lam{args.reward_weight}'
+    if args.support_weighting != 'uniform':
+        out = out.with_name(out.name + '_' + args.support_weighting)
     if (out/'results.json').exists() or (out/'router.pt').exists():
         raise FileExistsError(f'refusing to overwrite {out}')
     os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG', ':4096:8')
@@ -165,7 +168,7 @@ def main():
     px = torch.stack([vector(pt, p, PROMPTS) for p in PROMPTS]).to(device)
     seen = tuple(m for m in MODELS if m != args.held_out_model)
     mx = lambda pool: torch.stack([vector(mt, m, MODELS) for m in pool]).to(device)
-    model = SupportGraphRouter(vector(qt, rows[0]['qid'], ()).numel(), vector(tt, rows[0]['task'], TASKS).numel(), px.shape[1], mx(seen).shape[1], args.hidden_dim).to(device)
+    model = SupportGraphRouter(vector(qt, rows[0]['qid'], ()).numel(), vector(tt, rows[0]['task'], TASKS).numel(), px.shape[1], mx(seen).shape[1], args.hidden_dim, args.support_weighting).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     # Training and validation context contain seen candidates only.
     support_seen = outcomes(support, seen, True).to(device)
@@ -184,7 +187,7 @@ def main():
             context = rng.sample(available, min(args.calibration_queries, len(available)))
             obs = outcomes(context, seen, True).to(device)
             mask = torch.ones(obs.shape[:-1], dtype=torch.bool, device=device)
-            scores = model.score(x(batch), model.encode_support(x(context), px, mx(seen), obs, mask))
+            scores = model.score(x(batch), model.encode_support(x(context), px, mx(seen), obs, mask, target_x=x(batch)))
             y = outcomes(batch, seen, True).to(device)
             reward = y[..., 0]-args.reward_weight*y[..., 1]
             loss = F.mse_loss(scores, reward) + .05*F.cross_entropy(scores.flatten(1), reward.flatten(1).argmax(1))
@@ -193,7 +196,7 @@ def main():
             losses.append(float(loss.detach()))
         model.eval()
         with torch.no_grad():
-            encoded = model.encode_support(x(support), px, mx(seen), support_seen, support_mask)
+            encoded = model.encode_support(x(support), px, mx(seen), support_seen, support_mask, target_x=x(validation))
             vs = model.score(x(validation), encoded)
             vm = add_reward(summarize(validation, vs.cpu(), validation_truth.cpu(), seen), args.reward_weight)
         history.append(dict(epoch=epoch, loss=sum(losses)/len(losses), validation_R=vm['R']))
@@ -207,6 +210,7 @@ def main():
     model.load_state_dict(state); model.eval(); model.requires_grad_(False)
     truth = outcomes(targets, MODELS)
     result = {}
+    saved_scores = {}
     with torch.no_grad():
         for condition in ('seen_only', 'description_only', 'calibrated'):
             pool = seen if condition == 'seen_only' else MODELS
@@ -220,8 +224,9 @@ def main():
             obs[..., 1] = torch.where(span > 1e-12, (c-lo)/span.clamp_min(1e-12), torch.zeros_like(c))
             mask = torch.ones(obs.shape[:-1], dtype=torch.bool, device=device)
             if condition == 'description_only': mask[:, :, pool.index(args.held_out_model)] = False
-            encoded = model.encode_support(x(support), px, mx(pool), obs, mask)
+            encoded = model.encode_support(x(support), px, mx(pool), obs, mask, target_x=x(targets))
             scores = model.score(x(targets), encoded).cpu()
+            saved_scores[condition] = scores
             # Evaluation uses the original fixed full-pool cost reference in
             # every condition. These target costs never enter model inputs.
             observed_truth = truth[:, :, [MODELS.index(m) for m in pool]]
@@ -232,7 +237,8 @@ def main():
         raise RuntimeError('router weights changed during incorporation')
     out.mkdir(parents=True, exist_ok=True)
     config = {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}
-    payload = dict(protocol='prompt_conditioned_support_graph_v1', config=config,
+    payload = dict(protocol=('query_conditioned_support_graph_v1' if args.support_weighting == 'query_cosine'
+                             else 'prompt_conditioned_support_graph_v1'), config=config,
                    dataset_sha256=hashlib.sha256(args.data_path.read_bytes()).hexdigest(),
                    split_manifest=str(manifest), train_qids=sorted(train), support_qids=sorted(support_ids),
                    validation_qids=sorted(val), test_qids=sorted(test), seen_models=seen,
@@ -243,10 +249,27 @@ def main():
                    cost_limitation='No net deployment savings claim; calibration token/dollar cost not available here.',
                    best_epoch=best_epoch, history=history, results=result)
     payload['calibration_gain'] = result['calibrated']['R']-result['description_only']['R']
+    hi = MODELS.index(args.held_out_model)
+    seen_indices = [i for i in range(len(MODELS)) if i != hi]
+    payload['score_summary'] = {}
+    for condition in ('description_only', 'calibrated'):
+        scores = saved_scores[condition]
+        held_best = scores[:, :, hi].max(1).values
+        ranks = 1 + (scores > held_best[:, None, None]).flatten(1).sum(1)
+        margins = held_best-scores[:, :, seen_indices].flatten(1).max(1).values
+        payload['score_summary'][condition] = dict(
+            median_best_held_rank=float(ranks.float().quantile(.5)),
+            mean_margin_to_seen=float(margins.mean()),
+            best_held_prompt_counts=dict(Counter(PROMPTS[i] for i in scores[:, :, hi].argmax(1).tolist())))
+    payload['score_summary']['mean_abs_held_score_change'] = float((
+        saved_scores['calibrated'][:, :, hi]-saved_scores['description_only'][:, :, hi]).abs().mean())
+    # Save score evidence now so the pilot needs no second inference run.
+    payload['candidate_scores'] = {name: value.tolist() for name, value in saved_scores.items()}
     torch.save(dict(state_dict=state, config=config, support_qids=sorted(support_ids)), out/'router.pt')
     (out/'results.json').write_text(json.dumps(payload, indent=2)+'\n')
     for name, metrics in result.items():
         print(name, json.dumps({k: metrics[k] for k in ('P', 'C', 'R', 'top_pair_share')}), metrics.get('incorporation', ''))
+    print('calibration_gain=', payload['calibration_gain'], 'scores=', json.dumps(payload['score_summary']))
     print(f'results={out / "results.json"}')
 
 

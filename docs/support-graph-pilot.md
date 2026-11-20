@@ -97,3 +97,29 @@ normalized costs, matching checkpoint selection. It is then evaluated on test
 with the same fixed full-pool evaluation costs as the router. Missing validation
 tasks use the validation-global best pair and are explicitly flagged. No test
 outcome is used to select or tune this policy.
+
+
+## One query-conditioned follow-up (D-030)
+
+The uniform baseline and its audit are complete. To test the adopted single
+change, run the first real-data command with:
+
+```bash
+--support-weighting query_cosine --device cuda:0
+```
+
+This refits once with the same seed, support, objective, dimensions, optimizer
+and stopping rule. Only aggregation changes: each target obtains a masked
+softmax over cosine similarities to support query embeddings, temperature 0.1.
+Task embeddings are excluded from this similarity. No parameters are added.
+The weighted sum replaces the mean in both message rounds. Target-specific
+states never interact with other targets.
+
+Output: outputs/support_graph/qwen2.5-14b/k8_seed1_lam0.9_query_cosine/results.json.
+The result now includes all candidate scores, Qwen rank/margin/prompt summaries,
+and calibration gain, avoiding an additional inference audit. The audit CLI
+remains backward-compatible with old uniform checkpoints.
+
+Do not change k, lambda, seed or launch more configurations before reading this
+single run. Compare calibration gain and incorporation gain separately; reward
+improvement between seen candidates alone is not successful unseen adaptation.

@@ -7,13 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-029 — Audit the existing support-graph checkpoint and interpret flags
+### T-030 — Run and interpret the single query-conditioned support pilot
 
-- State: pending execution on Morel; audit code and synthetic checks ready.
-- Run audit_support_graph.py on the existing Qwen k8/seed1/lambda0.9 directory.
-- Read score_audit.json: before/after Qwen scores, margins, ranks on oracle
-  opportunities, and validation-selected fixed-pair-by-task test R/P/C.
-- No retraining, new folds, seeds or architecture variants before this audit.
+- State: pending real-data run on Morel; implementation and synthetic checks ready.
+- Use the prior command plus --support-weighting query_cosine and --device cuda:0.
+- Fixed Qwen held-out, k8, seed1, lambda0.9; no other configuration changes.
+- Output suffix: k8_seed1_lam0.9_query_cosine; never overwrite the uniform run.
+- Compare R/P/C, incorporation/calibration gain, prompt/task concentration and
+  embedded score summaries against the recorded uniform pilot.
+- Stop for interpretation before new folds, seeds or method variants.
 
 ## Next
 
@@ -129,3 +131,5 @@ T-027 completed by the implementation contract in docs/support-graph-pilot.md.
 
 T-028 development pilot completed and inspected: no incorporation gain and
 selfcheck selected throughout test. T-029 is the sole next action.
+
+T-029 completed: real-checkpoint audit interpreted; see D-030 for evidence.

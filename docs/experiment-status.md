@@ -978,3 +978,20 @@ retraining or architecture change. Two synthetic tests and an end-to-end
 synthetic replay passed. The audit reports score deltas/ranks/margins and a
 validation-selected fixed-pair-by-task baseline. Real-checkpoint audit execution
 is pending on Morel; no real score-change or baseline conclusion is available.
+
+
+## Score audit closed; query-conditioned pilot ready — 2026-11-20
+
+User score_audit.json reproduced all selections. On the 54 Qwen oracle
+opportunities, calibration improved median rank 13 -> 9 and mean margin
+-0.25701923 -> -0.10525529, but never beat a seen score. The best Qwen prompt
+switched from selfcheck for all queries to decompose for all queries. Seen
+scores changed by exactly zero. Fixed-pair-per-task validation baseline test
+P=0.44240118, C=0.13206349, R=0.32354404; router-minus-baseline R=+0.02599808.
+This closes T-029 without claiming causal explanation or statistical significance.
+
+D-030 adds only fixed query-conditioned cosine support weighting (temperature
+0.1), applied throughout training/evaluation with identical parameter count.
+All 13 support/audit tests pass, and synthetic training plus replay for weighted
+and legacy checkpoints passed. Real-data execution has not occurred here.
+The next action is one Morel run with --support-weighting query_cosine; no sweep.

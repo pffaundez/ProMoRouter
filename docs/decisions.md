@@ -786,3 +786,38 @@ These are unresolved choices, not adopted decisions:
 - **Status:** active; implementation provided, real-data execution pending.
 - **Files:** router/support_graph.py, train_router_support_graph.py,
   tests/test_support_graph.py, docs/support-graph-pilot.md.
+
+
+### D-030 — Condition support aggregation on the target query in one matched pilot
+
+- **Date:** 2026-11-20
+- **Evidence:** The Qwen seed1/k8/lambda0.9 audit reproduced the original choices.
+  Calibration changed Qwen scores (best-score mean increase +0.15176394 on 54
+  oracle opportunities), improved median best-pair rank 13 to 9, and reduced
+  its mean margin deficit from -0.25701923 to -0.10525529, without selections.
+  Seen scores were unchanged. Its preferred prompt changed uniformly from
+  selfcheck to decompose. The router R=0.34954213 exceeded the validation-selected
+  fixed-pair-by-task baseline R=0.32354404 by +0.02599808. Neither this difference
+  nor the concentration establishes instance-level adaptation or significance.
+- **Decision:** Close the score audit and change only support aggregation:
+  replace uniform means with target-query cosine weights, softmax temperature
+  fixed at 0.1, on raw query-text embeddings excluding task embeddings.
+  Apply the same weighting in training, validation and inference. No new
+  trainable parameters, objective changes, support search or additional folds.
+- **Controls:** Same architecture weights/shapes, hidden=128, seed1, Qwen
+  held out, k=8, lambda0.9, splits, episodes, optimizer, epoch limit, patience
+  and cost references. Refit once because the training aggregation changes;
+  do not claim this is an inference-only treatment of the old checkpoint.
+  New outputs get a query_cosine suffix and cannot overwrite prior results.
+- **Integrity:** Every target has separate support weights and representations;
+  no target-to-target paths, outcomes or batch statistics. Missing edges
+  receive zero messages; the description-only candidate retains its raw
+  representation. Old checkpoints/default uniform behavior remain supported.
+- **Convergence:** Compare this single run with the recorded uniform pilot.
+  Inspect R/P/C, incorporation/calibration gain, selections and prompt/task
+  concentration; save scores in the result to avoid a further audit run.
+  Query-conditioned weights functioning is not assumed to imply useful routing.
+  Do not launch sweeps or introduce another mechanism before interpreting it.
+- **Status:** active; code and synthetic checks ready; real-data run pending.
+- **Files:** router/support_graph.py, train_router_support_graph.py,
+  audit_support_graph.py, tests/test_support_graph.py and continuity docs.
