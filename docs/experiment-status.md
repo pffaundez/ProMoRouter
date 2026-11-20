@@ -946,3 +946,16 @@ unchanged and are not merged into the new result family. Support outcomes are
 legitimate context in the new protocol; target outcomes and target-to-target
 coupling remain forbidden. Novelty, improved incorporation and net savings are
 hypotheses, not reported results. No code, data or checkpoints were changed.
+
+
+
+## Support-graph pilot implemented — 2026-11-20
+
+D-029 implements the first prompt-conditioned support-graph variant and CLI.
+The synthetic tests check hidden-outcome masking, prompt-specific evidence,
+variable-pool/permutation behavior, support sensitivity, gradients, target
+isolation and normalization invariance. A two-epoch synthetic end-to-end run
+exercised training, checkpoint selection and all three frozen conditions.
+These synthetic outputs are engineering validation, not research results.
+Real-data execution remains pending on Morel; see docs/support-graph-pilot.md.
+No prior code, datasets, checkpoints or result files were overwritten.

@@ -760,3 +760,29 @@ These are unresolved choices, not adopted decisions:
   docs/next-steps.md; future protocol and implementation files not yet created.
 - **Status:** active
 - **Replaced by:** —
+
+
+
+### D-029 — Converge through one prompt-conditioned support-graph pilot
+
+- **Date:** 2026-11-20
+- **Decision:** Implement D-028 now with a single minimal graph variant. Parallel
+  query--model support edges retain prompt identity, quality and cost. Task
+  features are concatenated with queries; two shared message/update rounds
+  construct per-prompt model states without learned pair-ID tables. This is a
+  GraphRouter-inspired adaptation, not an exact reproduction.
+- **Execution:** Use qwen2.5-14b, seed 1, eight support queries and lambda 0.9 as
+  the first development pilot. Train only on seen models, MSE + 0.05 CE, and
+  select the epoch on seen validation. The same frozen checkpoint yields the
+  seen-only, description-only and calibrated conditions.
+- **Information/cost:** Disjoint support/targets; no external-model tensors in
+  training or tuning; episode targets excluded from support. Fit/support costs
+  use seen-only minmax; test metrics retain the fixed original full-pool qnorm
+  reference across conditions. This fit/evaluation scale limitation is explicit.
+  No monetary or amortized calibration savings claim.
+- **Convergence:** Read the pilot R/P/C, calibration and incorporation gains and
+  pair/task concentration before any further variant or sweep. No automatic
+  branching into objectives, architectures or new research questions.
+- **Status:** active; implementation provided, real-data execution pending.
+- **Files:** router/support_graph.py, train_router_support_graph.py,
+  tests/test_support_graph.py, docs/support-graph-pilot.md.

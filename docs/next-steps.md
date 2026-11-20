@@ -7,26 +7,14 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-027 — Specify the joint-routing unseen-LLM support-graph protocol
+### T-028 — Run and interpret the single support-graph development pilot
 
-- Description: Translate D-028 into an explicit graph representation and
-  evaluation contract, using GraphRouter as the methodological reference.
-- Objective: Preserve query--prompt--model support observations and test useful
-  incorporation with frozen parameters.
-- Dependencies: D-028 adopted; review actual Stage A artifacts rather than
-  relying on stale implementation-status headers.
-- Completion criterion: Specify support/target separation and training masks;
-  prompt-conditioned interaction-edge messages and alternatives; held-out
-  selection rules; explicit candidate pools and budgets; fixed-reference cost
-  normalization; R/P/C and incorporation metrics; paired controls and behavior
-  diagnostics; runtime/integrity checks and pilot execution gates.
-- Constraints: Known prompts/tasks initially; no target outcome inputs or
-  target-to-target coupling; no held-out model outcomes in training or tuning;
-  preserve historical artifacts. Representation, pilot model and support budget
-  are not finalized. No training sweep is launched by this task.
-- State: pending
-- Priority: P1
-- Blocker: None.
+- State: pending real-data execution on Morel.
+- Command and contract: docs/support-graph-pilot.md; D-028 and D-029.
+- Scope: qwen2.5-14b, seed 1, k=8, lambda=0.9; one graph architecture.
+- Completion: inspect R/P/C for the three conditions, calibration gain,
+  incorporation gain, beneficial/harmful selections and pair/task concentration.
+- Do not launch more variants or folds before interpreting this result.
 
 ## Next
 
@@ -136,3 +124,6 @@ must be reconciled with D-028 before execution.
 - Priority: P1
 - Blocker: None.
 
+
+
+T-027 completed by the implementation contract in docs/support-graph-pilot.md.
