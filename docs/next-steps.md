@@ -1,27 +1,30 @@
 # P1 - Experiment Repair next steps
 
-_Last updated: 2026-09-18_
+_Last updated: 2026-11-20_
 
 Read `docs/experiment-status.md`, `docs/decisions.md`, and
 `docs/methodology-scope.md` before continuing. Keep exactly one task in **Now**.
 
 ## Now
 
-### T-026 — Implement Edge-GNN v2 Stage A and integrity tests
+### T-027 — Specify the joint-routing unseen-LLM support-graph protocol
 
-- Description: Implement only the three arms and validation gates frozen in
-  `docs/edgegnn-v2-stage-a.md` and `configs/edgegnn_v2_stage_a.json`.
-- Objective: Produce a testable, deterministic Stage A implementation without
-  changing the frozen protocol or running the five-seed experiment.
-- Dependencies: T-025 completed; D-026 and D-027 active.
-- Completion criterion: Static/synthetic topology and leakage tests pass; all
-  arms pass a CPU smoke test; runner and aggregator dry runs validate expected
-  paths and cardinalities. No GPU training sweep is part of this task.
-- Constraints: Independent per-query graphs; matched full-MP/self-only scorer
-  with equal depth, activation and normalization;
-  shared objective; no reward-selected topology; no realized outcomes as
-  features; new output namespace; preserve P0 and inductive artifacts.
-- State: in_progress
+- Description: Translate D-028 into an explicit graph representation and
+  evaluation contract, using GraphRouter as the methodological reference.
+- Objective: Preserve query--prompt--model support observations and test useful
+  incorporation with frozen parameters.
+- Dependencies: D-028 adopted; review actual Stage A artifacts rather than
+  relying on stale implementation-status headers.
+- Completion criterion: Specify support/target separation and training masks;
+  prompt-conditioned interaction-edge messages and alternatives; held-out
+  selection rules; explicit candidate pools and budgets; fixed-reference cost
+  normalization; R/P/C and incorporation metrics; paired controls and behavior
+  diagnostics; runtime/integrity checks and pilot execution gates.
+- Constraints: Known prompts/tasks initially; no target outcome inputs or
+  target-to-target coupling; no held-out model outcomes in training or tuning;
+  preserve historical artifacts. Representation, pilot model and support budget
+  are not finalized. No training sweep is launched by this task.
+- State: pending
 - Priority: P1
 - Blocker: None.
 
@@ -102,3 +105,34 @@ Before implementing T-019/T-020, use `docs/cost-information-contract.md` and `do
 - T-010 completed: ran the canonical P0 aggregator on `morel`; validated 20
   source files and produced JSON, CSV, and LaTeX five-seed tables for nine
   methods without mixing inductive results.
+
+
+## Historical queue reconciliation — 2026-11-20
+
+T-026 is removed from Now and archived below as its original queue snapshot.
+Stage A implementation and aggregates exist, but its full completion checks were
+not rerun in this session. D-028 changes the active research direction; do not
+restart Stage A implementation from the stale queue. T-027 is the sole Now task.
+Earlier T-012/T-020 and external-candidate references are retained as history and
+must be reconciled with D-028 before execution.
+
+### Archived T-026 snapshot
+
+### T-026 — Implement Edge-GNN v2 Stage A and integrity tests
+
+- Description: Implement only the three arms and validation gates frozen in
+  `docs/edgegnn-v2-stage-a.md` and `configs/edgegnn_v2_stage_a.json`.
+- Objective: Produce a testable, deterministic Stage A implementation without
+  changing the frozen protocol or running the five-seed experiment.
+- Dependencies: T-025 completed; D-026 and D-027 active.
+- Completion criterion: Static/synthetic topology and leakage tests pass; all
+  arms pass a CPU smoke test; runner and aggregator dry runs validate expected
+  paths and cardinalities. No GPU training sweep is part of this task.
+- Constraints: Independent per-query graphs; matched full-MP/self-only scorer
+  with equal depth, activation and normalization;
+  shared objective; no reward-selected topology; no realized outcomes as
+  features; new output namespace; preserve P0 and inductive artifacts.
+- State: in_progress
+- Priority: P1
+- Blocker: None.
+
