@@ -995,3 +995,28 @@ D-030 adds only fixed query-conditioned cosine support weighting (temperature
 All 13 support/audit tests pass, and synthetic training plus replay for weighted
 and legacy checkpoints passed. Real-data execution has not occurred here.
 The next action is one Morel run with --support-weighting query_cosine; no sweep.
+
+
+## Official GraphRouter reference ready — 2026-11-22
+
+The query-cosine pilot returned P=0.45073089, C_qnorm=0.12270050,
+R_qnorm=0.34030043, zero Qwen selections and zero incorporation/calibration gain.
+It selected selfcheck on all queries and one model per task. This closes T-030
+as a negative development contrast (not a general failure claim).
+
+D-031 implements a separate fixed-Direct control using a pinned official
+encoder, not a state-per-pair approximation. One training yields the four
+seen/description/k8/k80 conditions. Cost normalization is fit only on known
+Direct training monetary outcomes; qnorm outputs are explicitly secondary.
+The public loop's epoch-wise test calls and missing checkpoint reload are not
+retained. Full known-model training history remains available.
+
+Four isolation/masking/frozen-state tests passed. A two-epoch synthetic
+end-to-end run passed all four conditions, checkpoint selection, nested-support,
+coverage and reward-algebra checks. The vendored core classes are unchanged
+from upstream; the MIT notice and pinned SHA are recorded. Local runtime used
+CPU PyTorch 2.15.0 and PyG 2.8.1; no GPU or real-data result is claimed.
+
+Run scripts/run_graphrouter_unseen.sh on Morel after installing the separate
+requirements-graphrouter.txt. Return its results.json. No other run or method
+change is queued before reading that control.

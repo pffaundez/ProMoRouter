@@ -1,0 +1,2 @@
+# Install into the existing PyTorch environment; no model generation dependency.
+torch-geometric==2.8.1

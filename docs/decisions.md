@@ -821,3 +821,50 @@ These are unresolved choices, not adopted decisions:
 - **Status:** active; code and synthetic checks ready; real-data run pending.
 - **Files:** router/support_graph.py, train_router_support_graph.py,
   audit_support_graph.py, tests/test_support_graph.py and continuity docs.
+
+
+### D-031 — Establish a pinned official GraphRouter model-only reference first
+
+- **Date:** 2026-11-22
+- **Context:** Both simplified joint support pilots failed to select Qwen.
+  Query-conditioned aggregation produced R_qnorm=0.34030043 versus uniform
+  0.34954213, with zero incorporation/calibration gain; it does not justify
+  another aggregation variant. Their state-per-pair architecture is not the
+  official GraphRouter encoder. Do not infer GraphRouter works on our fold
+  merely from its published experiments.
+- **Decision:** Implement one fixed-Direct model-only control using the official
+  encoder at upstream commit 0edfb8758d45acd93c8029354867ffb49bb8a97f.
+  Retain its directed graph, GeneralConv/BatchNorm layers, attribute processing,
+  compatibility decoder, BCE and edge-level masking. Keep code/config defaults
+  explicit (including embedding_dim=8/internal width16 and 32 mask draws).
+  Adapt the public training loop to select on seen-only validation macro-F1,
+  load the chosen state, freeze all parameters/buffers and evaluate test only
+  after training. No replacement with our earlier support scorer.
+- **Experiment:** Same 797-query seed1 manifest, Direct only, eight seen models,
+  external Qwen excluded from fitting/tuning. Known history uses all 557 train
+  qids; 549 produce supervised targets, eight reserved qids supply seen context.
+  Nested 8/80 Qwen support sets drawn from train are only revealed after weights
+  freeze. The 72 additional qids may have seen-model training observations.
+  Evaluate seen-only, description-only, calibrated_8 and calibrated_80 from one
+  checkpoint. GPU0 runner; 1000 epochs; no hyperparameter or model sweep.
+- **Cost contract:** Primary C is raw cost_proxy_money normalized with fixed
+  min/max from fitting seen Direct actions only. Primary R=P-0.9C is used for
+  supervision and evaluation. Extrapolated C is not clipped. Stored full-pool
+  qnorm C/R is SECONDARY historical output only; it must not be conflated with
+  the primary objective. No silent fallback if monetary costs are absent.
+  This changes the cost scale relative to the previous joint pilots and is
+  part of an adapted control, not a numerically matched reproduction.
+- **Outputs:** R/P/C in all conditions, separate historical qnorm summaries,
+  Direct-only oracle opportunities for both cost references, incorporation and
+  calibration gains, selections/counts/task profiles, scores and raw support
+  monetary cost. Freeze weights and BatchNorm stats and test target isolation.
+  Bootstrap is conditional on one fitted checkpoint, not seed-level evidence.
+- **Convergence:** Close the cosine-aggregation contrast; pause joint-model
+  modifications pending this reference result. One training and four evaluations.
+  Interpret whether k8/k80 adds utility before extending the working encoder
+  with prompts. Zero oracle margin is a scenario limitation, not failed routing.
+- **Status:** active; local CPU tests/synthetic control passed; real GPU run pending.
+- **Files:** router/graphrouter_official.py, router/LICENSE.GraphRouter,
+  train_graphrouter_unseen.py, tests/test_graphrouter_unseen.py,
+  requirements-graphrouter.txt, scripts/run_graphrouter_unseen.sh,
+  docs/graphrouter-unseen-control.md and continuity docs.

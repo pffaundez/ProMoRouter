@@ -7,15 +7,16 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-030 — Run and interpret the single query-conditioned support pilot
+### T-031 — Run and interpret the official GraphRouter fixed-Direct control
 
-- State: pending real-data run on Morel; implementation and synthetic checks ready.
-- Use the prior command plus --support-weighting query_cosine and --device cuda:0.
-- Fixed Qwen held-out, k8, seed1, lambda0.9; no other configuration changes.
-- Output suffix: k8_seed1_lam0.9_query_cosine; never overwrite the uniform run.
-- Compare R/P/C, incorporation/calibration gain, prompt/task concentration and
-  embedded score summaries against the recorded uniform pilot.
-- Stop for interpretation before new folds, seeds or method variants.
+- State: implementation and CPU synthetic checks complete; Morel GPU run pending.
+- Install requirements-graphrouter.txt in the existing PyTorch environment.
+- Run bash scripts/run_graphrouter_unseen.sh (GPU0 by default).
+- Read outputs/graphrouter_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
+- One training, four conditions: seen/description/k8/k80; no prompt selection.
+- Distinguish primary training-fitted monetary-normalized R from R_qnorm.
+- Interpret Direct-only oracle margin and useful incorporation before changing
+  architecture, launching seeds/folds or adding prompts. See D-031.
 
 ## Next
 
@@ -133,3 +134,5 @@ T-028 development pilot completed and inspected: no incorporation gain and
 selfcheck selected throughout test. T-029 is the sole next action.
 
 T-029 completed: real-checkpoint audit interpreted; see D-030 for evidence.
+
+T-030 completed: cosine aggregation did not improve incorporation or R_qnorm.
