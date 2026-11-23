@@ -7,15 +7,18 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-034 — Implement and validate the minimal official-encoder joint extension
+### T-035 — Run and interpret the official-encoder joint incorporation pilot
 
-- State: contract ready; implementation pending.
-- Follow docs/graphrouter-joint-contract.md and D-034.
-- Use query–prompt sources and shared LLM nodes with the official encoder/decoder.
-- Add no alternative scoring head, external gate or threshold search.
-- Pass masking, target isolation, frozen-state, permutation and Direct-reduction
-  checks plus synthetic checkpoint/evaluation smoke before providing a GPU run.
-- Preserve all prior artifacts; no real-data execution occurred in this update.
+- State: implementation and 35 CPU checks complete; Morel run pending.
+- Run bash scripts/run_graphrouter_joint_unseen.sh in the existing environment
+  (GPU0 by default). One training: seed1/Qwen/lambda0.9, 1000 epochs.
+- Three frozen conditions: known only, description, calibrated k8 (32 actions).
+- Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
+- Assess primary calibrated-minus-known R/P/C, calibration gain, oracle
+  opportunity and pair/task concentration. Keep qnorm secondary.
+- Historical Direct comparison requires verified direct_reference metadata.
+- No thresholds, additional support budgets, seeds or variants before reading
+  this result. Follow D-034 and docs/graphrouter-joint-contract.md.
 
 ## Next
 
@@ -150,3 +153,6 @@ above are dated snapshots, superseded by this closure.
 
 T-033 completed: scope clarified and documented in D-034. Closed interventions
 do not answer or reject the pending official-encoder joint experiment.
+
+T-034 completed: official-encoder joint implementation and synthetic integrity
+checks passed. No real-data result exists yet. T-035 is the sole current task.

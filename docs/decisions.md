@@ -957,3 +957,20 @@ These are unresolved choices, not adopted decisions:
   any real-data training. No external utility gate, threshold search or new
   scorer is part of the design. No real joint result exists yet.
 - **Status:** active design contract; implementation pending.
+
+#### D-034 implementation update — 2026-11-23
+
+- Implemented router/graphrouter_joint.py and train_graphrouter_joint_unseen.py
+  without modifying the official encoder/decoder source. Query–prompt sources,
+  shared model nodes and original compatibility scoring are retained.
+- The runner fixes seed1/Qwen/lambda0.9, 1000 epochs and three frozen conditions.
+  Direct-reference metadata checks verify the common primary monetary units;
+  absent/mismatched metadata blocks a matched historical interpretation, not
+  the primary within-checkpoint contrast.
+- All 35 CPU tests pass: 14 GraphRouter tests, including 10 new joint tests,
+  plus 21 support/audit/threshold regression tests. A two-epoch synthetic
+  end-to-end test checks optimizer, checkpoint selection, frozen incorporation,
+  graph counts, reward algebra and output protection. A controlled Direct
+  reduction fixture reproduces original-adapter scores with copied weights.
+- GPU/real-data execution remains pending; no research result is claimed.
+  T-034 implementation is complete; T-035 is the sole Morel run/interpretation.

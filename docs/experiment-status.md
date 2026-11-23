@@ -1099,3 +1099,26 @@ This update is design/documentation only: no joint training code, synthetic test
 results or real-data results are claimed. Prior intervention closures stand;
 they do not reject this untested architecture. T-033 review is complete;
 T-034 implementation and synthetic validation is the sole current task.
+
+## Official GraphRouter joint implementation ready — 2026-11-23
+
+T-034 follows docs/graphrouter-joint-contract.md. New files:
+router/graphrouter_joint.py, train_graphrouter_joint_unseen.py,
+scripts/run_graphrouter_joint_unseen.sh and two joint test modules.
+The vendored router/graphrouter_official.py is byte-for-byte unchanged from
+published source. No SupportGraphRouter scorer or external gate is used.
+
+All 35 CPU tests pass (14 GraphRouter tests including 10 new joint tests,
+and 21 support/audit/threshold regression tests). The joint integration fixture
+runs two synthetic epochs with 32 masks per step and checks checkpoint choice,
+three frozen conditions, graph counts, one label per original query,
+Direct-reference metadata checks and refusal to overwrite outputs. Unit checks
+cover Direct reduction with copied weights/zero prompt projection, masking,
+target isolation, support sensitivity, frozen state and candidate ordering.
+Python compilation and shell syntax checks passed.
+
+This is engineering validation only; no Morel/GPU or real-data joint run occurred
+here. T-035 is the sole next action: bash scripts/run_graphrouter_joint_unseen.sh.
+Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
+Interpret within-checkpoint incorporation/calibration gain before any variant
+or sweep. Prior experiment outputs are preserved.

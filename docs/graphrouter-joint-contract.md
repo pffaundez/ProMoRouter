@@ -1,7 +1,7 @@
 # Contrato: extensión conjunta mínima del GraphRouter oficial
 
-Fecha: 2026-11-23. Decisión D-034. Estado: diseño para implementación;
-no se ha implementado ni ejecutado el experimento conjunto descrito aquí.
+Fecha: 2026-11-23. Decisión D-034. Estado: implementación validada con pruebas sintéticas;
+ejecución del experimento conjunto con datos reales pendiente en Morel.
 
 ## Pregunta única
 
@@ -170,3 +170,42 @@ de un único fold observado previamente.
 Esta fase prueba una extensión mínima específica del mecanismo oficial, no todas
 las posibles arquitecturas de grafo con prompts. La incorporación física no basta:
 la pregunta principal sigue siendo si mejora las decisiones de inferencia.
+
+## Implementación y ejecución — 2026-11-23
+
+Contrato implementado en `router/graphrouter_joint.py` y
+`train_graphrouter_joint_unseen.py`; módulo oficial sin cambios.
+Pasaron 35 pruebas CPU: 14 de GraphRouter (10 nuevas conjuntas) y 21 de
+regresión de soporte/auditoría/umbral. La integración entrena dos épocas
+sintéticas y evalúa las tres condiciones; no es evidencia de mejora real.
+No se ha ejecutado el piloto con datos de Morel.
+
+Comando desde la rama v2-behavior-profiles en Morel:
+
+```bash
+source ~/repos/graph-router-2/.venv/bin/activate
+cd ~/repos/ProMoRouter
+git pull --ff-only
+bash scripts/run_graphrouter_joint_unseen.sh
+```
+
+Usa las dependencias de `requirements-graphrouter.txt` ya empleadas por el
+control Direct. GPU0 por defecto. Para GPU1, ejecutar en su lugar:
+
+```bash
+bash scripts/run_graphrouter_joint_unseen.sh ~/repos/graph-router-2/data cuda:1
+```
+
+Es un único entrenamiento; no ejecutar ambos comandos. Guarda checkpoint,
+historia, normalizador, hashes, scores, selecciones, conteos del grafo y métricas
+en `outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/`.
+Enviar `results.json` al terminar; se rechaza sobrescribir una carpeta existente.
+
+La referencia Direct se busca en
+`outputs/graphrouter_unseen/qwen2.5-14b/seed1_lam0.9/results.json`.
+`direct_reference` informa `verified`, `unavailable` o `mismatch`.
+Solo `verified` permite comparación numérica histórica en la misma escala;
+no implica igualdad de capacidad, datos históricos ni presupuesto de soporte.
+Una incompatibilidad no invalida el contraste primario entre condiciones del
+mismo checkpoint; bloquea su interpretación como contraste histórico alineado.
+No se elige checkpoint ni hiperparámetros usando resultados de test Direct.
