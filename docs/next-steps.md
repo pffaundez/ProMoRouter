@@ -7,18 +7,13 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-032 — Run the bounded margin-threshold experiment and close the intervention
+### T-033 — Review the documented closure before defining another research stage
 
-- State: implementation and 21 CPU tests complete; Morel execution pending.
-- Run bash scripts/run_support_threshold.sh (GPU0, existing environment).
-- Return outputs/support_threshold/seed1_lam0.9/results.json even on internal stop.
-- Two internal holdouts choose/check one threshold with external models excluded.
-- A failed check stops before external training/evaluation; do not tune further.
-- If passed, one shared outer fit confirms separately on Yi-34B and Mixtral.
-- Interpret gains against reject-all and argmax, uncertainty and concentration.
-  Both external cases must improve over both controls for descriptive success.
-- Maximum three fits; no architecture, seed or hyperparameter sweep.
-- Protocol: docs/support-threshold.md and D-032.
+- State: calculation record and reportable synthesis available; no new run queued.
+- Read docs/memoria-intervenciones-unseen.md and D-033.
+- T-032 completed with reject-all; external models were not evaluated.
+- Any subsequent experimental objective must be defined separately. Do not
+  reopen threshold searches, aggregation variants or GPU sweeps automatically.
 
 ## Next
 
@@ -145,3 +140,8 @@ reward improvement over seen-only; k80 increases selections and worsens the
 point estimate. See the dated status entry; confidence intervals include zero.
 T-032 is the sole current experimental action. Older queued methodology work
 remains deferred until this bounded intervention is interpreted.
+
+T-032 completed: reject-all selected; AUC criteria passed but no positive
+incorporation gain. The protocol stopped before external evaluation. See D-033
+and docs/memoria-intervenciones-unseen.md. Historical pending-run statements
+above are dated snapshots, superseded by this closure.

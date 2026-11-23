@@ -906,3 +906,27 @@ These are unresolved choices, not adopted decisions:
   both synthetic orchestration paths. Morel real-data execution pending.
 - **Files:** train_support_threshold.py, scripts/run_support_threshold.sh,
   tests/test_support_threshold*.py, docs/support-threshold.md and continuity docs.
+
+
+### D-033 — Close the tested incorporation interventions and retain a calculation record
+
+- **Date:** 2026-11-23
+- **Evidence:** Real T-032 output selected threshold=null (reject-all). Check AUC
+  was 0.61718098 pooled, 0.64488017 for Llama-8B and 0.66379310 for CodeLlama.
+  AUC passed; reject-all and zero gain failed the gate. All nonempty tuning
+  threshold policies lost reward; the best gained -0.00416935844 over 118
+  query-model records. No external fit or Yi/Mixtral evaluation occurred.
+- **Decision:** Close the global-threshold intervention under D-032 without
+  further threshold searches. Consolidate the uniform support pilot/audit,
+  cosine aggregation, official GraphRouter control and threshold intervention
+  in docs/memoria-intervenciones-unseen.md for reporting and calculation memory.
+- **Scope:** No evidence of useful incorporation from these interventions.
+  Do not infer general impossibility, causal diagnosis, significant harm or
+  negative external results. Model-selected prompts differ from oracle prompts;
+  repeated query-model records differ from independent queries. Preserve cost
+  contracts and separate the official Direct control from joint qnorm results.
+- **Reproducibility:** Record source locations, attachment/dataset/frozen-threshold
+  hashes, exact stopping criteria, recalculation snippet and reporting wording.
+  Original real-data outputs remain on Morel; no research artifact is overwritten.
+- **Status:** active closure decision; T-032 complete. No new training queued.
+- **Files:** docs/memoria-intervenciones-unseen.md and continuity documents.

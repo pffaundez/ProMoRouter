@@ -1055,3 +1055,26 @@ force gate outcomes to cover both stopping and continuing; they establish
 engineering behavior only. The real threshold experiment has not run here.
 Run bash scripts/run_support_threshold.sh on Morel; return its results.json
 even when status is stopped_internal_gate. Prior outputs remain unchanged.
+
+
+## Threshold intervention closed; calculation memory consolidated — 2026-11-23
+
+The user-provided results(3).json reports stopped_internal_gate, threshold=null.
+Both internal fits chose epoch 10 and stopped at 28. Verified disjoint query
+partitions: 549 fit / 8 support / 59 tune / 60 check / 121 test. The inner folds
+produce 118 tuning and 120 checking records, each query repeated across models.
+
+Check AUC: pooled 0.61718098, Llama-8B 0.64488017, CodeLlama 0.66379310.
+AUC did not fail. No nonempty strict-threshold policy improved tuning reward;
+the best nonempty policy selected one record with mean gain -0.00416935844.
+Reject-all won with zero gain, triggering the predeclared stop before outer
+training or any Yi/Mixtral evaluation. Check R=0.32542227, P=0.37059523,
+C=0.05019217 are pooled inner-fold values, not external performance. The [0,0]
+gain interval follows mechanically from unchanged decisions.
+
+T-032 is complete and D-033 closes this intervention without another sweep.
+docs/memoria-intervenciones-unseen.md consolidates all four intervention families
+and the score audit, calculation definitions, exact findings, reporting limits,
+source hashes and a CPU-only recalculation snippet. The raw JSON remains on
+Morel; no fresh training or dataset modification was performed for this record.
+No further experimental execution is currently queued.
