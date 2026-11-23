@@ -241,3 +241,25 @@ pregunta mediante una extensión mínima especificada: fuentes consulta–prompt
 un nodo compartido por LLM y encoder/decoder oficiales. Es un diseño pendiente
 de implementación, no un nuevo resultado ni una reinterpretación positiva de
 las intervenciones cerradas. No introduce otra regla externa de utilidad.
+
+
+## 7. I-05: piloto conjunto oficial ejecutado — 2026-11-23
+
+La extensión pendiente de la sección 6 ya se ejecutó. Su análisis y trazabilidad
+están en [graphrouter-joint-results.md](graphrouter-joint-results.md).
+Implementación 78e3314; adjunto results(4).json, SHA-256
+54b96da267ee6dc7e4fdc5368b086555ab56e5799d2b950477180a4c37f219cc.
+
+R primario: base conjunta 0.27727088, descripción 0.19038813, calibrado k8
+0.30704034. Ganancia vs base +0.02976946; calibración vs descripción
++0.11665220. CI condicional de incorporación [-0.04242451, 0.10897677].
+La mejora de recompensa procede de menor coste promedio; P no aumenta.
+Las 121 selecciones calibradas son Qwen/decompose, frente a Qwen/Direct en
+descripción. Por tanto, hay señal agregada positiva, pero concentración total
+y ausencia de evidencia de ventaja adaptativa por consulta.
+
+Los resultados negativos anteriores no se reescriben: correspondían a otras
+intervenciones. Este resultado tampoco valida retrospectivamente esas variantes.
+Antes de entrenar otra red, queda comparar con una política fija elegida con
+información permitida (validación conocida / soporte del nuevo). Nunca usar
+validación del modelo retenido o test para elegir ese comparador.

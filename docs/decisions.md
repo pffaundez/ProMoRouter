@@ -974,3 +974,28 @@ These are unresolved choices, not adopted decisions:
   reduction fixture reproduces original-adapter scores with copied weights.
 - GPU/real-data execution remains pending; no research result is claimed.
   T-034 implementation is complete; T-035 is the sole Morel run/interpretation.
+
+
+### D-035 — Interpret the official joint pilot as positive but fully concentrated
+
+- **Date:** 2026-11-23
+- **Evidence:** T-035 real output improves primary R from 0.27727088 to
+  0.30704034 (+0.02976946), conditional paired bootstrap 95% CI
+  [-0.04242451, 0.10897677]. Description R=0.19038813; support adds +0.11665220.
+  Every calibrated query selects Qwen/decompose; description selects
+  Qwen/Direct throughout. Known scores change exactly zero.
+- **Decision:** Complete T-035 with a descriptive positive incorporation signal,
+  not a confirmed instance-routing advantage. Record concentration, uncertainty,
+  cost-driven gain and score-scale disparity in docs/graphrouter-joint-results.md.
+- **Limits:** One reused seed/fold; 32 new-model calibration actions. The unchanged
+  known candidates score around 0.00065–0.00279 versus new-model scores near
+  0.48 after support. This is an observed ranking-scale flag, not a causal
+  diagnosis. Gain over the realized base and oracle expansion gain use different
+  references and must not be compared as identical quantities.
+- **Next:** Before any further training, assess a fixed-policy comparator using
+  permitted information only: known-model validation for known actions and the
+  reserved support for new-model prompts. No held-out-model validation outcomes
+  or test outcomes may select the baseline. No architecture change or sweep
+  is adopted by this result.
+- **Status:** active interpretation; T-035 complete, bounded comparator review
+  pending. No new GPU training authorized or launched by this documentation.

@@ -7,18 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-035 — Run and interpret the official-encoder joint incorporation pilot
+### T-036 — Assess the joint result against permitted fixed-policy controls
 
-- State: implementation and 35 CPU checks complete; Morel run pending.
-- Run bash scripts/run_graphrouter_joint_unseen.sh in the existing environment
-  (GPU0 by default). One training: seed1/Qwen/lambda0.9, 1000 epochs.
-- Three frozen conditions: known only, description, calibrated k8 (32 actions).
-- Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
-- Assess primary calibrated-minus-known R/P/C, calibration gain, oracle
-  opportunity and pair/task concentration. Keep qnorm secondary.
-- Historical Direct comparison requires verified direct_reference metadata.
-- No thresholds, additional support budgets, seeds or variants before reading
-  this result. Follow D-034 and docs/graphrouter-joint-contract.md.
+- State: T-035 analyzed; positive point gain with total Qwen/decompose concentration.
+- Read docs/graphrouter-joint-results.md and D-035.
+- Before another fit, compare with a fixed known-pool pair selected only on
+  known-model validation; any new-model prompt choice must use reserved support.
+- Do not use held-out-model validation outcomes or test to select the comparator.
+- Use existing artifacts; no new encoder, threshold, support-budget or seed sweep.
+- No new training is queued. Engineering for this comparison is not yet supplied.
 
 ## Next
 
@@ -156,3 +153,7 @@ do not answer or reject the pending official-encoder joint experiment.
 
 T-034 completed: official-encoder joint implementation and synthetic integrity
 checks passed. No real-data result exists yet. T-035 is the sole current task.
+
+T-035 completed: official joint incorporation gain +0.02976946, with conditional
+CI including zero and all 121 calibrated selections Qwen/decompose. See D-035.
+T-036 is the sole current task; prior pending-run statements are historical.

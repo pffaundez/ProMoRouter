@@ -1122,3 +1122,31 @@ here. T-035 is the sole next action: bash scripts/run_graphrouter_joint_unseen.s
 Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
 Interpret within-checkpoint incorporation/calibration gain before any variant
 or sweep. Prior experiment outputs are preserved.
+
+
+## Official joint pilot returned — 2026-11-23
+
+Real results(4).json completes T-035. Best epoch 44, validation macro-F1
+0.01758658, validation R=0.30288675. The three primary P/C/R tuples are:
+known (0.34977802, 0.08056349, 0.27727088), description
+(0.26279095, 0.08044757, 0.19038813), calibrated
+(0.34419288, 0.04128061, 0.30704034). Incorporation gain +0.02976946,
+calibration gain +0.11665220. Conditional incorporation CI includes zero
+[-0.04242451, 0.10897677]. Direct reference metadata verifies common units.
+
+All calibrated selections are Qwen/decompose (121/121); description selected
+Qwen/Direct throughout. Calibrated changes are beneficial in 81 cases and
+harmful in 40. The gain is cost-driven and concentrated mainly in GSM8K.
+Known scores are unchanged exactly; new scores around 0.48 dominate known
+scores around 0.00065–0.00279. No causal explanation is established.
+
+See docs/graphrouter-joint-results.md for partitions, graph counts, source hash,
+per-task gains, oracle-reference clarification and a support-only exploratory
+fixed-prompt comparator. The latter chooses CoT and gets R_test=0.24274546,
+but is not the missing validation-selected known-pool fixed-pair control.
+AUC/threshold results of the previous architecture do not apply to this pilot.
+
+The official joint mechanism now has a positive descriptive result, but no
+demonstrated per-instance selection advantage. No fresh fit is queued. The sole
+next task is a bounded fixed-policy comparison using existing artifacts and
+permitted validation/support information; no unseen-model validation tuning.
