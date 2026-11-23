@@ -999,3 +999,25 @@ These are unresolved choices, not adopted decisions:
   is adopted by this result.
 - **Status:** active interpretation; T-035 complete, bounded comparator review
   pending. No new GPU training authorized or launched by this documentation.
+
+
+### D-036 — Bound the last comparison and close this development stage
+
+- **Date:** 2026-11-23
+- **Decision:** Implement one no-training/no-inference fixed-policy audit of the
+  existing official joint pilot, then close this stage regardless of outcome.
+  No new GNN, thresholds, support budgets or training seeds are introduced.
+- **Selectors:** fixed_known uses known-model validation only; fixed_new_support
+  uses the eight held-out-model support queries only. fixed_adapted compares
+  those two fixed actions on the same support queries, retaining known on ties.
+  Never tune using held-out-model validation or test.
+- **Closure:** Nonpositive gain against either main fixed control means no
+  advantage over both. Positive gains with intervals crossing zero are
+  uncertain. Positive conditional intervals still do not establish instance
+  routing when all decisions are the same pair. Record the result and close;
+  do not automatically add another intervention under any outcome.
+- **Implementation:** audit_graphrouter_joint_fixed.py and CPU-only shell runner;
+  stdlib only, original data hash checked, policies fixed before reading test,
+  original result unchanged. Seven new tests passed; full 42-test suite passed.
+- **Status:** audit ready; one Morel calculation pending, not a training run.
+  See docs/graphrouter-joint-closure.md.

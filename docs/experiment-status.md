@@ -1150,3 +1150,21 @@ The official joint mechanism now has a positive descriptive result, but no
 demonstrated per-instance selection advantage. No fresh fit is queued. The sole
 next task is a bounded fixed-policy comparison using existing artifacts and
 permitted validation/support information; no unseen-model validation tuning.
+
+
+## Final bounded fixed-policy audit ready — 2026-11-23
+
+D-036 implements the remaining T-036 comparison without training, inference
+or GPU. The selector reads known-model validation and the same eight support
+queries; saved target outcomes are used only after fixed policies are selected.
+Main controls are fixed_known and fixed_adapted; the support-selected new prompt
+is also reported. Dataset hash, qid partitions and target ordering are checked.
+The original results.json is not modified.
+
+Seven new stdlib-only tests passed, including information separation, target
+order, test-independent policy choice and CLI output protection. The complete
+42-test CPU suite passes. No real fixed-policy audit has run here because the
+original validation dataset is only on Morel. Run
+bash scripts/audit_graphrouter_joint_fixed.sh and return fixed_policy_audit.json.
+docs/graphrouter-joint-closure.md fixes interpretation and closes the stage after
+that calculation; no outcome triggers another automatic training or variant.

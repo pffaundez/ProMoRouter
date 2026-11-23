@@ -7,15 +7,14 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-036 — Assess the joint result against permitted fixed-policy controls
+### T-036 — Run the final CPU fixed-policy audit and close the joint pilot
 
-- State: T-035 analyzed; positive point gain with total Qwen/decompose concentration.
-- Read docs/graphrouter-joint-results.md and D-035.
-- Before another fit, compare with a fixed known-pool pair selected only on
-  known-model validation; any new-model prompt choice must use reserved support.
-- Do not use held-out-model validation outcomes or test to select the comparator.
-- Use existing artifacts; no new encoder, threshold, support-budget or seed sweep.
-- No new training is queued. Engineering for this comparison is not yet supplied.
+- State: audit implemented; all 42 CPU tests pass. One Morel calculation pending.
+- Run bash scripts/audit_graphrouter_joint_fixed.sh. No GPU, inference or fit.
+- Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/fixed_policy_audit.json.
+- Select fixed controls using known validation / reserved support only.
+- Apply D-036 and docs/graphrouter-joint-closure.md, then close this stage.
+- No further variants or sweeps follow automatically, regardless of result.
 
 ## Next
 
@@ -157,3 +156,6 @@ checks passed. No real-data result exists yet. T-035 is the sole current task.
 T-035 completed: official joint incorporation gain +0.02976946, with conditional
 CI including zero and all 121 calibrated selections Qwen/decompose. See D-035.
 T-036 is the sole current task; prior pending-run statements are historical.
+
+T-036 engineering is complete; only the final no-training Morel calculation
+and its closure record remain. No new research branch or GPU run is queued.
