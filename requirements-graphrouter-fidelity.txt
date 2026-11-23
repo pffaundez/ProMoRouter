@@ -1,0 +1,3 @@
+-r requirements-graphrouter.txt
+# Metric dependency from the pinned upstream requirements, for optional reruns.
+scikit_learn==1.6.1

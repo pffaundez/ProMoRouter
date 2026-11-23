@@ -1231,3 +1231,25 @@ analysis/graphrouter_reference/seed1881_balance/. Final/best-validation weights
 are preserved in the separate graphrouter_reference_seed1881_weights.zip deliverable. No Morel execution is needed
 to read this measured CPU result. The optional GPU runner is for deliberate
 repetition, not an automatic next fit. ProMoRouter remains paused.
+
+
+## Bounded GraphRouter fidelity audit complete — 2026-11-23
+
+D-040 concludes partial_reproduction. The executable audit compares the actual
+pinned upstream GNN_prediction.train_validate against our reference in a small
+engineering fixture: matching masks, zero train/parameter/BN/validation error,
+test error 1.1920929e-7 or zero when preserving the upstream edge order.
+Recorded real-result metrics/choices match the released CSV with zero checked
+error, and the original 1000-epoch JSON hash remains unchanged.
+
+A future-GPU mask RNG deviation was corrected to keep sampling on CPU as in
+upstream; it does not affect the existing CPU result. The checkpoint-saving
+suspicion raised during manual review was refuted by AST/source: best_f1 IS
+updated, while test() does not reload that saved state. No false source defect
+is carried into the verdict.
+
+18 selected reference/audit/Direct CPU tests passed. No full benchmark training,
+new ProMoRouter variant or parameter search occurred. See
+docs/graphrouter-fidelity-verdict.md for the scope, remaining original-Table5
+artifacts needed and an unsent technical request. ProMoRouter remains paused;
+the audit is complete rather than an invitation to another blind rerun.

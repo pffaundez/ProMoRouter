@@ -1098,3 +1098,29 @@ These are unresolved choices, not adopted decisions:
 - **Status:** Reference implementation and one full run complete. No prompt
   extension launched; inspect the fidelity record rather than assuming the
   published reward establishes incremental incorporation.
+
+
+### D-040 — Finish the bounded fidelity audit as a partial reproduction
+
+- **Date:** 2026-11-23
+- **Scope:** Audit the pinned public release, published protocol and recorded
+  CPU reference. Do not start variants or repeat the full benchmark unless a
+  concrete error affecting that result is found.
+- **Evidence:** Execute the actual upstream train_validate on an engineering
+  fixture with matched initialization/RNG. Masks, train scores, parameters/BN
+  and validation scores match exactly. Test error is 1.1920929e-7 with the
+  reference's history-edge ordering and zero with upstream order. Canonical
+  metric/argmax checks have zero error; original result hash is unchanged.
+- **Correction:** Future GPU runs now draw mask RNG on CPU like upstream.
+  The recorded CPU primary was already equivalent, so no full rerun is needed.
+  A manual suspicion about best_f1 was explicitly refuted: it is updated;
+  public test() evaluates current state without loading the saved best.
+- **Verdict:** partial_reproduction. Public-code blocks and scalar R=0.207
+  agreement are supported; the exact original Table5 policy/useful adaptation
+  is not verified. Auxiliary IDs/sampler, few-shot driver, configuration-to-
+  checkpoint mapping/predictions and exact runtime remain unresolved.
+- **Checks:** 18 selected reference/audit/Direct CPU tests pass; no new
+  benchmark fit, ProMoRouter change or parameter search.
+- **Record:** docs/graphrouter-fidelity-verdict.md and
+  analysis/graphrouter_reference/fidelity_audit_final.json.
+- **Status:** bounded audit complete; no further automatic run queued.

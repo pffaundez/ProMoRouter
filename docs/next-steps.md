@@ -7,17 +7,16 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-037 — Review the completed public-artifact GraphRouter reference
+### T-038 — Completed: bounded GraphRouter fidelity audit
 
-- State: implementation, 52 CPU tests and a real 1000-epoch run completed.
-- Read docs/graphrouter-reference.md and D-039.
-- R rounds to 0.207, but all conditions select the same known model, with
-  zero useful incremental incorporation. Do not call scalar agreement proof
-  of the authors' complete adaptation result.
-- Canonical artifacts: analysis/graphrouter_reference/seed1881_balance/.
-- No prompt extension or new training is queued. Optional Morel reproduction
-  uses scripts/run_graphrouter_reference.sh only if explicitly desired.
-- Older Next/Later items below remain historical and inactive.
+- State: complete, verdict partial_reproduction under D-040.
+- Read docs/graphrouter-fidelity-verdict.md and the saved JSON evidence.
+- Recorded CPU primary passes the audited blocks; no full rerun is justified
+  by an identified result-affecting error.
+- Future GPU masks now preserve the public CPU RNG stream.
+- Exact Table5 auxiliary IDs/driver/checkpoint mapping remain unidentified.
+- No further training, parameter search or ProMoRouter extension is queued.
+- Historical Next/Later items below are inactive; they do not restart work.
 
 ## Next
 
@@ -168,3 +167,6 @@ remains active; earlier pending-run and comparison statements are historical.
 
 T-037 reference implementation and full CPU execution completed under D-039.
 No automatic continuation into prompts or hyperparameter search follows.
+
+T-038 completed: bounded source/executable/result audit recorded in D-040.
+No new benchmark fit was required; original reference results remain unchanged.

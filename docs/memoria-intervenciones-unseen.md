@@ -313,3 +313,24 @@ coinciden estructuralmente con el upstream fijado.
 Resultados y hashes se conservan en analysis/graphrouter_reference/seed1881_balance/;
 los checkpoints final/mejor-validación están en graphrouter_reference_seed1881_weights.zip. D-039 documenta esta etapa.
 No se lanza todavía otra variante ProMoRouter ni otro fit automáticamente.
+
+
+## 10. Dictamen de fidelidad cerrado — 2026-11-23
+
+[La auditoría acotada](graphrouter-fidelity-verdict.md) concluye reproducción
+parcial. Se ejecutó el loop original fijado en un fixture de ingeniería:
+máscaras, scores de train, parámetros/BN y validación coinciden; el residuo de
+test 1.19e-7 desaparece al conservar el orden original de las aristas.
+Las métricas/decisiones del resultado real se recalcularon con error comprobado
+cero. El resultado CPU de 1000 épocas conserva su hash y no se reentrenó.
+
+Se corrigió el RNG de futuras máscaras GPU para muestrearlas en CPU como el
+código público. No afecta a la referencia CPU existente. Una sospecha manual
+sobre best_f1 fue refutada y corregida: la variable sí se actualiza; lo que
+test() omite es recargar el checkpoint guardado.
+
+No se encontraron errores en los bloques auditados que justifiquen repetir el
+benchmark. Faltan artefactos que vinculen la ejecución original de Tabla5 con
+índices auxiliares, driver, configuración/checkpoint, predicciones y runtime.
+La coincidencia de R redondeado no valida por sí sola adaptación útil.
+D-040 cierra esta auditoría sin otra variante ni envío de mensajes a autores.

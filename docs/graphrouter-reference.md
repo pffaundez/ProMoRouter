@@ -171,3 +171,15 @@ no intenta regenerar interacciones. Se puede proporcionar una copia del mismo
 CSV con `python prepare_graphrouter_reference.py --router-data-path RUTA`.
 El hash sigue siendo obligatorio. Una repetición GPU puede variar por versión
 PyTorch/dispositivo; su resultado se conserva separado del primario CPU.
+
+
+## Dictamen posterior de fidelidad — 2026-11-23
+
+La auditoría acotada terminó con **partial_reproduction**. Se ejecutó el método
+original train_validate en un fixture y se verificó el resultado canónico;
+[graphrouter-fidelity-verdict.md](graphrouter-fidelity-verdict.md) contiene la
+evidencia y límites. Se corrigió únicamente el origen CPU del RNG para futuras
+máscaras GPU; la referencia CPU permanece válida en los bloques auditados,
+sin repetir las 1000 épocas. best_f1 sí se actualiza en el upstream: se guarda
+el mejor estado, aunque test() evalúa el actual sin recargarlo.
+No se inicia una extensión de prompts ni otro barrido.

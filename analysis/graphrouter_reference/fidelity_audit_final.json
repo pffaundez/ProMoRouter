@@ -1,0 +1,93 @@
+{
+  "verdict": "partial_reproduction",
+  "scope": "pinned public release; not a full reconstruction of unpublished Table5 execution",
+  "upstream_commit": "0edfb8758d45acd93c8029354867ffb49bb8a97f",
+  "source_files": {
+    "graph_nn.py": {
+      "git_blob": "0ae2f865c8903542c0771ca8a750cf6ca7f01dc2",
+      "sha256": "573baddfe7b89f94014bcb80c335a5091a732389a32c43143c0506e4f56ba9db"
+    },
+    "multi_task_graph_router.py": {
+      "git_blob": "d1ac7048598f950adfea0ade816a97abdcc63864",
+      "sha256": "b2d0ac8b7536246874d20587b78a1a6b293a5a840f5bd966864ff1017ee4380b"
+    },
+    "config.yaml": {
+      "git_blob": "36e4b54b6f9ad6e3586d9e45fca5a72157398edd",
+      "sha256": "32fc2f5858fba48323d98a7ceb7b3406f9bce3918374bb2968696ac2705526a4"
+    },
+    "requirements.txt": {
+      "git_blob": "87a7aa973e823d6f456a16d89c9a116b767c1523",
+      "sha256": "296fed0c7b4ddda01c0faab7fdd7d91a4f194c218bcb5368ea925091405d638a"
+    }
+  },
+  "static_evidence": {
+    "core_classes_identical": {
+      "FeatureAlign": true,
+      "EncoderDecoderNet": true
+    },
+    "upstream_best_f1_assignment_count": 2,
+    "upstream_best_f1_never_updated": false,
+    "upstream_test_reloads_checkpoint": false,
+    "upstream_masks_cpu_default": true,
+    "note": "best_f1 is updated and best-validation state is saved; public test() evaluates current state"
+  },
+  "audit_runtime": {
+    "torch": "2.15.0+cpu",
+    "pyg": "2.8.1",
+    "sklearn": "1.8.0",
+    "device": "cpu"
+  },
+  "executable_parity": {
+    "passed": true,
+    "fixture_only": true,
+    "benchmark_training_repeated": false,
+    "executed_function": "actual pinned GNN_prediction.train_validate",
+    "mask_draws": 3,
+    "epochs": 1,
+    "masks_equal": true,
+    "max_training_score_error": 0.0,
+    "max_parameter_or_bn_error": 0.0,
+    "max_validation_score_error": 0.0,
+    "max_test_score_error": 1.1920928955078125e-07,
+    "max_test_score_error_with_upstream_edge_order": 0.0,
+    "numerical_note": "Reference concatenates train+val; upstream masks full edges in source order. Sum-order rounding is reported separately."
+  },
+  "canonical_result_checks": {
+    "passed": true,
+    "maximum_metric_error": 0.0,
+    "score_choices_match": {
+      "known_only": true,
+      "description_only": true,
+      "fewshot_80": true
+    },
+    "support_changes_unseen_scores": true,
+    "max_support_score_change": 0.33966563642024994,
+    "queries": 48,
+    "epochs": 1000,
+    "fewshot_R": 0.20734848899458788,
+    "new_model_selections": 0,
+    "useful_incremental_gain": 0.0,
+    "public_rounded_reward_match": true
+  },
+  "source_results_sha256": "5e11700e3c41df0752e3dba2efa46a1f05b5d43e1f62f4a82d8f95d1ee1665cc",
+  "source_csv_sha256": "df6fd3e7cd932b85801d8cb4d782188250266dad5f53eff5ed95253134a6349c",
+  "corrections": [
+    {
+      "kind": "prospective_GPU_rng",
+      "issue": "mask random draws must remain on CPU as upstream, not CUDA",
+      "affects_recorded_cpu_primary": false,
+      "benchmark_rerun_required": false
+    }
+  ],
+  "missing_evidence": [
+    "Table5 auxiliary query IDs and exact sampler state",
+    "few-shot driver: whether unseen nodes participate during training and exact history construction",
+    "Table5 checkpoint-to-configuration mapping and per-query predictions",
+    "exact PyG version; public requirements pins Torch2.1.0 while measured run uses2.15.0",
+    "resolution of GAT32/Adam schedule prose versus GeneralConv16/AdamW code and Cases unit"
+  ],
+  "full_benchmark_retrained": false,
+  "promorouter_modified": false,
+  "rejected_manual_suspicion": "An initial reading suggested best_f1 was not updated; AST and actual source show it is updated. No checkpoint-saving defect was found.",
+  "decision": "No error found that changes the recorded CPU primary. No new fit or parameter search. Full useful-adaptation replication remains unverified."
+}

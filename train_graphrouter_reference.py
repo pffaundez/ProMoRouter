@@ -40,8 +40,10 @@ def train_step(net,opt,inputs,draws=32):
     net.train();opt.zero_grad(set_to_none=True)
     losses=[]
     for _ in range(draws):
-        # Same full-edge random mask layout and one optimizer step as upstream.
-        predict_mask=eligible & ~(torch.rand(len(eligible),device=eligible.device)<.5)
+        # Upstream samples masks on CPU even when the network is on CUDA.
+        # Keep that RNG stream instead of silently switching to a CUDA generator.
+        random_mask=(torch.rand(len(eligible),device='cpu')<.5).to(eligible.device)
+        predict_mask=eligible & ~random_mask
         see=~predict_mask & eligible
         if not bool(predict_mask.any()):raise RuntimeError('empty training edge sample')
         scores=net(t,q,m,edges,edge_mask=predict_mask,edge_can_see=see,edge_weight=attrs)
