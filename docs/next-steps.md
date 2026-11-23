@@ -1,22 +1,24 @@
 # P1 - Experiment Repair next steps
 
-_Last updated: 2026-11-20_
+_Last updated: 2026-11-23_
 
 Read `docs/experiment-status.md`, `docs/decisions.md`, and
 `docs/methodology-scope.md` before continuing. Keep exactly one task in **Now**.
 
 ## Now
 
-### T-031 — Run and interpret the official GraphRouter fixed-Direct control
+### T-032 — Run the bounded margin-threshold experiment and close the intervention
 
-- State: implementation and CPU synthetic checks complete; Morel GPU run pending.
-- Install requirements-graphrouter.txt in the existing PyTorch environment.
-- Run bash scripts/run_graphrouter_unseen.sh (GPU0 by default).
-- Read outputs/graphrouter_unseen/qwen2.5-14b/seed1_lam0.9/results.json.
-- One training, four conditions: seen/description/k8/k80; no prompt selection.
-- Distinguish primary training-fitted monetary-normalized R from R_qnorm.
-- Interpret Direct-only oracle margin and useful incorporation before changing
-  architecture, launching seeds/folds or adding prompts. See D-031.
+- State: implementation and 21 CPU tests complete; Morel execution pending.
+- Run bash scripts/run_support_threshold.sh (GPU0, existing environment).
+- Return outputs/support_threshold/seed1_lam0.9/results.json even on internal stop.
+- Two internal holdouts choose/check one threshold with external models excluded.
+- A failed check stops before external training/evaluation; do not tune further.
+- If passed, one shared outer fit confirms separately on Yi-34B and Mixtral.
+- Interpret gains against reject-all and argmax, uncertainty and concentration.
+  Both external cases must improve over both controls for descriptive success.
+- Maximum three fits; no architecture, seed or hyperparameter sweep.
+- Protocol: docs/support-threshold.md and D-032.
 
 ## Next
 
@@ -136,3 +138,10 @@ selfcheck selected throughout test. T-029 is the sole next action.
 T-029 completed: real-checkpoint audit interpreted; see D-030 for evidence.
 
 T-030 completed: cosine aggregation did not improve incorporation or R_qnorm.
+
+
+T-031 completed: official GraphRouter control selects Qwen but shows no primary
+reward improvement over seen-only; k80 increases selections and worsens the
+point estimate. See the dated status entry; confidence intervals include zero.
+T-032 is the sole current experimental action. Older queued methodology work
+remains deferred until this bounded intervention is interpreted.

@@ -1020,3 +1020,38 @@ CPU PyTorch 2.15.0 and PyG 2.8.1; no GPU or real-data result is claimed.
 Run scripts/run_graphrouter_unseen.sh on Morel after installing the separate
 requirements-graphrouter.txt. Return its results.json. No other run or method
 change is queued before reading that control.
+
+
+## Official GraphRouter control interpreted; final margin test ready — 2026-11-23
+
+User-provided real-data results close T-031. Best checkpoint epoch 993;
+seen-only validation macro-F1 0.2125562. Primary monetary-normalized cost was
+fit on known Direct training observations (proxy range 7.6 to 502.8).
+
+| Condition | P | Primary C | Primary R | Gain vs seen | Qwen selections |
+|---|---:|---:|---:|---:|---:|
+| Seen only | 0.33158374 | 0.11815411 | 0.22524504 | 0 | 0 |
+| Description only | 0.33383565 | 0.12370519 | 0.22250097 | -0.00274406 | 24 |
+| Calibrated k8 | 0.33396743 | 0.12329268 | 0.22300401 | -0.00224102 | 22 |
+| Calibrated k80 | 0.31791216 | 0.12396566 | 0.20634307 | -0.01890197 | 55 |
+
+Primary Direct-only oracle has 19 opportunities, gain 0.00817815. k8 has
+eight beneficial / 14 harmful selections and captures 5/19 opportunities;
+k80 has 27 beneficial / 28 harmful and captures 11/19. More support increases
+incorporation without improving aggregate utility here. Conditional bootstrap
+gain intervals include zero; no significant degradation or general failure
+is established. These primary values are not the joint pilot's qnorm scale.
+
+D-032 is now the only experimental action: uniform support architecture, one
+margin threshold selected on internal model holdouts, checked on separate
+validation queries, then frozen before external model confirmation. See
+docs/support-threshold.md for exact models, partitions, gates and closure rule.
+If the internal gate fails, stop before the outer fit and report that result.
+If it passes, one shared outer fit evaluates Yi and Mixtral separately.
+Maximum three training trajectories; no sweep. Query reuse remains explicit.
+
+21 CPU support/audit/threshold tests passed. Two synthetic orchestration tests
+force gate outcomes to cover both stopping and continuing; they establish
+engineering behavior only. The real threshold experiment has not run here.
+Run bash scripts/run_support_threshold.sh on Morel; return its results.json
+even when status is stopped_internal_gate. Prior outputs remain unchanged.

@@ -1,6 +1,6 @@
 # P1 - Experiment Repair decision log
 
-_Last updated: 2026-11-20_
+_Last updated: 2026-11-23_
 
 This file records only decisions confirmed in the working conversation or
 verified in the repository. General progress, measurements, and task tracking
@@ -868,3 +868,41 @@ These are unresolved choices, not adopted decisions:
   train_graphrouter_unseen.py, tests/test_graphrouter_unseen.py,
   requirements-graphrouter.txt, scripts/run_graphrouter_unseen.sh,
   docs/graphrouter-unseen-control.md and continuity docs.
+
+
+### D-032 — One internally selected incorporation threshold, then close
+
+- **Date:** 2026-11-23
+- **Evidence:** The official fixed-Direct GraphRouter control selects Qwen but
+  does not improve primary reward over seen-only: description gain -0.00274406,
+  k8 gain -0.00224102, k80 gain -0.01890197. This closes T-031; technical
+  incorporation is not evidence of useful incorporation. Conditional gain
+  intervals include zero; this is not proof of general harm.
+- **Decision:** Freeze the uniform SupportGraphRouter architecture and its
+  seed1/k8/lambda0.9 defaults. Test one external inference rule: select the
+  predicted best new-model prompt only when its score margin over the predicted
+  best seen pair exceeds an internally chosen threshold (possibly negative).
+  Compare with reject-all and threshold-zero argmax. Do not modify the GNN,
+  objective, aggregation, support budget or hyperparameters.
+- **Bounded protocol:** Internal holdouts llama3.1-8b and codellama-34b; external
+  holdouts yi-34b and mixtral-8x7b. Exclude both external models from every
+  inner fit and decision; additionally exclude each inner holdout in its fit.
+  Two inner fits use six seen models. Split validation 59 tune / 60 check;
+  checkpoint choice and threshold selection use tune only. Gate once on check:
+  pooled and per-fold AUC > 0.5, positive pooled gain, nonnegative fold gains.
+  Undefined AUC or reject-all fails. Persist the frozen threshold before
+  revealing any external support/test outcomes.
+- **Closure:** Failed inner gate stops before outer training/evaluation. If it
+  passes, train one shared seven-model base and independently add each external
+  model with frozen weights. Both must improve over reject-all and argmax to
+  pass descriptive external confirmation. No automatic search after failure.
+  At most three training trajectories; new namespace preserves older artifacts.
+- **Interpretation:** Frozen architecture is not reuse of a checkpoint that
+  already saw a held-out model. Every incorporation happens after the relevant
+  fit is frozen. Model pools and evaluation-cost contract differ from the
+  official monetary-normalized control. Query reuse and a single seed limit
+  confirmation; no pristine-dataset or generalization significance claim.
+- **Status:** active; 21 CPU support/audit/threshold tests passed, including
+  both synthetic orchestration paths. Morel real-data execution pending.
+- **Files:** train_support_threshold.py, scripts/run_support_threshold.sh,
+  tests/test_support_threshold*.py, docs/support-threshold.md and continuity docs.
