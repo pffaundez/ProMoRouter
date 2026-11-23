@@ -263,3 +263,23 @@ intervenciones. Este resultado tampoco valida retrospectivamente esas variantes.
 Antes de entrenar otra red, queda comparar con una política fija elegida con
 información permitida (validación conocida / soporte del nuevo). Nunca usar
 validación del modelo retenido o test para elegir ese comparador.
+
+
+## 8. Auditoría final y cierre — 2026-11-23
+
+La comparación pendiente terminó. La pareja fija conocida seleccionada solo
+en validación, selfcheck/Qwen-7B, obtuvo R=0.34255881, frente a 0.30704034 de
+la GNN calibrada. Diferencia GNN-control -0.03551847, intervalo condicional
+[-0.10844570,0.03267945]. La política fija adaptada por soporte eligió
+Qwen/CoT y obtuvo R=0.24274546; frente a ella la diferencia GNN es
++0.06429488, intervalo [-0.00222867,0.13043471].
+
+El veredicto acordado es no_advantage_over_both_fixed_controls. La mejora de
+incorporación frente a la base interna se conserva, pero no demuestra ventaja
+frente al control conocido sencillo ni selección adaptativa por instancia:
+la GNN calibrada eligió Qwen/decompose en 121/121 consultas.
+
+D-037 cierra esta etapa sin otra ejecución pendiente. Esto no establece
+inferioridad estadística general ni imposibilidad de adaptar modelos nuevos.
+[El cierre completo](graphrouter-joint-closure.md) registra selección de los
+controles, P/C/R, ganancias, incertidumbre, hashes y texto reutilizable.

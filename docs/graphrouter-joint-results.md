@@ -141,3 +141,17 @@ Los cálculos de esta nota usan results, candidate_scores, support_outcomes y
 target_outcomes del JSON. Se verificó álgebra R=P-0.9C, disjunción de qids,
 selecciones, valores del comparador de soporte y scores conocidos invariables.
 La revisión no ejecutó nuevos entrenamientos ni modificó el artefacto original.
+
+
+## Final comparator result — 2026-11-23
+
+The pending comparison has completed. A known-pool fixed pair selected only on
+known validation, selfcheck/Qwen-7B, obtains primary R=0.34255881, exceeding the
+calibrated GNN's 0.30704034 by 0.03551847. The GNN-minus-control conditional
+interval [-0.10844570,0.03267945] includes zero. The support-selected adapted
+fixed policy Qwen/CoT obtains R=0.24274546; the GNN beats that point estimate
+but does not beat both main fixed controls. All GNN calibrated choices remain
+Qwen/decompose. D-037 closes this stage without another experiment.
+See [graphrouter-joint-closure.md](graphrouter-joint-closure.md) for the final
+calculation record and reporting limits; earlier pending-control text above
+is superseded by this result.

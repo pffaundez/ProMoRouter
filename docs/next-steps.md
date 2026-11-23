@@ -7,14 +7,14 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-036 — Run the final CPU fixed-policy audit and close the joint pilot
+### T-036 — Completed: final audit and stage closure
 
-- State: audit implemented; all 42 CPU tests pass. One Morel calculation pending.
-- Run bash scripts/audit_graphrouter_joint_fixed.sh. No GPU, inference or fit.
-- Return outputs/graphrouter_joint_unseen/qwen2.5-14b/seed1_lam0.9/fixed_policy_audit.json.
-- Select fixed controls using known validation / reserved support only.
-- Apply D-036 and docs/graphrouter-joint-closure.md, then close this stage.
-- No further variants or sweeps follow automatically, regardless of result.
+- State: closed under D-037; no active experimental execution pending.
+- The GNN did not beat the validation-selected fixed known policy.
+- Final evidence and reusable wording: docs/graphrouter-joint-closure.md.
+- No automatic follow-up, new architecture, training or audit is queued.
+- Historical Next/Later items below are inactive snapshots; they are not a
+  continuation order. A new stage requires a separately stated objective.
 
 ## Next
 
@@ -159,3 +159,6 @@ T-036 is the sole current task; prior pending-run statements are historical.
 
 T-036 engineering is complete; only the final no-training Morel calculation
 and its closure record remain. No new research branch or GPU run is queued.
+
+T-036 completed and current stage closed under D-037. No experimental task
+remains active; earlier pending-run and comparison statements are historical.

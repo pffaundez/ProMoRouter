@@ -1168,3 +1168,22 @@ original validation dataset is only on Morel. Run
 bash scripts/audit_graphrouter_joint_fixed.sh and return fixed_policy_audit.json.
 docs/graphrouter-joint-closure.md fixes interpretation and closes the stage after
 that calculation; no outcome triggers another automatic training or variant.
+
+
+## Final audit returned; stage closed — 2026-11-23
+
+T-036 completed. Source-result hash and dataset match, and all paired gains
+were recalculated. Validation-selected fixed_known is selfcheck/Qwen-7B,
+P=0.41206791, C=0.07723234, R=0.34255881. The calibrated GNN's
+R=0.30704034 is lower by 0.03551847 (conditional CI [-0.10844570,0.03267945]).
+Support-selected fixed_adapted is Qwen/CoT, R=0.24274546; GNN gain vs it
+is +0.06429488 (CI [-0.00222867,0.13043471]).
+
+The predefined verdict is no_advantage_over_both_fixed_controls. The positive
+gain against the GNN's own base does not establish an advantage over a simple
+fixed known policy. All calibrated decisions remain Qwen/decompose. D-037 closes
+the current stage: no further training, audit, variant or sweep is queued.
+No general impossibility or statistically established inferiority is claimed.
+
+Full record and reporting wording: docs/graphrouter-joint-closure.md.
+The previous pending-execution statements are dated snapshots superseded here.

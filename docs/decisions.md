@@ -1021,3 +1021,23 @@ These are unresolved choices, not adopted decisions:
   original result unchanged. Seven new tests passed; full 42-test suite passed.
 - **Status:** audit ready; one Morel calculation pending, not a training run.
   See docs/graphrouter-joint-closure.md.
+
+
+### D-037 — Close the joint pilot after the final fixed-policy audit
+
+- **Date:** 2026-11-23
+- **Evidence:** fixed_known, selected on known validation, is selfcheck/Qwen-7B:
+  primary R=0.34255881. Calibrated GNN R=0.30704034, gain -0.03551847,
+  conditional CI [-0.10844570,0.03267945]. fixed_adapted selects Qwen/CoT:
+  R=0.24274546; GNN gain +0.06429488, CI [-0.00222867,0.13043471].
+- **Decision:** Apply D-036's no_advantage_over_both_fixed_controls verdict and
+  close T-036 and the current stage. No further fit, audit, variant or sweep
+  is queued. Do not automatically reopen earlier support/threshold approaches.
+- **Interpretation:** Preserve technical incorporation and the descriptive gain
+  over the GNN's own base, but do not claim instance-routing benefit or
+  superiority over the fixed known policy. Both comparison intervals include
+  zero; neither general inferiority nor impossibility is established.
+- **Reporting:** docs/graphrouter-joint-closure.md contains final metrics,
+  selector provenance, uncertainty, source hashes and reusable wording. Status,
+  result notes and calculation memory are synchronized.
+- **Status:** active closure decision; current experimental stage complete.
