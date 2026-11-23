@@ -1,0 +1,66 @@
+{
+  "upstream_commit": "0edfb8758d45acd93c8029354867ffb49bb8a97f",
+  "source_csv_sha256": "df6fd3e7cd932b85801d8cb4d782188250266dad5f53eff5ed95253134a6349c",
+  "upstream_artifact_sha256": {
+    "LLM_Descriptions.json": "5801c443ac8087e30f62d54cd45107c75f23971f30018c5ca93faa6afab6fdf3",
+    "llm_description_embedding.pkl": "067abe564c3a3d81b3a82b2242ca2c5fc4578c4c42c4e7cb06d7e292c62486e6",
+    "config.yaml": "32fc2f5858fba48323d98a7ceb7b3406f9bce3918374bb2968696ac2705526a4"
+  },
+  "task_counts": {
+    "alpaca_data": 60,
+    "GSM8K": 60,
+    "multi_news": 60,
+    "SQUAD": 60
+  },
+  "paper_population_match": false,
+  "authors_release_verified": true,
+  "released_interaction_rows_per_task": {
+    "alpaca_data": 600,
+    "GSM8K": 600,
+    "multi_news": 600,
+    "SQUAD": 600
+  },
+  "paper_table_cases_per_task": 600,
+  "paper_cases_unit_ambiguity": "table says 600 Cases/task; released data has 60 query blocks and 600 interaction rows/task",
+  "blank_model_label_resolution": {
+    "count": 240,
+    "rule": "only empty fourth position maps to LLaMA-2 (7b), as positional upstream code; all other model labels verified"
+  },
+  "model_names": [
+    "LLaMA-3 (8b)",
+    "Mixtral-8x7B",
+    "NousResearch",
+    "LLaMA-2 (7b)",
+    "Mistral-7b",
+    "LLaMA-3 (70b)",
+    "LLaMA-3-Turbo (8b)",
+    "LLaMA-3-Turbo (70b)",
+    "Llama-3.1-Turbo (70b)",
+    "Qwen-1.5 (72b)"
+  ],
+  "known_models": [
+    "LLaMA-3 (8b)",
+    "Mixtral-8x7B",
+    "NousResearch",
+    "LLaMA-2 (7b)",
+    "Mistral-7b",
+    "LLaMA-3 (70b)"
+  ],
+  "unseen_models": [
+    "LLaMA-3-Turbo (8b)",
+    "LLaMA-3-Turbo (70b)",
+    "Llama-3.1-Turbo (70b)",
+    "Qwen-1.5 (72b)"
+  ],
+  "mode": "public_code_fewshot_reconstruction",
+  "quantitative_paper_reproduction_verified": false,
+  "cost": "authors' stored task-normalized cost; unchanged",
+  "reward": "0.5*effect - 0.5*cost (Balance)",
+  "differences": [
+    "public code has GeneralConv width16/AdamW constant lr, paper describes GAT width32/Adam schedule",
+    "public code has no explicit unseen-model driver; this reconstructs the published 6/4 +80 protocol",
+    "support draw is reconstructed using config seed1881; original auxiliary query IDs not released",
+    "primary evaluation uses final epoch as public test(); best-validation checkpoint saved separately",
+    "full-query embeddings enter training BatchNorm as in public code; no validation/test outcomes do"
+  ]
+}

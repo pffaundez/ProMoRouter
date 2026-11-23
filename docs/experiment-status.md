@@ -1201,3 +1201,33 @@ D-038 and docs/graphrouter-comparison-clarification.md distinguish that baseline
 from the recent pinned official-encoder Direct control and joint extension.
 The original ProMoRouter architecture is not identical to the recent extension.
 No new experiment or causal explanation is introduced; the pilot remains closed.
+
+
+## Public-artifact GraphRouter reference implemented and executed — 2026-11-23
+
+D-039 starts a distinct reference phase authorized by the user; previous PR
+pilots remain closed. The authors' CSV, ten model descriptions and embeddings
+were downloaded and pinned by checksums. No ProMoRouter interaction log, prompt
+embedding or scorer is used. Public CSV has 240 query blocks/2400 interactions;
+a positional missing label is recorded explicitly, not silently reassigned.
+
+New reference data/preparation/training modules and runner reproduce public
+architecture/config/mask-loop behavior while reconstructing the paper's
+six-known/four-new/80-support Balance setting. The paper/code/data discrepancies
+are recorded in docs/graphrouter-reference.md, including full-query BN features,
+known-validation history at test, and final-state primary evaluation.
+
+All 52 CPU tests pass; real released embeddings match the upstream parser.
+A complete 1000-epoch CPU run finished on seed1881: primary R=0.20734849
+in known-only, description and fewshot80. Fixed known-validation model has the
+same reward. All 48 decisions are LLaMA-3 (8b), with zero new-model selections.
+Support changes unseen scores (max delta 0.33966564) and known scores stay
+identical. New-model oracle opportunities: 14; oracle R=0.23101927.
+The rounded 0.207 matches Table5, but not the full claim of useful adaptation
+or the original authors' unavailable per-query predictions.
+
+Canonical results, source reports and manifest:
+analysis/graphrouter_reference/seed1881_balance/. Final/best-validation weights
+are preserved in the separate graphrouter_reference_seed1881_weights.zip deliverable. No Morel execution is needed
+to read this measured CPU result. The optional GPU runner is for deliberate
+repetition, not an automatic next fit. ProMoRouter remains paused.

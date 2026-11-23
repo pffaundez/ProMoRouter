@@ -1,0 +1,28 @@
+{
+  "upstream_commit": "0edfb8758d45acd93c8029354867ffb49bb8a97f",
+  "files": {
+    "results.json": "5e11700e3c41df0752e3dba2efa46a1f05b5d43e1f62f4a82d8f95d1ee1665cc",
+    "data_report.json": "4444c3436830ed9f6e61da4b0ed066aae02145fad940cb20eb08112ef907de1c",
+    "artifact_sources.json": "40867848ead2f836ee5cd143a2d4456f5e21d77caa2999e450c8b9f3b43be30e",
+    "source_audit.json": "6262b8c6ac438e8b8580452785a741986d0f2e26faf061438366cfd5f72a0b07"
+  },
+  "csv_sha256": "df6fd3e7cd932b85801d8cb4d782188250266dad5f53eff5ed95253134a6349c",
+  "rounded_published_reward_match": true,
+  "quantitative_paper_reproduction_verified": false,
+  "unseen_selections": 0,
+  "max_known_score_change": 0.0,
+  "max_unseen_score_change": 0.33966563642024994,
+  "observed_useful_incorporation": false,
+  "reason": "Rounded reward matches publication, but all 48 decisions use the same known LLM and support changes no selections. This does not establish the authors' original per-query policy.",
+  "runtime": {
+    "torch": "2.15.0+cpu",
+    "pyg": "2.8.1",
+    "device": "cpu"
+  },
+  "checkpoint_files": {
+    "router.pt": "0b472f98027ca1054ca27cc5828a6fb655f7a9c0436dcdd2c7c28cca6c59b89a",
+    "best_validation_router.pt": "c9530fe5a597b7ac1d4507d0db4239d2992a490681c9760b92ddcef403bbc46e"
+  },
+  "checkpoint_archive": "graphrouter_reference_seed1881_weights.zip",
+  "checkpoint_archive_sha256": "2c6c3e54c8fc51a49aaba180e02541791ec487c555050920cc94dcd55a7596d6"
+}

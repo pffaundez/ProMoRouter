@@ -1062,3 +1062,39 @@ These are unresolved choices, not adopted decisions:
   primary paper reference and the observed score-scale flag without assigning
   a causal diagnosis.
 - **Status:** active reporting correction. Pilot remains closed; no new run queued.
+
+
+### D-039 — Establish a public-artifact GraphRouter reference before prompts
+
+- **Date:** 2026-11-23
+- **Authorization:** User requested implementation of the GraphRouter few-shot
+  reference before further ProMoRouter adaptation.
+- **Sources:** Pin ulab-uiuc/GraphRouter at 0edfb8758d45acd93c8029354867ffb49bb8a97f,
+  download the authors' precomputed CSV and pinned model embeddings/descriptions.
+  Verify hashes and preserve the published data instead of our Qwen/PR logs.
+- **Protocol:** Six known/four unseen in authors' order; Balance reward
+  0.5P-0.5C using stored normalized costs, 70/10/20 per-task contiguous public
+  split, 80 train support queries and 320 new-model observations. Encoder and
+  compatibility decoder unchanged. Follow public config and training masks.
+- **Fidelity:** Public release contains 60 query blocks/600 interaction rows per
+  task; paper Table2 says 600 Cases, whose unit is not resolved here. An empty
+  fourth-model field is resolved only by the official positional mapping.
+  Public GeneralConv width16/AdamW differs from paper prose GAT width32/Adam
+  schedule. Known validation history enters test, and all query features enter
+  train BatchNorm as in code. Primary evaluates final state because public
+  test() does not reload best; best-validation state is preserved separately.
+  These details are explicit, not silently repaired or mixed.
+- **Engineering:** 52 CPU tests pass; 10 new tests include parser alignment,
+  withheld outcomes, gradient-step equivalence to upstream, frozen state and
+  synthetic end-to-end training. Real CSV/parser/artifacts were verified.
+- **Real result:** 1000 CPU epochs completed on the released data. R=0.20734849
+  for known-only, description and fewshot80, rounding to published 0.207.
+  All 48 choices are known LLaMA-3 (8b); support changes scores, not decisions.
+  There are 14 new-model oracle opportunities. Thus scalar agreement is not
+  proof of reproducing useful adaptation or the authors' exact policy.
+- **Record:** docs/graphrouter-reference.md and
+  analysis/graphrouter_reference/seed1881_balance hold metrics and manifest;
+  the two checkpoints are preserved in a separately delivered archive. Runtime Torch2.15 CPU/PyG2.8.1; no LLM generation.
+- **Status:** Reference implementation and one full run complete. No prompt
+  extension launched; inspect the fidelity record rather than assuming the
+  published reward establishes incremental incorporation.

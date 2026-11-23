@@ -7,14 +7,17 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-036 — Completed: final audit and stage closure
+### T-037 — Review the completed public-artifact GraphRouter reference
 
-- State: closed under D-037; no active experimental execution pending.
-- The GNN did not beat the validation-selected fixed known policy.
-- Final evidence and reusable wording: docs/graphrouter-joint-closure.md.
-- No automatic follow-up, new architecture, training or audit is queued.
-- Historical Next/Later items below are inactive snapshots; they are not a
-  continuation order. A new stage requires a separately stated objective.
+- State: implementation, 52 CPU tests and a real 1000-epoch run completed.
+- Read docs/graphrouter-reference.md and D-039.
+- R rounds to 0.207, but all conditions select the same known model, with
+  zero useful incremental incorporation. Do not call scalar agreement proof
+  of the authors' complete adaptation result.
+- Canonical artifacts: analysis/graphrouter_reference/seed1881_balance/.
+- No prompt extension or new training is queued. Optional Morel reproduction
+  uses scripts/run_graphrouter_reference.sh only if explicitly desired.
+- Older Next/Later items below remain historical and inactive.
 
 ## Next
 
@@ -162,3 +165,6 @@ and its closure record remain. No new research branch or GPU run is queued.
 
 T-036 completed and current stage closed under D-037. No experimental task
 remains active; earlier pending-run and comparison statements are historical.
+
+T-037 reference implementation and full CPU execution completed under D-039.
+No automatic continuation into prompts or hyperparameter search follows.

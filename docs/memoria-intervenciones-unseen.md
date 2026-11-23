@@ -283,3 +283,33 @@ D-037 cierra esta etapa sin otra ejecución pendiente. Esto no establece
 inferioridad estadística general ni imposibilidad de adaptar modelos nuevos.
 [El cierre completo](graphrouter-joint-closure.md) registra selección de los
 controles, P/C/R, ganancias, incertidumbre, hashes y texto reutilizable.
+
+
+## 9. Referencia con datos públicos originales de GraphRouter — 2026-11-23
+
+El usuario autorizó una referencia anterior a cualquier nueva extensión PR.
+Se implementó y ejecutó un entrenamiento CPU completo de 1000 épocas con el
+CSV y embeddings publicados por los autores, seis conocidos/cuatro nuevos,
+Balance y 80 consultas auxiliares. No se usaron interacciones ProMoRouter.
+El documento [graphrouter-reference.md](graphrouter-reference.md) registra las
+diferencias entre paper, código público y reconstrucción few-shot.
+
+La publicación numérica R=0.207 se recupera al redondear nuestro R=0.20734849.
+Pero las 48 decisiones de esta referencia son el mismo LLaMA-3 (8b) conocido,
+antes y después del soporte; la ganancia incremental es cero. Hay 14
+oportunidades oráculo nuevas y el soporte sí modifica scores. No se puede
+concluir que recuperar ese escalar valide una adaptación útil, ni que la
+política original de los autores fuera la misma, pues sus predicciones y
+partición auxiliar no están publicadas.
+
+Los artefactos fuente contienen 60 consultas y 600 filas de interacción por
+tarea; se registra la ambigüedad con los 600 Cases de la tabla. Un nombre
+vacío del cuarto modelo se resuelve por la posición usada en el código
+original. Configuración pública, semántica del estado final, visibilidad de
+features y normalización permanecen explícitas. No se corrigen silenciosamente
+para perseguir la cifra. Pasaron 52 pruebas CPU; las dos clases del encoder
+coinciden estructuralmente con el upstream fijado.
+
+Resultados y hashes se conservan en analysis/graphrouter_reference/seed1881_balance/;
+los checkpoints final/mejor-validación están en graphrouter_reference_seed1881_weights.zip. D-039 documenta esta etapa.
+No se lanza todavía otra variante ProMoRouter ni otro fit automáticamente.

@@ -1,0 +1,11 @@
+{
+  "upstream_commit": "0edfb8758d45acd93c8029354867ffb49bb8a97f",
+  "core_classes_ast_identical": true,
+  "class_ast_sha256": {
+    "FeatureAlign": "cfd817eb08dd0371fd6e9769d6cc825112253f6546cd90b02f285dd96e8efe42",
+    "EncoderDecoderNet": "170105ed300d33a84dda08747add9682ce8a5324377757bc33cde81c36eef6f9"
+  },
+  "upstream_graph_nn_source_sha256": "573baddfe7b89f94014bcb80c335a5091a732389a32c43143c0506e4f56ba9db",
+  "local_vendored_module_sha256": "af479f3c251b5a29bc2f7d18aa20a1fb48545f26cc20263ed226532bbf3badff",
+  "training_mask_gradient_equivalence_test": "tests/test_graphrouter_reference.py::test_training_step_matches_public_accumulated_mask_loop"
+}

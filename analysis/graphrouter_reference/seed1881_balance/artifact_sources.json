@@ -1,0 +1,19 @@
+{
+  "LLM_Descriptions.json": {
+    "url": "https://raw.githubusercontent.com/ulab-uiuc/GraphRouter/0edfb8758d45acd93c8029354867ffb49bb8a97f/configs/LLM_Descriptions.json",
+    "sha256": "5801c443ac8087e30f62d54cd45107c75f23971f30018c5ca93faa6afab6fdf3"
+  },
+  "llm_description_embedding.pkl": {
+    "url": "https://raw.githubusercontent.com/ulab-uiuc/GraphRouter/0edfb8758d45acd93c8029354867ffb49bb8a97f/configs/llm_description_embedding.pkl",
+    "sha256": "067abe564c3a3d81b3a82b2242ca2c5fc4578c4c42c4e7cb06d7e292c62486e6"
+  },
+  "config.yaml": {
+    "url": "https://raw.githubusercontent.com/ulab-uiuc/GraphRouter/0edfb8758d45acd93c8029354867ffb49bb8a97f/configs/config.yaml",
+    "sha256": "32fc2f5858fba48323d98a7ceb7b3406f9bce3918374bb2968696ac2705526a4"
+  },
+  "router_data.csv": {
+    "release_link": "https://drive.google.com/file/d/1YYn-BV-5s2amh6mKLqKMR0H__JB-CKU4/view",
+    "source": "authors_release_link_or_cached_copy",
+    "sha256": "df6fd3e7cd932b85801d8cb4d782188250266dad5f53eff5ed95253134a6349c"
+  }
+}
