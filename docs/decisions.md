@@ -930,3 +930,30 @@ These are unresolved choices, not adopted decisions:
   Original real-data outputs remain on Morel; no research artifact is overwritten.
 - **Status:** active closure decision; T-032 complete. No new training queued.
 - **Files:** docs/memoria-intervenciones-unseen.md and continuity documents.
+
+
+### D-034 — Return to a minimal joint extension of the official GraphRouter
+
+- **Date:** 2026-11-23
+- **Correction:** D-033 closes the tested support/threshold interventions, not the
+  original joint-routing research question. The official Direct control and the
+  simplified joint scorer never tested an official-encoder joint extension.
+- **Decision:** Specify one minimal extension in docs/graphrouter-joint-contract.md:
+  sources are query–prompt nodes with concatenated query/prompt embeddings;
+  destinations remain one shared node per LLM. Preserve the vendored
+  FeatureAlign/GeneralConv/edge processing and compatibility decoder; adjust
+  query input dimensionality, not the scoring head. This is NOT a separate
+  prompt-node architecture and NOT the previous SupportGraphRouter.
+- **Protocol:** Seed1/Qwen development pilot; four prompts, one training,
+  known-only/description/calibrated k8 from one frozen checkpoint. Keep the
+  official Direct adapter's optimizer/masks/BCE/checkpoint convention, but
+  supervise one best joint action per original query. Use the Direct-known
+  training monetary reference for all prompts and evaluation conditions.
+- **Transparency:** Input dimensionality, action count, positive-label proportion,
+  history size and calibration action budget increase. Thus this is a specified
+  extension, not an unchanged official reproduction or equal-budget prompt
+  ablation. The benchmark/Qwen fold is development, not pristine confirmation.
+- **Next step:** Implement this contract and its isolation/reduction tests before
+  any real-data training. No external utility gate, threshold search or new
+  scorer is part of the design. No real joint result exists yet.
+- **Status:** active design contract; implementation pending.

@@ -227,3 +227,17 @@ o un cambio global de umbral resuelva ya la hipótesis del paper. La causa del
 problema no queda identificada causalmente por estos contrastes. Se conserva
 la evidencia negativa y se cierran estas intervenciones; no se autoriza por
 este registro un nuevo entrenamiento o una nueva rama experimental.
+
+## 6. Aclaración posterior de alcance — 2026-11-23
+
+El cierre anterior corresponde a las intervenciones ejecutadas, no al objetivo
+de extender GraphRouter a selección conjunta. El usuario señaló correctamente
+que el control oficial solo usaba Direct y los pilotos conjuntos cambiaban el
+encoder y el scorer. Por tanto, no se ha probado todavía la combinación del
+mecanismo oficial de incorporación con routing prompt–modelo.
+
+D-034 y [el contrato conjunto](graphrouter-joint-contract.md) restablecen esa
+pregunta mediante una extensión mínima especificada: fuentes consulta–prompt,
+un nodo compartido por LLM y encoder/decoder oficiales. Es un diseño pendiente
+de implementación, no un nuevo resultado ni una reinterpretación positiva de
+las intervenciones cerradas. No introduce otra regla externa de utilidad.

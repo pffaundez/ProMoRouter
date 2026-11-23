@@ -7,13 +7,15 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-033 — Review the documented closure before defining another research stage
+### T-034 — Implement and validate the minimal official-encoder joint extension
 
-- State: calculation record and reportable synthesis available; no new run queued.
-- Read docs/memoria-intervenciones-unseen.md and D-033.
-- T-032 completed with reject-all; external models were not evaluated.
-- Any subsequent experimental objective must be defined separately. Do not
-  reopen threshold searches, aggregation variants or GPU sweeps automatically.
+- State: contract ready; implementation pending.
+- Follow docs/graphrouter-joint-contract.md and D-034.
+- Use query–prompt sources and shared LLM nodes with the official encoder/decoder.
+- Add no alternative scoring head, external gate or threshold search.
+- Pass masking, target isolation, frozen-state, permutation and Direct-reduction
+  checks plus synthetic checkpoint/evaluation smoke before providing a GPU run.
+- Preserve all prior artifacts; no real-data execution occurred in this update.
 
 ## Next
 
@@ -145,3 +147,6 @@ T-032 completed: reject-all selected; AUC criteria passed but no positive
 incorporation gain. The protocol stopped before external evaluation. See D-033
 and docs/memoria-intervenciones-unseen.md. Historical pending-run statements
 above are dated snapshots, superseded by this closure.
+
+T-033 completed: scope clarified and documented in D-034. Closed interventions
+do not answer or reject the pending official-encoder joint experiment.

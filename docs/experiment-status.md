@@ -1078,3 +1078,24 @@ and the score audit, calculation definitions, exact findings, reporting limits,
 source hashes and a CPU-only recalculation snippet. The raw JSON remains on
 Morel; no fresh training or dataset modification was performed for this record.
 No further experimental execution is currently queued.
+
+
+## Original question restored: official-encoder joint contract — 2026-11-23
+
+The user clarified that the intended experiment is GraphRouter's incorporation
+mechanism extended to prompt–model routing. Prior SupportGraphRouter pilots
+changed the encoder/scorer, while the official control fixed Direct. Neither
+completes this joint experiment. D-034 therefore defines a minimal extension
+rather than another external gate.
+
+docs/graphrouter-joint-contract.md specifies query–prompt source nodes, shared
+LLM destinations, official two-GeneralConv encoder and compatibility decoder,
+unchanged model-incorporation mechanism with frozen state, and one seed1/Qwen
+development run with known/description/k8 conditions. Primary costs use the
+same known Direct training reference as the control. Added input dimensions,
+history/action counts and 32 vs eight calibration actions are explicit.
+
+This update is design/documentation only: no joint training code, synthetic test
+results or real-data results are claimed. Prior intervention closures stand;
+they do not reject this untested architecture. T-033 review is complete;
+T-034 implementation and synthetic validation is the sole current task.
