@@ -1041,3 +1041,24 @@ These are unresolved choices, not adopted decisions:
   selector provenance, uncertainty, source hashes and reusable wording. Status,
   result notes and calculation memory are synchronized.
 - **Status:** active closure decision; current experimental stage complete.
+
+
+### D-038 — Correct attribution of the historical GraphRouter-direct baseline
+
+- **Date:** 2026-11-23
+- **Code evidence:** P0's aggregator labels model-only Direct result files as
+  GraphRouter-direct. Their trainer, train_router_model_only_direct_qnorm.py,
+  instantiates DirectModelOnlyRouter, an embedding-concatenation MLP with
+  no official GraphRouter encoder or GNN message passing.
+- **Correction:** Describe that historical baseline as a Direct model-only MLP
+  (legacy label GraphRouter-direct). P0 superiority over it must not be reported
+  as superiority over the official GraphRouter paper. Preserve verified numbers;
+  the correction concerns attribution and interpretation.
+- **Scope:** Distinguish P0 closed-pool routing, the recent adapted official
+  Direct control, and the recent official-encoder joint extension. The latter
+  is not ProMoRouter v1 with only a new node added. Published few-shot results
+  and our marginal/fixed-policy comparisons do not measure identical claims.
+- **Record:** docs/graphrouter-comparison-clarification.md includes source paths,
+  primary paper reference and the observed score-scale flag without assigning
+  a causal diagnosis.
+- **Status:** active reporting correction. Pilot remains closed; no new run queued.

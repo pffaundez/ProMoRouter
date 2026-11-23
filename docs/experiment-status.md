@@ -1187,3 +1187,17 @@ No general impossibility or statistically established inferiority is claimed.
 
 Full record and reporting wording: docs/graphrouter-joint-closure.md.
 The previous pending-execution statements are dated snapshots superseded here.
+
+
+## Historical baseline attribution corrected — 2026-11-23
+
+Review found that P0's GraphRouter-direct label points to results from
+train_router_model_only_direct_qnorm.py, whose DirectModelOnlyRouter is an MLP,
+not the official GraphRouter GNN. Historical P0 metrics remain unchanged, but
+their interpretation must be corrected: they compare against a model-only
+Direct MLP and do not establish superiority over the published GraphRouter.
+
+D-038 and docs/graphrouter-comparison-clarification.md distinguish that baseline
+from the recent pinned official-encoder Direct control and joint extension.
+The original ProMoRouter architecture is not identical to the recent extension.
+No new experiment or causal explanation is introduced; the pilot remains closed.
