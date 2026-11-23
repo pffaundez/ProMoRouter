@@ -7,16 +7,18 @@ Read `docs/experiment-status.md`, `docs/decisions.md`, and
 
 ## Now
 
-### T-038 — Completed: bounded GraphRouter fidelity audit
+### T-039 — Run and interpret the paired incorporation episodes on GPU0
 
-- State: complete, verdict partial_reproduction under D-040.
-- Read docs/graphrouter-fidelity-verdict.md and the saved JSON evidence.
-- Recorded CPU primary passes the audited blocks; no full rerun is justified
-  by an identified result-affecting error.
-- Future GPU masks now preserve the public CPU RNG stream.
-- Exact Table5 auxiliary IDs/driver/checkpoint mapping remain unidentified.
-- No further training, parameter search or ProMoRouter extension is queued.
-- Historical Next/Later items below are inactive; they do not restart work.
+- State: code/contract and 18 CPU tests ready; real GPU run pending.
+- Run bash scripts/run_graphrouter_joint_episodic.sh in the existing environment.
+- Two matched 8x4 fits, one process on GPU0; Qwen-14B excluded until frozen.
+- Same target-query masks/labels/init; only pseudo-new support restriction differs.
+- Return outputs/graphrouter_joint_episodic/qwen2.5-14b/seed1_lam0.9/results.json.
+- Compare calibrated R, own incorporation, difference in incorporation gains,
+  fixed controls and concentration. The runner already computes those controls.
+- No 9x4 training, external gate, seed/support sweep or separate audit queued.
+- Follow D-041 and docs/joint-episodic-incorporation.md. Old Next/Later items
+  below remain historical and inactive.
 
 ## Next
 
@@ -170,3 +172,7 @@ No automatic continuation into prompts or hyperparameter search follows.
 
 T-038 completed: bounded source/executable/result audit recorded in D-040.
 No new benchmark fit was required; original reference results remain unchanged.
+
+T-039 is now the sole active experiment under explicit user authorization:
+incorporation episodes and GPU0. Earlier reproduction requirements no longer
+block this direct hypothesis test; prior results and closures stay preserved.

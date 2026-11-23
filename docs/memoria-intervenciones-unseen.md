@@ -334,3 +334,27 @@ benchmark. Faltan artefactos que vinculen la ejecución original de Tabla5 con
 índices auxiliares, driver, configuración/checkpoint, predicciones y runtime.
 La coincidencia de R redondeado no valida por sí sola adaptación útil.
 D-040 cierra esta auditoría sin otra variante ni envío de mensajes a autores.
+
+
+## 11. Episodios de incorporación: implementación, no resultado — 2026-11-23
+
+El usuario decide evaluar directamente la mejora sin exigir una referencia
+positiva de GraphRouter y autoriza GPU0. D-041 y
+[joint-episodic-incorporation.md](joint-episodic-incorporation.md) fijan un único
+contraste emparejado entre control y episodios dentro de los ocho conocidos.
+
+Ambos brazos comparten inicialización, targets, labels, máscaras agrupadas por
+consulta y presupuesto. Solo el episódico restringe la historia de un candidato
+pseudo-nuevo a ocho consultas. El noveno real no participa en fit ni validación.
+Congelados ambos checkpoints, se compara su incorporación 8→9 con el mismo
+soporte y controles fijos, que ya se calculan dentro del runner.
+
+El control histórico enmascaraba aristas individuales; por eso se reentrena
+un control emparejado con la misma máscara por consulta, sin atribuir cambios
+contra el checkpoint viejo solo a los episodios. No es entrenamiento 8x4 vs9x4.
+
+Pasaron 18 pruebas CPU únicas (ocho nuevas y diez conjuntas previas), incluida
+la invariancia de los ajustes al alterar todos los outcomes del modelo externo.
+No hay resultado real nuevo ni ejecución GPU aquí. El runner Morel fija GPU0
+sin fallback CPU. La memoria de cálculo se completará con su results.json,
+sin otro barrido automático.

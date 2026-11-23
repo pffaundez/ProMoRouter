@@ -1253,3 +1253,31 @@ new ProMoRouter variant or parameter search occurred. See
 docs/graphrouter-fidelity-verdict.md for the scope, remaining original-Table5
 artifacts needed and an unsent technical request. ProMoRouter remains paused;
 the audit is complete rather than an invitation to another blind rerun.
+
+
+## Matched pseudo-new incorporation experiment ready — 2026-11-23
+
+D-041 implements the user's chosen next hypothesis, without requiring a
+positive GraphRouter reference and without training on the real ninth model.
+The current official-encoder joint graph/scorer stays fixed. Two models start
+from identical weights, see identical target-query masks/labels and get the
+same optimizer budget. The episodic arm alone restricts a rotating known
+candidate to 8x4 support outcomes; the control retains all allowed history.
+
+All target-query outcome edges are masked in BOTH arms. Because the historical
+checkpoint used individual edge masks, the primary comparator is re-fit under
+the same grouped query-mask contract; comparison against the old checkpoint is
+not claimed to isolate this single treatment. Each epoch has four pseudo-new
+episodes per known model and 32 total draws. Both fits are strictly 8x4.
+
+Eight new tests and ten prior joint tests pass (18 unique CPU checks). The
+synthetic paired two-epoch integration covers freezing, all six inference
+conditions, fixed controls, reward algebra and output preservation. Poisoning
+all real-held-out outcomes does not alter either fit or episode plan.
+No GPU or real-data training was performed in this CUDA-unavailable workspace.
+
+Run scripts/run_graphrouter_joint_episodic.sh on Morel: one process, physical
+GPU0 only, 1000 epochs per matched arm. Return
+outputs/graphrouter_joint_episodic/qwen2.5-14b/seed1_lam0.9/results.json.
+It includes fixed-policy controls; no follow-up audit command is required.
+No additional variants or sweeps are queued before interpreting this result.

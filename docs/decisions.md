@@ -1124,3 +1124,37 @@ These are unresolved choices, not adopted decisions:
 - **Record:** docs/graphrouter-fidelity-verdict.md and
   analysis/graphrouter_reference/fidelity_audit_final.json.
 - **Status:** bounded audit complete; no further automatic run queued.
+
+
+### D-041 — Train incorporation episodes inside the eight known models, GPU0
+
+- **Date:** 2026-11-23
+- **Authorization:** User accepts pseudo-new episodes and explicitly selects GPU0.
+  A positive GraphRouter reproduction is no longer a prerequisite for this
+  direct ProMoRouter hypothesis test. Previous reference results stay intact.
+- **Single treatment:** Preserve current official-encoder joint query–prompt
+  graph/scorer. Compare matched full-history control against limited-history
+  episodes, both trained only on eight models/four prompts. Real Qwen-14B
+  remains absent from all fitting/validation numerical inputs until freeze.
+- **Pairing:** Same initialization, grouped target-query masks, labels, optimizer,
+  32 draws/epoch, 1000 epochs, seed1/lambda0.9 and known-validation checkpoint
+  rule. Only one candidate's permitted history differs: eight support queries
+  (32 actions) in the episodic arm. Rotate all eight pseudo roles four times
+  per epoch. All target-query outcome edges are hidden in BOTH arms.
+- **Control clarification:** Historical training masked individual edges.
+  Query grouping is shared by both new arms to prevent target-outcome leakage;
+  the old checkpoint is historical only, not the matched primary comparator.
+- **Evaluation:** Freeze both best-known-validation checkpoints, then evaluate
+  8x4 known, 9x4 description, 9x4 calibrated on identical qids/support.
+  Include fixed controls in the same runner, paired final-R and incorporation-
+  gain contrasts, uncertainty and concentration; no separate audit/GPU sweep.
+- **Verification:** Eight new CPU tests pass, plus ten joint regression tests.
+  Poisoning all real-unseen outcomes leaves training/checkpoint/episode hashes
+  unchanged. CPU tests are engineering only; no real-data fit occurred here.
+- **GPU:** Runner explicitly masks physical GPU0 and fails without CUDA rather
+  than substituting CPU. This execution workspace has no CUDA or remote Morel
+  channel; the single Morel command is ready.
+- **Status:** implementation complete; paired GPU0 execution pending.
+- **Files:** router/episodic_incorporation.py, train_graphrouter_joint_episodic.py,
+  scripts/run_graphrouter_joint_episodic.sh, two new test modules,
+  docs/joint-episodic-incorporation.md and synchronized handoff docs.
