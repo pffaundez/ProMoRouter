@@ -27,7 +27,7 @@ El complemento de cada trío constituye el conjunto conocido. Cada LLM se retien
 |---|---|---|---:|
 | Router conjunto con encoder oficial | Brazo control del piloto T-039 adaptado a seis conocidos | Congelar pesos y buffers. Añadir los tres nodos y sus aristas de soporte. | 36 |
 | GraphRouter Direct | Control basado en el encoder oficial, con seis LLM y Direct | Congelar pesos y buffers. Añadir tres nodos y las aristas Direct del soporte. | 9 |
-| Flat-MLP conjunto con soporte | Flat-MLP de P0, ajustado a seis LLM y cuatro prompts | Comparador con actualización supervisada usando únicamente los resultados nuevos del soporte y la historia de ajuste conocida. Fijar el presupuesto de actualización antes de evaluar A. | 36 |
+| Flat-MLP conjunto con soporte | Flat-MLP de P0, ajustado a seis LLM y cuatro prompts | Comparador con actualización supervisada usando únicamente los resultados nuevos del soporte y la historia de ajuste conocida. Una época de actualización con replay de las 549 consultas conocidas y las ocho de soporte. | 36 |
 | Pareja fija adaptada | Elegir la mejor pareja conocida por recompensa en validación conocida | Compararla con las 12 parejas nuevas en las ocho consultas de soporte. Elegir una pareja para todo el test. En empate conservar la conocida. | 1 emitida |
 
 Registrar también la pareja fija conocida. Para Flat-MLP, la selección de hiperparámetros y presupuesto de actualización debe quedar definida con candidatos conocidos. Su fila requiere indicar que actualiza los pesos. La fila conjunta con encoder oficial corresponde al candidato de adaptación de T-039. ProMoRouter v1 es el antecedente de pool cerrado.
@@ -36,5 +36,37 @@ Registrar también la pareja fija conocida. Para Flat-MLP, la selección de hipe
 
 - Por método y fold, reportar P, C y R en el pool ampliado, diferencias pareadas por consulta, selecciones por LLM y por pareja, observaciones de soporte consumidas, tiempo de ajuste inicial, tiempo de incorporación/actualización y tiempo de scoring. Los tiempos con logs precalculados excluyen la generación de las observaciones de soporte.
 - El fold A valida la alineación de IDs, los pools y la escala de recompensa compartida, la exclusión de resultados retenidos del ajuste inicial y la invariancia del estado en los métodos congelados. Revisar comparaciones por consulta y guardar resultados junto con el manifiesto de ejecución.
-- Los runners actuales aceptan un único modelo retenido. Implementar la entrada de tres IDs, unificar evaluadores y agregar la actualización del MLP antes de lanzar A. T-039 es un antecedente 8→9 y sus métricas no ocupan una fila de esta comparación 6→9.
+- El runner compartido ejecuta la comparación 6→9. T-039 queda como antecedente 8→9.
 - Ejecutar primero A en GPU 0 de Morel. Ejecutar B y C con el mismo contrato una vez validado el pipeline.
+
+## Ejecución en Morel
+
+El ajuste de los dos grafos usa 1000 épocas, 32 máscaras por paso y selección
+por macro-F1 en validación conocida. Ambos agrupan las máscaras por consulta.
+El baseline Direct reutiliza el encoder oficial con este protocolo común.
+El MLP usa hasta 80 épocas de ajuste inicial con selección por recompensa en
+validación conocida y una época de actualización de 557 pasos. Para los grafos,
+el tiempo de incorporación mide la preparación del contexto. Construcción del
+grafo de inferencia y forward se cuentan en el tiempo de scoring.
+
+```bash
+cd ~/repos/ProMoRouter
+git fetch origin experiment/unseen-6x3
+git switch experiment/unseen-6x3
+git pull --ff-only origin experiment/unseen-6x3
+source ~/repos/graph-router-2/.venv/bin/activate
+CUDA_VISIBLE_DEVICES=0 python run_unseen_6x3.py \
+  --fold A --data-root ~/repos/graph-router-2/data \
+  --split-manifest data/router/splits/qnorm_complete_seed1.json \
+  --output outputs/unseen_6x3/fold_A/results.json
+```
+
+El manifiesto debe ser el archivo existente de T-039. Si se guardó en otro
+directorio, pasar esa ruta mediante `--split-manifest`.
+
+La prueba sintética CPU del fold A ejecutó los cinco métodos y comprobó las
+96 y 24 observaciones de soporte, el orden de consultas, R = P − 0.9 C y la
+invariancia de pesos, buffers y scores conocidos al añadir candidatos en los
+grafos. Sustituir por NaN los resultados de los retenidos en ajuste/validación
+y alterar los resultados de test dejó idénticos todos los scores. La ejecución
+completa en GPU de Morel sigue pendiente.
