@@ -1,6 +1,6 @@
 # P1 - Experiment Repair decision log
 
-_Last updated: 2026-11-23_
+_Last updated: 2026-11-24_
 
 This file records only decisions confirmed in the working conversation or
 verified in the repository. General progress, measurements, and task tracking
@@ -1158,3 +1158,40 @@ These are unresolved choices, not adopted decisions:
 - **Files:** router/episodic_incorporation.py, train_graphrouter_joint_episodic.py,
   scripts/run_graphrouter_joint_episodic.sh, two new test modules,
   docs/joint-episodic-incorporation.md and synchronized handoff docs.
+
+### D-042 — Define ProMoRouter v2 and its two research questions
+
+- **Date:** 2026-11-24
+- **Decision:** v1 is the reviewed ProMoRouter manuscript. v2 addresses
+  methodological issues by returning to GraphRouter's approach and extending
+  the action to `(p, m)`, checking the OpenReview feedback for architecture and
+  reporting issues, and adding unseen-model adaptation.
+- **RQ1:** Promote v1 RQ2 to the primary question in v2. Evaluate practical
+  joint prompt–model routing against fixed-prompt GraphRouter and the other
+  baselines. Retain the main-table layout of v1: P, C and R at λ ∈ {0.1, 0.5,
+  0.9}, with reward as the primary criterion. Compare the two oracle action
+  spaces to quantify the ceiling separately from measured router performance.
+  Remove v1 RQ1 as a research question.
+- **RQ2:** Measure incremental adaptation to models withheld during
+  training. Start with a matched 0-vs-8 support-query contrast at fixed
+  candidate pool within a split. Moving across folds changes held-out model
+  identities and is evidence about coverage, not a support ablation.
+  GraphRouter's four-new-model, 80-query Balance experiment is the historical
+  reference. The current 6→9 protocol retains its eight-query budget.
+- **Verified:** The current 6→9 runner implements the joint and Direct
+  variants with the pinned upstream encoder and shared fitting procedure.
+  It uses λ = 0.9 with a frozen known-Direct monetary cost reference and
+  chooses graph checkpoints by known-validation macro-F1. v1 instead
+  specifies query-normalized cost and validation reward. Reporting secondary
+  qnorm fields on existing predictions does not align their fitting or
+  checkpoint selection with v1. Resolve and document the v2 contract before
+  extending the sweep.
+- **Evidence:** Supplied B/C evaluation artifacts use the same query manifest
+  and eight support queries. At λ = 0.9, joint beats Direct in mean reward
+  but trails the adapted MLP and adapted fixed pair in both folds. The joint
+  graph selects one prompt–model pair per fold. These runs evaluate
+  supported routing and do not estimate incremental adaptation.
+- **Status:** RQs and reporting structure confirmed. Implementation, completed
+  checks and remaining work are tracked in
+  [the v2 checklist](promorouter-v2-checklist.md). The OpenReview comments
+  and final cost/checkpoint contract remain open.
