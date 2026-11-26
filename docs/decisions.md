@@ -1243,3 +1243,27 @@ These are unresolved choices, not adopted decisions:
 - **Status:** Incorporation with frozen weights works mechanically. Useful
   adaptation by query remains open. The [v2 checklist](promorouter-v2-checklist.md)
   records the completed work and remaining requirements.
+
+### D-044 — Incorporar las observaciones de ARR a la revisión de v2
+
+- **Fecha:** 2026-11-26.
+- **Fuente:** Revisé la metarrevisión, los cuatro informes y las respuestas
+  de autor de la sumisión 16731 en la [discusión de ARR](https://openreview.net/forum?id=e2yVbty4We#discussion).
+  Con esto queda resuelta la falta de acceso anotada en D-043.
+- **Decisión:** Priorizo la validez de las comparaciones, la regeneración de
+  las tablas desde los resultados por consulta, la descripción del método
+  y la evaluación de modelos no vistos. Mantengo la RQ de routing conjunto
+  como principal y la adaptación como RQ2. La sugerencia de ampliar la
+  antigua Tabla 1 se resuelve retirando esa RQ del manuscrito.
+- **Arquitectura y coste:** El encoder fijado y su extensión a parejas ya están
+  implementados. Reescribiré el Algoritmo 1 y las figuras siguiendo el runner.
+  Haré explícito dónde entran los resultados observados y verificaré el
+  criterio de checkpoint y la escala de coste antes de producir las tablas
+  finales. Las comprobaciones del runner actual quedan como evidencia parcial.
+- **Evaluación:** Reportaré las diferencias de acciones y presupuesto entre
+  baselines, con Flat-MLP como comparador conjunto. Revisaré las discrepancias
+  de recompensa de las tablas 2 y 3 de v1, la robustez entre semillas y los
+  límites de una evaluación offline. Distinguiré los tiempos medidos del router
+  de la latencia de servir una respuesta.
+- **Seguimiento:** Las tareas, su prioridad y la evidencia pendiente están en el
+  [checklist de v2](promorouter-v2-checklist.md).
