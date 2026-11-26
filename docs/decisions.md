@@ -1267,3 +1267,14 @@ These are unresolved choices, not adopted decisions:
   de la latencia de servir una respuesta.
 - **Seguimiento:** Las tareas, su prioridad y la evidencia pendiente están en el
   [checklist de v2](promorouter-v2-checklist.md).
+
+### D-045 — Construir la tabla principal con nuevas corridas de v2
+
+- **Fecha:** 2026-11-26.
+- **Decisión:** Cerraré primero los ajustes de arquitectura y el protocolo
+  de coste y selección de checkpoint. Después ejecutaré la evaluación de RQ1
+  en pool cerrado para λ = 0.1, 0.5 y 0.9. Construiré la tabla principal con
+  los resultados nuevos de v2 y los comparadores evaluados bajo el mismo
+  protocolo, verificando P, C y R desde las decisiones por consulta.
+- **Trazabilidad:** Las inconsistencias de v1 motivan la auditoría de las
+  métricas. Las corridas 6→9 conservan su papel como evidencia para RQ2.
