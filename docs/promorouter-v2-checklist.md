@@ -1,6 +1,6 @@
 # ProMoRouter v2 — checklist
 
-La v1 es el manuscrito enviado a revisión. La v2 conserva su pregunta sobre
+La v1 es el manuscrito [ProMoRouter: Joint Prompt and Model Routing for Cost-Efficient LLM Inference](https://openreview.net/pdf?id=e2yVbty4We) que no superó la revisión. Se verificaron sus RQ y su protocolo en el PDF facilitado por el autor. La v2 conserva su pregunta sobre
 enrutamiento conjunto como pregunta principal y añade la incorporación de
 modelos no vistos. El [registro de decisiones](decisions.md) documenta los
 acuerdos. El [protocolo 6→9](unseen-6x3-comparison.md) describe las corridas
@@ -44,18 +44,18 @@ existentes.
 
 ## 2. RQ1 — enrutamiento conjunto de prompt y modelo
 
-**¿Qué efecto tiene seleccionar conjuntamente el prompt y el modelo sobre
-rendimiento, coste y recompensa frente al enrutamiento solo de modelo y los
-demás baselines?** Es la RQ2 de la v1 y la pregunta principal de la v2.
+**¿Supera el enrutamiento conjunto de prompt y modelo al enrutamiento solo de modelo?** Es la RQ2 de la v1 (§4) y la pregunta principal de la v2.
 La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
 
 - [x] Conservar la estructura de la Tabla 2 de v1. Reportar P, C y R para
   cada escenario: λ = 0.1, 0.5 y 0.9. R es el criterio principal y P y C
   explican el intercambio entre rendimiento y coste.
-- [x] Revisar los resultados entregados de B y C en λ = 0.9, semilla 1.
-  `joint_gnn` supera a `graphrouter_direct` en recompensa media en ambos.
-  `flat_mlp_adapted` y `fixed_adapted` superan a `joint_gnn` en ambas medias.
-  La GNN elige una sola pareja por fold durante las 121 consultas de test.
+- [x] Registrar el antecedente en pool cerrado: cinco semillas con las tres
+  penalizaciones. Flat-MLP conjunto lideró los routers aprendidos en 0.1 y
+  0.5 y quedó cerca de Edge-GNN en 0.9. El baseline histórico llamado
+  GraphRouter-direct era un MLP que fijaba Direct (D-038).
+- [ ] Completar la comparación de v2 en pool cerrado. Los resultados 6→9
+  documentados abajo corresponden a generalización con candidatos retenidos.
 - [ ] Preparar y entrenar las políticas aprendidas por λ una vez cerrado el
   contrato. Completar 0.1 y 0.5 y decidir si 0.9 requiere repetición.
 - [ ] Completar la tabla con GraphRouter Direct, Flat-MLP, los controles
@@ -69,17 +69,36 @@ La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
 
 ## 3. RQ2 — adaptación a modelos no vistos
 
-**¿Cuánto mejora el router al incorporar observaciones de soporte de modelos
-excluidos del entrenamiento?** Es la pregunta nueva de v2, motivada por el
-experimento de nuevos LLM de GraphRouter.
+**¿Cómo se compara ProMoRouter v2 con otros routers al incorporar LLM no vistos con soporte limitado, y qué efecto tiene el soporte con el checkpoint congelado?** La recompensa en el pool ampliado es la comparación principal entre métodos. El contraste emparejado 0 vs. 8 aísla el efecto del soporte.
 
 - [x] Implementar el protocolo 6 vistos + 3 nuevos. A valida el pipeline y
   B/C cambian el trío retenido. Los folds comparten consultas, por lo que
   sus resultados tienen dependencia.
 - [x] Registrar el soporte actual: ocho consultas. La GNN conjunta consume
   hasta 96 observaciones (8 × 3 modelos nuevos × 4 prompts) y GraphRouter
-  Direct consume 24 (8 × 3 × 1). Las corridas B y C entregadas solo tienen
-  la condición con soporte para los grafos.
+  Direct consume 24 (8 × 3 × 1). Las corridas A, B y C entregadas tienen la condición con soporte para los grafos.
+- [x] Cerrar T-039 (8→9): el control y el entrenamiento episódico obtuvieron
+  R = 0.30704 y eligieron Qwen2.5-14B + decompose en 121/121 consultas.
+  La ganancia episódica aparente frente a su propia base provenía de una
+  base más débil. El margen calibrado apenas discriminó la ventaja por consulta.
+- [x] Validar las tres corridas 6→9 (semilla 1, λ = 0.9). Comparten dataset,
+  manifiesto, soporte y consultas de test. La normalización se ajusta por
+  fold y se comparte entre métodos.
+
+  | Método | A | B | C | Media |
+  |---|---:|---:|---:|---:|
+  | GNN conjunto congelado | 0.32229 | 0.27460 | 0.23576 | 0.27755 |
+  | GraphRouter Direct congelado | 0.22145 | -0.00426 | 0.13823 | 0.11847 |
+  | Flat-MLP actualizado | 0.37057 | 0.34011 | 0.32714 | 0.34594 |
+  | Pareja fija conocida | 0.35724 | 0.28122 | 0.32101 | 0.31982 |
+  | Pareja fija adaptada | 0.25761 | 0.34256 | 0.32101 | 0.30706 |
+
+  El GNN supera a Direct en los tres folds, con espacios de acciones de
+  36 y 9 respectivamente. Queda por debajo de Flat-MLP y de la pareja
+  fija conocida en los tres. El GNN elige un LLM distinto por fold
+  (Qwen2.5-14B, Qwen2.5-7B y Llama3.1-8B), siempre con decompose en
+  las 121 consultas. La incorporación técnica está verificada. La
+  adaptación útil por consulta sigue siendo un criterio abierto.
 - [ ] Añadir el control pareado de 0 vs. 8 consultas en un split fijo. Para
   cada GNN evaluar el mismo checkpoint, pool ampliado, prompts, información
   estática, métricas y consultas de test. En 0 shots omitir las observaciones
