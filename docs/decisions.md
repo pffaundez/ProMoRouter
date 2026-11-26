@@ -1195,3 +1195,51 @@ These are unresolved choices, not adopted decisions:
   checks and remaining work are tracked in
   [the v2 checklist](promorouter-v2-checklist.md). The OpenReview comments
   and final cost/checkpoint contract remain open.
+
+
+### D-043 — Consolidate v2 scope and completed adaptation experiments
+
+- **Date:** 2026-11-26
+- **Version boundary:** v1 is the reviewed ProMoRouter short paper that did
+  not pass review. The supplied PDF agrees with the [public manuscript](https://openreview.net/pdf?id=e2yVbty4We)
+  on §4 and Table 2. v2 is the current revision.
+- **RQ1, primary:** “Does joint prompt–model routing outperform model-only
+  routing?” is carried forward from v1 RQ2. Retire v1 RQ1 about prompting and
+  the performance–cost trade-off as a standalone RQ. Retain the three-regime
+  P/C/R presentation and distinguish router outcomes from oracle ceilings.
+- **Methodology:** The return to the pinned public GraphRouter encoder and its
+  extension to joint prompt–LLM actions is implemented. The joint adapter uses
+  query–prompt sources, one node per LLM, observed [R,C,P] edge attributes,
+  two GeneralConv layers with BatchNorm and a sigmoid dot-product decoder.
+  GraphRouter Direct uses the same encoder with Direct-only actions. The
+  original paper's few-shot experiment was partially reconstructed (D-039/040).
+  Finish the audit and resolve cost/checkpoint conventions before expanding
+  the main table. v1 uses query-normalized token usage and validation reward.
+  The completed 6→9 protocol uses training-only monetary normalization
+  and known-validation macro-F1 for graph checkpoint selection.
+- **OpenReview:** The public PDF was available. The forum requires verification
+  and no reviewer comments were retrieved via the public search and API lookup.
+  Review architecture, comparison validity and presentation once the comments
+  or an export are available. Record each comment's source, response and
+  evidence of closure in the checklist.
+- **RQ2, new:** How does v2 compare with other routers when adding unseen LLMs
+  with limited support, and what effect does that support have with frozen
+  weights? Compare methods primarily by test reward with the expanded pool.
+  Use a matched 0-vs-8 support contrast at a fixed pool and checkpoint to
+  isolate the effect of support. GraphRouter's few-shot experiment motivates
+  this question. The v1 manuscript did not test unseen-model incorporation.
+- **T-039 completed:** The actual GPU 0 run produced matched calibrated reward
+  0.30704 and identical 121/121 Qwen2.5-14B/decompose decisions. The episodic
+  fit gave no calibrated improvement. Score analysis gave AUC around 0.50 for
+  using Qwen versus the known alternatives. This closes the paired pilot.
+- **6→9 completed:** A, B and C used the same 121 test queries, eight support
+  queries and one seed, retaining each of the nine LLMs once. Mean reward was
+  0.27755 for joint GNN, 0.11847 for GraphRouter Direct, 0.34594 for adapted
+  Flat-MLP, 0.31982 for fixed-known and 0.30706 for fixed-adapted. The joint
+  GNN beat Direct in all folds (36 versus 9 actions) and trailed Flat-MLP
+  and fixed-known in all folds. Each fold selected a different held-out LLM
+  with decompose for all 121 queries. The shared test set gives dependent
+  folds. A includes Qwen2.5-14B, already used in development.
+- **Status:** Incorporation with frozen weights works mechanically. Useful
+  adaptation by query remains open. The [v2 checklist](promorouter-v2-checklist.md)
+  records the completed work and remaining requirements.
