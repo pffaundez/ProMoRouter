@@ -4,7 +4,10 @@ import json
 import math
 from pathlib import Path
 
-from add_query_normalized_lambda_rewards import MODEL_PRICES, get_token_cost_proxy
+if __package__:
+    from .add_query_normalized_lambda_rewards import MODEL_PRICES, get_token_cost_proxy
+else:
+    from add_query_normalized_lambda_rewards import MODEL_PRICES, get_token_cost_proxy
 
 
 def rows(path):
