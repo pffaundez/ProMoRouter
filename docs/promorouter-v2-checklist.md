@@ -44,9 +44,12 @@ existentes.
   train_clean.jsonl y router_bipartite_qnorm_complete.jsonl de Morel.
   Comprobar que las estrategias multillamada agregan todos los tokens
   mediante el registro de llamadas o el código de generación original.
-- [ ] Implementar la normalización común de las 36 acciones de ajuste y
-  la selección de checkpoint acordada en el runner de RQ1. Validar en una
-  corrida corta antes de generar la tabla principal.
+- [x] Implementé la normalización común y la selección de checkpoint en el
+  [runner de RQ1](../run_rq1_closed_pool.py). Validé los tres λ en CPU con
+  datos sintéticos, incluyendo 1.296 costes y la invariancia de scores y
+  checkpoints al modificar P y C de test.
+- [ ] Validar el runner con los logs y la GPU 0 de Morel antes de generar
+  la tabla principal.
 - [ ] Analizar perfiles con el log completo. Comparar prompts fijando
   consulta y modelo, y modelos fijando consulta y prompt. Reportar tokens,
   coste bruto, calidad e interacción entre prompt y modelo.
@@ -166,3 +169,28 @@ El auditor compara todas las aristas del dataset de routing con el log de
 origen por ID de consulta, prompt y modelo. Verifiqué con datos sintéticos
 que acepta un cálculo correcto con tarifas asimétricas y rechaza un proxy
 alterado. Falta ejecutar esa comprobación sobre los archivos de Morel.
+
+
+## Corrida corta de RQ1 en Morel
+
+El runner evalúa el GNN conjunto, GraphRouter Direct, Flat-MLP, controles
+fijos y ambos oráculos con el mismo manifiesto. Recibe una semilla por
+ejecución y evalúa los tres λ. Para la corrida corta usaré la semilla 1.
+
+```bash
+cd ~/repos/ProMoRouter
+git switch experiment/unseen-6x3
+git pull --ff-only origin experiment/unseen-6x3
+source ~/repos/graph-router-2/.venv/bin/activate
+CUDA_VISIBLE_DEVICES=0 python run_rq1_closed_pool.py \
+  --smoke --seed 1 \
+  --data-root ~/repos/graph-router-2/data \
+  --raw-log ~/repos/graph-router-2/data/interaction_logs/grpp_il_v1/train_clean.jsonl \
+  --split-manifest data/router/splits/qnorm_complete_seed1.json \
+  --output outputs/rq1_closed_pool/smoke_seed1.json
+```
+
+La auditoría coteja las aristas contra el log original antes de ajustar los
+routers. El modo smoke hace una época por método y λ. La corrida de tabla
+requiere el log original y GPU 0. La cobertura de llamadas se verifica
+aparte con el código de generación o registros por llamada.
