@@ -30,14 +30,23 @@ existentes.
   actual. Entrenaré con la pérdida binaria de pareja ganadora, por separado
   para cada λ. Seleccionaré checkpoints por recompensa media de validación
   y usaré macro-F1 de selección como diagnóstico.
-- [ ] Verificar la procedencia de `cost_proxy_money` contra las tarifas y
-  los tokens de todas las llamadas. Implementar la escala monetaria con
-  los extremos de las 36 acciones por consulta de ajuste, compartida entre
-  métodos y valores de λ dentro de cada split y aplicada sin recorte.
-  Reportar el coste bruto medio junto a P, C y R.
-- [ ] Implementar selección por recompensa de validación para cada λ,
-  fijar desempate y parada temprana, y validar el runner en una corrida
-  corta antes de ejecutar la tabla principal.
+- [x] Verifiqué el cálculo implementado del proxy: tokens de entrada por
+  tarifa de entrada más tokens de salida por tarifa de salida. El valor
+  almacenado no divide por un millón. La escala min–max es invariante a
+  esa conversión común. Reportaré el valor como proxy de coste ponderado
+  y usaré unidades monetarias solo si están documentadas las tarifas.
+- [x] Fijé la selección del checkpoint. Maximizaré la recompensa media de
+  validación por λ. Una mejora efectiva supera el mejor valor guardado por
+  más de 1e-6. Las diferencias dentro de esa tolerancia conservan el primer
+  checkpoint. La parada temprana ocurre tras 18 épocas consecutivas sin
+  mejora efectiva. El tope es 1000 épocas para los grafos y 80 para Flat-MLP.
+- [ ] Ejecutar [la auditoría de costes](../analysis/audit_rq1_cost.py) sobre
+  train_clean.jsonl y router_bipartite_qnorm_complete.jsonl de Morel.
+  Comprobar que las estrategias multillamada agregan todos los tokens
+  mediante el registro de llamadas o el código de generación original.
+- [ ] Implementar la normalización común de las 36 acciones de ajuste y
+  la selección de checkpoint acordada en el runner de RQ1. Validar en una
+  corrida corta antes de generar la tabla principal.
 - [ ] Analizar perfiles con el log completo. Comparar prompts fijando
   consulta y modelo, y modelos fijando consulta y prompt. Reportar tokens,
   coste bruto, calidad e interacción entre prompt y modelo.
@@ -140,3 +149,20 @@ La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
   6 vistos, 4 nuevos y 80 consultas en Balance. Mantener las 8 consultas
   para la primera comprobación de v2 y reconsiderar el presupuesto solo
   si responde a una pregunta experimental explícita.
+
+## Evidencia de la auditoría del coste
+
+El [script histórico](../analysis/add_query_normalized_lambda_rewards.py)
+define nueve tarifas y calcula el proxy a partir de `cost.tokens_in` y
+`cost.tokens_out`. El [constructor del grafo](../analysis/build_bipartite_router_dataset.py)
+copia el proxy y el total de tokens. El JSON de T-039 permite invertir su
+normalización para una comprobación indirecta. Para las 3.872 acciones de
+test de los ocho modelos con tarifa simétrica, el proxy recuperado equivale
+a un número entero de tokens con error máximo inferior a 0,000025 tokens.
+El modelo con tarifas asimétricas requiere el desglose de entrada y salida.
+La comprobación indirecta no acredita la cobertura de llamadas.
+
+El auditor compara todas las aristas del dataset de routing con el log de
+origen por ID de consulta, prompt y modelo. Verifiqué con datos sintéticos
+que acepta un cálculo correcto con tarifas asimétricas y rechaza un proxy
+alterado. Falta ejecutar esa comprobación sobre los archivos de Morel.
