@@ -1278,3 +1278,26 @@ These are unresolved choices, not adopted decisions:
   protocolo, verificando P, C y R desde las decisiones por consulta.
 - **Trazabilidad:** Las inconsistencias de v1 motivan la auditoría de las
   métricas. Las corridas 6→9 conservan su papel como evidencia para RQ2.
+
+
+### D-046 — Nombrar ProMoRouter Lite y pasar a RQ2
+
+- **Decisión:** En el manuscrito llamaré **ProMoRouter Lite (MLP)** al
+  método evaluado como Joint Flat-MLP. Puntúa las mismas 36 parejas
+  prompt–modelo con un MLP sobre embeddings de consulta, prompt y modelo.
+  Usaré **ProMoRouter v2 (Joint GNN)** para la variante de grafo.
+- **Atribución:** Dejaré explícito que Lite se evaluó originalmente como
+  comparador Flat-MLP. El nombre no implica cambios en el método ni en
+  las corridas. En RQ2, **ProMoRouter Lite (updated)** identifica la
+  variante que actualiza sus pesos con el soporte.
+- **RQ1:** La [comparación de cinco semillas](rq1-closed-pool-results.md)
+  permite cerrar la lectura principal en pool conocido. Lite lidera en
+  recompensa media entre los métodos evaluables en los tres regímenes.
+  La ventaja específica del grafo sigue abierta frente al MLP con las
+  mismas acciones.
+- **RQ2:** Retomo las corridas 6→9 como comparación entre routers con el
+  pool ampliado. El siguiente contraste evalúa, para cada GNN, las
+  condiciones de cero y ocho consultas de soporte con el mismo checkpoint,
+  pool de nueve modelos, normalización y consultas de test. Mantendré la
+  recompensa absoluta entre routers como comparación principal y usaré
+  la diferencia emparejada para medir el efecto del soporte.
