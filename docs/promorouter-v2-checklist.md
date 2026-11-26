@@ -107,21 +107,7 @@ La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
   conjunto. Cuantificar el aumento de techo y cuánto captura el router en
   test. Reportar diferencias pareadas y el espacio de acciones de cada fila.
 
-## 3. RQ2 — adaptación sin reentrenar
-
-**¿Qué método se adapta mejor sin reentrenar?**
-
-- [x] Comparé el GNN conjunto y GraphRouter Direct con 0 y 8 consultas de
-  soporte en A, B y C. Cada contraste usa el mismo checkpoint congelado,
-  nueve candidatos y el mismo test.
-- [x] Verifiqué el cambio de recompensa y de decisiones. La recompensa del
-  GNN conjunto aumenta en los tres folds y cambia la pareja global en
-  todos. GraphRouter Direct cambia 85 de 121 decisiones en C.
-- [ ] Preparar la tabla del manuscrito con R sin y con soporte, ΔR,
-  incertidumbre y cambios de decisión. Explicitar 36 frente a 9 acciones
-  y 96 frente a 24 observaciones con las mismas ocho consultas.
-
-## 4. RQ3 — recompensa al incorporar modelos nuevos
+## 3. RQ2 — recompensa al incorporar modelos nuevos
 
 **¿Qué sistema obtiene mayor recompensa al incorporar modelos nuevos con
 consultas de soporte?**
@@ -133,6 +119,24 @@ consultas de soporte?**
   incorporación de cada sistema, incluyendo los controles fijos y el
   tiempo registrado. Identificar que Lite actualiza sus pesos y que los
   dos GNN los conservan congelados.
+
+## 4. RQ3 — efecto del soporte con pesos congelados
+
+**¿Cuánto aporta el soporte a los routers congelados al incorporar modelos nuevos?**
+
+- [x] Comparé el GNN conjunto y GraphRouter Direct con 0 y 8 consultas de
+  soporte en A, B y C. Cada contraste usa el mismo checkpoint congelado,
+  nueve candidatos y el mismo test.
+- [x] Verifiqué el cambio de recompensa y de decisiones. La recompensa del
+  GNN conjunto aumenta en los tres folds y cambia la pareja global en
+  todos. GraphRouter Direct cambia 85 de 121 decisiones en C.
+- [ ] Preparar la tabla del manuscrito con R sin y con soporte, ΔR,
+  incertidumbre y cambios de decisión. Explicitar 36 frente a 9 acciones
+  y 96 frente a 24 observaciones con las mismas ocho consultas.
+- [ ] Evaluar si el contraste de Lite con y sin soporte aporta evidencia
+  relevante para esta pregunta. Si lo incluyo, identificaré la actualización
+  de pesos y usaré un control de actualización con solo datos conocidos
+  e igual número de pasos si atribuyo el efecto al soporte.
 
 ## Evidencia de la auditoría del coste
 
