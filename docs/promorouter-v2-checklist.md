@@ -31,16 +31,30 @@ existentes.
   grafo por macro-F1. Los campos qnorm que exporta son métricas secundarias
   de las decisiones ya tomadas. Registrar la decisión antes de ampliar corridas.
 
-### 1.2. Revisiones de OpenReview
+### 1.2. Respuesta a la revisión de ARR
 
-- [ ] Recuperar los comentarios y la decisión de
-  [OpenReview](https://openreview.net/forum?id=e2yVbty4We). El artículo se pudo
-  identificar, pero la página del foro exige verificación y los comentarios
-  aún no se han inspeccionado.
-- [ ] Registrar cada observación pertinente sobre arquitectura, validez de
-  la comparación o presentación de resultados, con enlace o ID del comentario,
-  respuesta propuesta y evidencia de cierre. Incorporar las tareas concretas
-  a este checklist.
+- [x] Revisé la metarrevisión y los cuatro informes, junto con las respuestas
+  de autor. Unifiqué las observaciones repetidas en las tareas de abajo y en
+  las dos RQ. [Discusión de ARR](https://openreview.net/forum?id=e2yVbty4We#discussion)
+
+| Prioridad | Observación | Qué haré para cerrarla |
+|---|---|---|
+| Alta | Posicionamiento y novedad (metarrevisión, gY5T y cuarto informe) | Explicaré qué reutilizo de GraphRouter, cómo extiendo la acción a (prompt, LLM) y cómo se compara con Route-to-Reason y el routing de esfuerzo de razonamiento. Situaré TensorOpera Router en trabajos relacionados. |
+| Alta | Coste antes del routing, arquitectura y Algoritmo 1 (metarrevisión, gY5T y segundo informe) | Reescribiré el algoritmo y añadiré figuras separadas de entrenamiento e inferencia. Identificaré los embeddings, las aristas visibles y ocultas, las etiquetas, el decoder, la información disponible antes de decidir y el papel del soporte. Eliminaré las definiciones duplicadas de φ. |
+| Alta | Coherencia de recompensa (gY5T y metarrevisión) | Regeneraré las tablas del manuscrito desde las decisiones por consulta. Comprobaré R = P − λC antes del redondeo y rastrearé las discrepancias señaladas en FrugalGPT-direct y RouteLLM-direct para λ = 0,5 y en la Tabla 3. Si conservo la ablación fijo/adaptativo en los resultados principales, la reconstruiré con el protocolo final. |
+| Alta | Comparabilidad de baselines (metarrevisión e informes 2 y 3) | Explicitaré acciones, prompt fijo, soporte y actualizaciones por método. Distinguiré la comparación de sistemas con Direct de los controles con el mismo espacio de acciones, como Flat-MLP. Documentaré ambos oráculos y consideraré un control con prompt fijo fuerte seleccionado en validación si hace falta aislar el efecto del prompt. |
+| Alta | Reproducibilidad y robustez (metarrevisión e informes 2 y 3) | Incluiré tamaños de splits, semillas, hiperparámetros, selección de checkpoint, versiones, hardware y procedencia de logs. Reportaré resultados por semilla y diferencias pareadas cuando estén disponibles. Distinguiré la incertidumbre por consulta de la variación entre semillas y folds. |
+| Alta | Incorporación de candidatos (metarrevisión e informes 2 y 3) | Evaluaré modelos nuevos en RQ2. Reportaré selecciones por modelo y prompt, concentración de decisiones, comparación con políticas fijas y el contraste de soporte con pesos congelados. La extensión a prompts nuevos queda como limitación. |
+| Media | Despliegue y escalabilidad (metarrevisión e informes 2 y 3) | Separaré coste de generación, construcción del grafo, scoring, incorporación y latencia extremo a extremo. Explicaré el crecimiento del espacio de acciones y el alcance de los tiempos offline. |
+| Media | Alcance de las conclusiones (informes 2 a 4) | Acotaré las afirmaciones a los benchmarks en inglés, los LLM abiertos y la evaluación offline. Explicitaré el riesgo de diferencias de calidad por variedad lingüística. Evaluar modelos propietarios, razonamiento adaptativo o familias adicionales de baselines queda condicionado a que aclare una RQ. |
+
+El coste realizado se usa para evaluar las decisiones o como atributo de
+interacciones observadas permitidas. La prueba de perturbación del runner 6→9
+ya mostró que alterar resultados retenidos de ajuste y resultados de test deja
+intactos los scores. Quedan por cerrar la redacción, la comprobación del
+protocolo final y la regeneración de las tablas. Las respuestas del hilo
+documentan compromisos de la v1 y las tareas anteriores registran su estado
+para la v2.
 
 ## 2. RQ1 — enrutamiento conjunto de prompt y modelo
 
