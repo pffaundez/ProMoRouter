@@ -33,17 +33,19 @@ SUPPORT_SIZE = 8
 MLP_UPDATE_EPOCHS = 1
 
 
-def fit_graph(inputs, values, fit_mask, validate, epochs, device):
+def fit_graph(inputs, values, fit_mask, validate, epochs, device, *,
+              lam=LAM, seed=SEED, patience=None, min_delta=0.0,
+              metric_name="macro F1"):
     task, query, models, src, dst, attrs = inputs
     edges = torch.tensor([src, dst], dtype=torch.long, device=device)
     attributes = torch.tensor(attrs, dtype=torch.float32, device=device)
-    _, labels = joint.best_action_labels(values, LAM)
+    _, labels = joint.best_action_labels(values, lam)
     labels = labels.to(device)
     actions = values.shape[1] * values.shape[2]
     net = EncoderDecoderNet(query.shape[1], models.shape[1], 8, 3).to(device)
     optimizer = torch.optim.AdamW(net.parameters(), lr=0.0003, weight_decay=0.0001)
-    rng = torch.Generator().manual_seed(SEED)
-    best_f1 = -1.0
+    rng = torch.Generator().manual_seed(seed)
+    best_metric, stale = -float("inf"), 0
     for epoch in range(1, epochs + 1):
         net.train()
         optimizer.zero_grad(set_to_none=True)
@@ -56,12 +58,16 @@ def fit_graph(inputs, values, fit_mask, validate, epochs, device):
                          edge_can_see=~predict, edge_weight=attributes)
             (F.binary_cross_entropy(scores.flatten(), labels[predict]) / 32).backward()
         optimizer.step()
-        f1 = validate(net)
-        if f1 > best_f1:
-            best_f1, best_epoch = f1, epoch
+        metric = validate(net)
+        if metric > best_metric + min_delta:
+            best_metric, best_epoch, stale = metric, epoch, 0
             state = deepcopy(net.state_dict())
+        else:
+            stale += 1
         if epoch == 1 or epoch % 25 == 0:
-            print(f"epoch {epoch}, validation macro F1 {f1:.5f}", flush=True)
+            print(f"epoch {epoch}, validation {metric_name} {metric:.5f}", flush=True)
+        if patience is not None and stale >= patience:
+            break
     net.load_state_dict(state)
     return net.eval().requires_grad_(False), best_epoch
 
