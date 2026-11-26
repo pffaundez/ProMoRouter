@@ -41,7 +41,7 @@ existentes.
 |---|---|---|
 | Alta | Posicionamiento y novedad (metarrevisión, gY5T y cuarto informe) | Explicaré qué reutilizo de GraphRouter, cómo extiendo la acción a (prompt, LLM) y cómo se compara con Route-to-Reason y el routing de esfuerzo de razonamiento. Situaré TensorOpera Router en trabajos relacionados. |
 | Alta | Coste antes del routing, arquitectura y Algoritmo 1 (metarrevisión, gY5T y segundo informe) | Reescribiré el algoritmo y añadiré figuras separadas de entrenamiento e inferencia. Identificaré los embeddings, las aristas visibles y ocultas, las etiquetas, el decoder, la información disponible antes de decidir y el papel del soporte. Eliminaré las definiciones duplicadas de φ. |
-| Alta | Coherencia de recompensa (gY5T y metarrevisión) | Regeneraré las tablas del manuscrito desde las decisiones por consulta. Comprobaré R = P − λC antes del redondeo y rastrearé las discrepancias señaladas en FrugalGPT-direct y RouteLLM-direct para λ = 0,5 y en la Tabla 3. Si conservo la ablación fijo/adaptativo en los resultados principales, la reconstruiré con el protocolo final. |
+| Alta | Coherencia de recompensa (gY5T y metarrevisión) | Cerraré la arquitectura y el protocolo de v2 y construiré la tabla principal con nuevas corridas del router y sus comparadores bajo ese mismo protocolo. Comprobaré R = P − λC por consulta y antes del redondeo. Las discrepancias de las tablas 2 y 3 de v1 quedan como antecedente de auditoría. Si conservo la ablación fijo/adaptativo, la ejecutaré con el protocolo final. |
 | Alta | Comparabilidad de baselines (metarrevisión e informes 2 y 3) | Explicitaré acciones, prompt fijo, soporte y actualizaciones por método. Distinguiré la comparación de sistemas con Direct de los controles con el mismo espacio de acciones, como Flat-MLP. Documentaré ambos oráculos y consideraré un control con prompt fijo fuerte seleccionado en validación si hace falta aislar el efecto del prompt. |
 | Alta | Reproducibilidad y robustez (metarrevisión e informes 2 y 3) | Incluiré tamaños de splits, semillas, hiperparámetros, selección de checkpoint, versiones, hardware y procedencia de logs. Reportaré resultados por semilla y diferencias pareadas cuando estén disponibles. Distinguiré la incertidumbre por consulta de la variación entre semillas y folds. |
 | Alta | Incorporación de candidatos (metarrevisión e informes 2 y 3) | Evaluaré modelos nuevos en RQ2. Reportaré selecciones por modelo y prompt, concentración de decisiones, comparación con políticas fijas y el contraste de soporte con pesos congelados. La extensión a prompts nuevos queda como limitación. |
@@ -70,8 +70,9 @@ La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
   GraphRouter-direct era un MLP que fijaba Direct (D-038).
 - [ ] Completar la comparación de v2 en pool cerrado. Los resultados 6→9
   documentados abajo corresponden a generalización con candidatos retenidos.
-- [ ] Preparar y entrenar las políticas aprendidas por λ una vez cerrado el
-  contrato. Completar 0.1 y 0.5 y decidir si 0.9 requiere repetición.
+- [ ] Entrenar y evaluar las políticas de v2 para λ = 0.1, 0.5 y 0.9 tras
+  cerrar la arquitectura y el protocolo. Usaré esas corridas de pool cerrado
+  para la tabla principal de RQ1. Las corridas 6→9 quedan como evidencia de RQ2.
 - [ ] Completar la tabla con GraphRouter Direct, Flat-MLP, los controles
   fijos actuales y ambos oráculos. Usar el mismo test y la misma definición
   de recompensa en cada comparación. Documentar el alcance de los baselines
