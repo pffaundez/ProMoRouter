@@ -40,16 +40,18 @@ existentes.
   más de 1e-6. Las diferencias dentro de esa tolerancia conservan el primer
   checkpoint. La parada temprana ocurre tras 18 épocas consecutivas sin
   mejora efectiva. El tope es 1000 épocas para los grafos y 80 para Flat-MLP.
-- [ ] Ejecutar [la auditoría de costes](../analysis/audit_rq1_cost.py) sobre
-  train_clean.jsonl y router_bipartite_qnorm_complete.jsonl de Morel.
-  Comprobar que las estrategias multillamada agregan todos los tokens
-  mediante el registro de llamadas o el código de generación original.
+- [x] Ejecuté [la auditoría de costes](../analysis/audit_rq1_cost.py) en
+  Morel durante la corrida corta. Las 28.692 acciones coinciden con el
+  log de origen, con error absoluto máximo cero.
+- [ ] Verificar cobertura de tokens de las estrategias multillamada en el
+  código de generación original o en los registros por llamada.
 - [x] Implementé la normalización común y la selección de checkpoint en el
   [runner de RQ1](../run_rq1_closed_pool.py). Validé los tres λ en CPU con
   datos sintéticos, incluyendo 1.296 costes y la invariancia de scores y
   checkpoints al modificar P y C de test.
-- [ ] Validar el runner con los logs y la GPU 0 de Morel antes de generar
-  la tabla principal.
+- [x] Validé la corrida corta de RQ1 en GPU 0 de Morel con la semilla 1.
+  Completó los tres λ y nueve métodos. Las 121 consultas de test son
+  comunes y se verificó R = P − λC por consulta y en los agregados.
 - [ ] Analizar perfiles con el log completo. Comparar prompts fijando
   consulta y modelo, y modelos fijando consulta y prompt. Reportar tokens,
   coste bruto, calidad e interacción entre prompt y modelo.
@@ -168,7 +170,7 @@ La comprobación indirecta no acredita la cobertura de llamadas.
 El auditor compara todas las aristas del dataset de routing con el log de
 origen por ID de consulta, prompt y modelo. Verifiqué con datos sintéticos
 que acepta un cálculo correcto con tarifas asimétricas y rechaza un proxy
-alterado. Falta ejecutar esa comprobación sobre los archivos de Morel.
+alterado. La corrida corta de Morel auditó las 28.692 acciones con error máximo cero. La referencia de ajuste de semilla 1 fue [7.6, 517.2].
 
 
 ## Corrida corta de RQ1 en Morel
