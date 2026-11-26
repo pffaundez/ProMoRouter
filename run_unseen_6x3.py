@@ -202,9 +202,24 @@ def run(args):
     mlp.load_state_dict(state)
     mlp_info = {"fit_seconds": perf_counter() - begin, "best_epoch": best_epoch}
 
-    # Revealing the held-out support is permitted only after initial model selection.
+    # Score all nine candidates before reading any held-out support outcomes.
+    all_scores = {}
+    metadata = {}
+    for name, net, score, visible in (
+        ("joint_gnn", joint_net, score_joint, known_joint),
+        ("graphrouter_direct", direct_net, score_direct, known_direct),
+    ):
+        before = state_hash(net.state_dict())
+        begin = perf_counter()
+        all_scores[name + "_zero"] = score(net, test, MODELS, visible)
+        metadata[name + "_zero"] = dict(
+            scoring_seconds=perf_counter() - begin, support_actions=0,
+            checkpoint_sha256=before,
+        )
+        if before != state_hash(net.state_dict()):
+            raise RuntimeError(f"{name} modified its frozen state without support")
+
     support_truth = joint.action_data(support, PROMPTS, held, lo, span)
-    all_scores, metadata = {}, {}
     for name, net, score, visible, info, prompts in (
         ("joint_gnn", joint_net, score_joint, known_joint, joint_info, PROMPTS),
         ("graphrouter_direct", direct_net, score_direct, known_direct, direct_info, direct_prompts),
@@ -216,6 +231,7 @@ def run(args):
         else:
             extra = direct.make_visible(support, held, support_truth[:, direct_index], LAM)
         observed = visible + extra
+        info['checkpoint_sha256'] = before
         info.update(incorporation_seconds=perf_counter() - begin, support_actions=len(extra))
         begin = perf_counter()
         all_scores[name] = score(net, test, MODELS, observed)
@@ -224,7 +240,9 @@ def run(args):
         indices = [MODELS.index(model) for model in seen]
         if not torch.allclose(base, all_scores[name][:, :, indices], atol=1e-6, rtol=1e-6):
             raise RuntimeError(f"{name} changed known candidate scores")
-        if before != state_hash(net.state_dict()):
+        if not torch.allclose(base, all_scores[name + "_zero"][:, :, indices], atol=1e-6, rtol=1e-6):
+            raise RuntimeError(f"{name} changed known scores in the zero-support pool")
+        if before != metadata[name + "_zero"]["checkpoint_sha256"] or before != state_hash(net.state_dict()):
             raise RuntimeError(f"{name} modified its frozen weights or buffers")
         metadata[name] = info
 
@@ -267,7 +285,7 @@ def run(args):
     truth = joint.action_data(test, PROMPTS, MODELS, lo, span)
     methods = {}
     for name, scores in all_scores.items():
-        prompts = direct_prompts if name == "graphrouter_direct" else PROMPTS
+        prompts = direct_prompts if name in ("graphrouter_direct", "graphrouter_direct_zero") else PROMPTS
         observed = truth[:, direct_index:direct_index+1] if prompts == direct_prompts else truth
         if not torch.isfinite(scores).all():
             raise RuntimeError(f"{name} produced nonfinite scores")
@@ -279,6 +297,21 @@ def run(args):
         result["held_out_counts"] = {m: result["model_counts"].get(m, 0) for m in held}
         methods[name] = dict(metrics=result, **metadata[name], candidate_scores=scores.tolist())
 
+    support_contrasts = {}
+    for name in ("joint_gnn", "graphrouter_direct"):
+        zero = methods.pop(name + "_zero")
+        eight = methods[name]["metrics"]
+        baseline = zero["metrics"]
+        changes = sum(
+            (a["prompt"], a["model"]) != (b["prompt"], b["model"])
+            for a, b in zip(eight["selections"], baseline["selections"], strict=True)
+        )
+        support_contrasts[name] = dict(
+            zero_support=zero, changed_selections=changes,
+            delta_P=eight["P"] - baseline["P"],
+            delta_C=eight["C"] - baseline["C"],
+            delta_R=paired(eight, baseline, SEED),
+        )
     primary = methods["joint_gnn"]["metrics"]
     return dict(torch_version=torch.__version__,
                 protocol="unseen_6x3_v1", fold=args.fold, smoke=args.smoke, seed=SEED,
@@ -289,7 +322,8 @@ def run(args):
                 validation_qids=sorted(val_ids), test_qids=[row["qid"] for row in test],
                 held_out_models=held, seen_models=seen, model_order=MODELS, prompt_order=PROMPTS,
                 cost_reference=dict(min=lo, max=hi, clipped=False),
-                methods=methods, comparisons={name: paired(primary, result["metrics"], SEED)
+                methods=methods, support_contrasts=support_contrasts,
+                comparisons={name: paired(primary, result["metrics"], SEED)
                                              for name, result in methods.items() if name != "joint_gnn"})
 
 
