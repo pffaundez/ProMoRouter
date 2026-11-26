@@ -107,53 +107,32 @@ La antigua RQ1 sobre el efecto del prompting por sí solo se elimina.
   conjunto. Cuantificar el aumento de techo y cuánto captura el router en
   test. Reportar diferencias pareadas y el espacio de acciones de cada fila.
 
-## 3. RQ2 — adaptación a modelos no vistos
+## 3. RQ2 — adaptación sin reentrenar
 
-**¿Cómo se compara ProMoRouter v2 con otros routers al incorporar LLM no vistos con soporte limitado, y qué efecto tiene el soporte con el checkpoint congelado?** La recompensa en el pool ampliado es la comparación principal entre métodos. El contraste emparejado 0 vs. 8 aísla el efecto del soporte.
+**¿Qué método se adapta mejor sin reentrenar?**
 
-- [x] Implementar el protocolo 6 vistos + 3 nuevos. A valida el pipeline y
-  B/C cambian el trío retenido. Los folds comparten consultas, por lo que
-  sus resultados tienen dependencia.
-- [x] Registrar el soporte actual: ocho consultas. La GNN conjunta consume
-  hasta 96 observaciones (8 × 3 modelos nuevos × 4 prompts) y GraphRouter
-  Direct consume 24 (8 × 3 × 1). Las corridas A, B y C entregadas tienen la condición con soporte para los grafos.
-- [x] Cerrar T-039 (8→9): el control y el entrenamiento episódico obtuvieron
-  R = 0.30704 y eligieron Qwen2.5-14B + decompose en 121/121 consultas.
-  La ganancia episódica aparente frente a su propia base provenía de una
-  base más débil. El margen calibrado apenas discriminó la ventaja por consulta.
-- [x] Validar las tres corridas 6→9 (semilla 1, λ = 0.9). Comparten dataset,
-  manifiesto, soporte y consultas de test. La normalización se ajusta por
-  fold y se comparte entre métodos.
+- [x] Comparé el GNN conjunto y GraphRouter Direct con 0 y 8 consultas de
+  soporte en A, B y C. Cada contraste usa el mismo checkpoint congelado,
+  nueve candidatos y el mismo test.
+- [x] Verifiqué el cambio de recompensa y de decisiones. La recompensa del
+  GNN conjunto aumenta en los tres folds y cambia la pareja global en
+  todos. GraphRouter Direct cambia 85 de 121 decisiones en C.
+- [ ] Preparar la tabla del manuscrito con R sin y con soporte, ΔR,
+  incertidumbre y cambios de decisión. Explicitar 36 frente a 9 acciones
+  y 96 frente a 24 observaciones con las mismas ocho consultas.
 
-  | Método | A | B | C | Media |
-  |---|---:|---:|---:|---:|
-  | GNN conjunto congelado | 0.32229 | 0.27460 | 0.23576 | 0.27755 |
-  | GraphRouter Direct congelado | 0.22145 | -0.00426 | 0.13823 | 0.11847 |
-  | Flat-MLP actualizado | 0.37057 | 0.34011 | 0.32714 | 0.34594 |
-  | Pareja fija conocida | 0.35724 | 0.28122 | 0.32101 | 0.31982 |
-  | Pareja fija adaptada | 0.25761 | 0.34256 | 0.32101 | 0.30706 |
+## 4. RQ3 — recompensa al incorporar modelos nuevos
 
-  El GNN supera a Direct en los tres folds, con espacios de acciones de
-  36 y 9 respectivamente. Queda por debajo de Flat-MLP y de la pareja
-  fija conocida en los tres. El GNN elige un LLM distinto por fold
-  (Qwen2.5-14B, Qwen2.5-7B y Llama3.1-8B), siempre con decompose en
-  las 121 consultas. La incorporación técnica está verificada. La
-  adaptación útil por consulta sigue siendo un criterio abierto.
-- [ ] Añadir el control pareado de 0 vs. 8 consultas en un split fijo. Para
-  cada GNN evaluar el mismo checkpoint, pool ampliado, prompts, información
-  estática, métricas y consultas de test. En 0 shots omitir las observaciones
-  de soporte de los modelos nuevos. Verificar que los tres modelos se puedan
-  puntuar en frío con la representación disponible.
-- [ ] Medir ΔR por consulta, con ΔP y ΔC, incertidumbre y frecuencia de
-  selección de nuevos modelos. Distinguir el efecto de añadir candidatos
-  del efecto de revelar soporte. Documentar el presupuesto de observaciones
-  al comparar métodos y aplicar un control con acciones equivalentes si se
-  quiere atribuir la diferencia al mecanismo de adaptación.
-- [ ] Tras validar el contraste principal, comprobar si el efecto se mantiene
-  con otros tríos retenidos. El referente histórico de GraphRouter usó
-  6 vistos, 4 nuevos y 80 consultas en Balance. Mantener las 8 consultas
-  para la primera comprobación de v2 y reconsiderar el presupuesto solo
-  si responde a una pregunta experimental explícita.
+**¿Qué sistema obtiene mayor recompensa al incorporar modelos nuevos con
+consultas de soporte?**
+
+- [x] Evalué los sistemas con el pool ampliado y ocho consultas de soporte
+  en los tres folds. Lite actualizado supera al GNN conjunto en los tres.
+  El GNN conjunto supera a GraphRouter Direct en los tres.
+- [ ] Preparar la tabla con la recompensa absoluta y el protocolo de
+  incorporación de cada sistema, incluyendo los controles fijos y el
+  tiempo registrado. Identificar que Lite actualiza sus pesos y que los
+  dos GNN los conservan congelados.
 
 ## Evidencia de la auditoría del coste
 
