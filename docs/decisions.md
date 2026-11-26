@@ -1301,3 +1301,9 @@ These are unresolved choices, not adopted decisions:
   pool de nueve modelos, normalización y consultas de test. Mantendré la
   recompensa absoluta entre routers como comparación principal y usaré
   la diferencia emparejada para medir el efecto del soporte.
+
+### D-047 — Separar la adaptación sin reentrenar de la comparación entre sistemas
+
+- **RQ2. ¿Qué método se adapta mejor sin reentrenar?** Compararé el GNN conjunto y GraphRouter Direct con pesos congelados. Usaré el contraste 0 frente a 8 consultas con el mismo checkpoint, pool ampliado y test para medir el aporte del soporte. Reportaré ΔR y cambios de selección, junto con las diferencias de espacio de acciones y número de observaciones.
+- **RQ3. ¿Qué sistema obtiene mayor recompensa al incorporar modelos nuevos con consultas de soporte?** Compararé la recompensa absoluta con ocho consultas de soporte entre los dos GNN, ProMoRouter Lite actualizado y las políticas fijas. Indicaré qué métodos actualizan pesos y el tiempo de incorporación registrado.
+- **Evidencia:** Ya tengo las condiciones 0 y 8 para ambos GNN y los resultados de los sistemas con ocho consultas en A, B y C. Lite actualizado entra en RQ3. Su contraste propio 0 frente a 8 permitiría medir una pregunta adicional sobre el efecto de su actualización.
