@@ -24,12 +24,17 @@ existentes.
   y qué diferencias frente a GraphRouter deben declararse. Verificar que el
   presupuesto de soporte, el conjunto de acciones y la recompensa se describan
   tal como los usa cada método.
-- [ ] Resolver el contrato de coste y selección de checkpoint para la tabla
-  principal. La v1 usa coste normalizado por consulta y selecciona por reward
-  de validación. El runner actual usa coste monetario normalizado con una
-  referencia ajustada en Direct de los modelos vistos y elige checkpoints de
-  grafo por macro-F1. Los campos qnorm que exporta son métricas secundarias
-  de las decisiones ya tomadas. Registrar la decisión antes de ampliar corridas.
+- [x] Fijé la arquitectura, la escala de coste y el criterio de checkpoint
+  de RQ1 en [D-046](decisions.md#d-046--fijar-arquitectura-coste-y-checkpoint-de-rq1).
+- [ ] Verificar la procedencia de `cost_proxy_money` contra las tarifas y
+  los tokens de todas las llamadas. Implementar la escala monetaria con
+  los extremos de las 36 acciones de ajuste, compartida y sin recorte.
+- [ ] Implementar selección por recompensa de validación para cada λ,
+  fijar desempate y parada temprana, y validar el runner en una corrida
+  corta antes de ejecutar la tabla principal.
+- [ ] Analizar perfiles con el log completo. Comparar prompts fijando
+  consulta y modelo, y modelos fijando consulta y prompt. Reportar tokens,
+  coste bruto, calidad e interacción entre prompt y modelo.
 
 ### 1.2. Respuesta a la revisión de ARR
 
