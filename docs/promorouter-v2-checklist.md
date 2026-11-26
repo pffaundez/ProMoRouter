@@ -25,10 +25,16 @@ existentes.
   presupuesto de soporte, el conjunto de acciones y la recompensa se describan
   tal como los usa cada método.
 - [x] Fijé la arquitectura, la escala de coste y el criterio de checkpoint
-  de RQ1 en [D-046](decisions.md#d-046--fijar-arquitectura-coste-y-checkpoint-de-rq1).
+  de RQ1. Mantengo el encoder fijado de GraphRouter con fuentes consulta–prompt,
+  un nodo por LLM, dos capas GeneralConv, máscaras por consulta y el decoder
+  actual. Entrenaré con la pérdida binaria de pareja ganadora, por separado
+  para cada λ. Seleccionaré checkpoints por recompensa media de validación
+  y usaré macro-F1 de selección como diagnóstico.
 - [ ] Verificar la procedencia de `cost_proxy_money` contra las tarifas y
   los tokens de todas las llamadas. Implementar la escala monetaria con
-  los extremos de las 36 acciones de ajuste, compartida y sin recorte.
+  los extremos de las 36 acciones por consulta de ajuste, compartida entre
+  métodos y valores de λ dentro de cada split y aplicada sin recorte.
+  Reportar el coste bruto medio junto a P, C y R.
 - [ ] Implementar selección por recompensa de validación para cada λ,
   fijar desempate y parada temprana, y validar el runner en una corrida
   corta antes de ejecutar la tabla principal.
