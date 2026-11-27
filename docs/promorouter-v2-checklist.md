@@ -120,6 +120,17 @@ consultas de soporte?**
   tiempo registrado. Identificar que Lite actualiza sus pesos y que los
   dos GNN los conservan congelados.
 
+- [x] Implementé y validé en CPU el [runner de Lite calibrado](../run_rq2_lite_calibrated.py).
+  Conserva los pesos y corrige cada score de un candidato nuevo por el
+  residuo medio recompensa menos score en las ocho consultas de soporte.
+  El multiplicador se elige de {0, 0.25, 0.5, 0.75, 1} por recompensa de
+  validación, usando seis ajustes con un modelo conocido retenido por vez.
+  En empate uso el menor multiplicador. El ajuste definitivo usa los seis
+  conocidos y se congela antes de puntuar los nueve candidatos.
+- [ ] Ejecutar Lite calibrado en A, B y C y verificar la comparación con
+  los resultados existentes. Reportar por separado el tiempo de selección
+  del multiplicador, el ajuste inicial y la incorporación en inferencia.
+
 ## 4. RQ3 — efecto del soporte con pesos congelados
 
 **¿Cuánto aporta el soporte a los routers congelados al incorporar modelos nuevos?**
